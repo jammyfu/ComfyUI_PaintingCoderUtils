@@ -2,6 +2,8 @@
 
 一个为 ComfyUI 设计的实用节点集合，提供了一系列便捷的图像处理工具。
 
+[English](./README.md)
+
 ## 🌟 特点
 
 - 💡 简单易用
@@ -21,7 +23,7 @@
 
 bash
 cd custom_nodes
-git clone https://github.com/laofu-dev/ComfyUI_PaintingCoderUtils.git
+git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
 
 
 3. 重启 ComfyUI

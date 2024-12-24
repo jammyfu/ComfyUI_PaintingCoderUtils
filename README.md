@@ -5,7 +5,7 @@ Below is the English translation of the provided markdown content:
 A collection of utility nodes designed for ComfyUI, offering a range of convenient image processing tools.
       
     
-    
+[中文说明](./README_CN.md)    
       
     
 
