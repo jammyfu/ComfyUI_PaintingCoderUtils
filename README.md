@@ -19,16 +19,16 @@ A collection of utility nodes designed for ComfyUI, offering a range of convenie
 ## 📦 Installation Instructions
 
 1. Navigate to ComfyUI's `custom_nodes` directory
-2. Download the `ComfyUI_LaofuUtil` folder
+2. Download the `ComfyUI_PaintingCoderUtils` folder
 3. Restart ComfyUI
 
 ## 📚 Documentation
 
-Please refer to the `README.md` file inside the `ComfyUI_LaofuUtil` folder.
+Please refer to the `README.md` file inside the `ComfyUI_PaintingCoderUtils` folder.
 
 ```bash
 cd custom_nodes
-git clone https://github.com/laofu-dev/ComfyUI_LaofuUtil.git
+git clone https://github.com/laofu-dev/ComfyUI_PaintingCoderUtils.git
 ```
 
 3. Restart ComfyUI
