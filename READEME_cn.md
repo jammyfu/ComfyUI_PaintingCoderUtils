@@ -1,4 +1,4 @@
-# ComfyUI LaofuUtil Nodes
+# ComfyUI PaintingCoderUtils Nodes
 
 一个为 ComfyUI 设计的实用节点集合，提供了一系列便捷的图像处理工具。
 
