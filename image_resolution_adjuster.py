@@ -124,15 +124,27 @@ def pad_image(image, target_width, target_height, position='center'):
 def calculate_resolution(aspect_ratio, scale_factor, max_width, max_height, min_width, min_height):
     """Calculate the target resolution based on aspect ratio and scale factor."""
     
-    # 从目标分辨率中提取实际的宽高比和尺寸
-    if "(" in aspect_ratio:
-        # 如果输入格式是 "9:7 (1152x896)" 这样的格式
-        dimensions = aspect_ratio.split("(")[1].strip(")").split("x")
-        base_width = int(dimensions[0])
-        base_height = int(dimensions[1])
+    # SDXL 最佳分辨率对照表
+    base_resolutions = {
+        "1:1": (1024, 1024),
+        "9:7": (1152, 896),
+        "7:9": (896, 1152),
+        "3:2": (1216, 832),
+        "2:3": (832, 1216),
+        "7:4": (1344, 768),
+        "4:7": (768, 1344),
+        "12:5": (1536, 640),
+        "5:12": (640, 1536),
+    }
+    
+    # 从输入中提取比例部分
+    ratio = aspect_ratio.split(" ")[0]
+    
+    # 查找对应的基础分辨率
+    if ratio in base_resolutions:
+        base_width, base_height = base_resolutions[ratio]
     else:
-        # 如果找不到对应的预设值，返回错误
-        raise ValueError(f"Unable to parse resolution from: {aspect_ratio}")
+        raise ValueError(f"Invalid aspect ratio: {ratio}")
 
     # 计算初始目标尺寸
     target_width = int(base_width * scale_factor)
@@ -155,7 +167,25 @@ def calculate_resolution(aspect_ratio, scale_factor, max_width, max_height, min_
     return target_width, target_height, base_width, base_height
 
 def get_aspect_ratio_string(width, height):
-    """Get the aspect ratio string from width and height"""
+    """Get the aspect ratio string from width and height, maintaining SDXL standard ratios"""
+    # SDXL 标准比例映射
+    sdxl_ratios = {
+        (1024, 1024): "1:1",
+        (1152, 896): "9:7",
+        (896, 1152): "7:9",
+        (1216, 832): "3:2",
+        (832, 1216): "2:3",
+        (1344, 768): "7:4",
+        (768, 1344): "4:7",
+        (1536, 640): "12:5",
+        (640, 1536): "5:12"
+    }
+    
+    # 如果是标准 SDXL 分辨率，直接返回对应的比例
+    if (width, height) in sdxl_ratios:
+        return sdxl_ratios[(width, height)]
+    
+    # 如果不是标准分辨率，则使用最大公约数计算
     common_divisor = gcd(width, height)
     aspect_width = width // common_divisor
     aspect_height = height // common_divisor

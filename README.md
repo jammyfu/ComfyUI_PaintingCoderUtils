@@ -56,6 +56,21 @@ Features:
 - Supports trimming leading and trailing spaces
 - Flexible output format options
 
+### Image Resolution Adjuster
+A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
+
+Features:
+- Supports all SDXL optimal resolutions (1:1, 9:7, 7:9, 3:2, 2:3, etc.)
+- Adjustable scale factor for resolution scaling
+- Configurable maximum and minimum resolution constraints
+- Multiple extend modes (contain, cover, fill, etc.)
+- Maintains aspect ratio while resizing
+
+Use Cases:
+- Preparing images for SDXL generation
+- Batch resizing images to specific aspect ratios
+- Standardizing image dimensions for consistent processing
+
 ## 🎨 Usage Examples
 
 ### Dynamic Image Inputs Node
