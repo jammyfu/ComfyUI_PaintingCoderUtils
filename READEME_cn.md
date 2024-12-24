@@ -12,16 +12,16 @@
 ## 📦 安装方法
 
 1. 进入 ComfyUI 的 `custom_nodes` 目录
-2. 下载 `ComfyUI_LaofuUtil` 文件夹
+2. 下载 `ComfyUI_PaintingCoderUtils` 文件夹
 3. 重启 ComfyUI
 
 ## 📚 使用文档
 
-请参考 `ComfyUI_LaofuUtil` 文件夹中的 `README.md` 文件。
+请参考 `ComfyUI_PaintingCoderUtils` 文件夹中的 `README.md` 文件。
 
 bash
 cd custom_nodes
-git clone https://github.com/laofu-dev/ComfyUI_LaofuUtil.git
+git clone https://github.com/laofu-dev/ComfyUI_PaintingCoderUtils.git
 
 
 3. 重启 ComfyUI
