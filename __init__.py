@@ -2,6 +2,8 @@ from .image_scale_calculator import ImageScaleCalculator
 from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 from .remove_empty_lines_advance import RemoveEmptyLinesAndLeadingSpacesAdvance
 from .dynamic_image_input import DynamicImageInputs
+from .image_resolution_adjuster import ImageResolutionAdjuster
+
 
 # 可以在此处添加任何初始化代码
 
@@ -10,7 +12,8 @@ NODE_CLASS_MAPPINGS = {
     "ImageScaleCalculator": ImageScaleCalculator,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
     "RemoveEmptyLinesAndLeadingSpacesAdvance": RemoveEmptyLinesAndLeadingSpacesAdvance,
-    "DynamicImageInputs": DynamicImageInputs
+    "DynamicImageInputs": DynamicImageInputs,
+    "ImageResolutionAdjuster": ImageResolutionAdjuster
 }
 
 # 友好/人类可读的节点标题映射
@@ -18,7 +21,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageScaleCalculator": "Image Scale Calculator Node",
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines & Leading Spaces",
     "RemoveEmptyLinesAndLeadingSpacesAdvance": "Remove Empty Lines & Leading Spaces Advance",
-    "DynamicImageInputs": "Dynamic Image Inputs"
+    "DynamicImageInputs": "Dynamic Image Inputs",
+    "ImageResolutionAdjuster": "Image Resolution Adjuster"
 }
 
 # 你可以在此处添加更多的配置或注册逻辑
