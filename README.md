@@ -92,7 +92,7 @@ MIT License
 
 ## 🤝 Updates
 
-### v0.1.0 (2024-01-21)
+### v0.1.0 (2024-12-23)
 - Initial release
 - Added Image Resolution Adjuster:
   - Support for SDXL optimal resolutions
