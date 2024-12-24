@@ -7,21 +7,28 @@ import torch
 import numpy as np
 from PIL import Image, ImageOps
 from math import gcd
+import folder_paths
+import json
+import os
 
-def resize_image(image, target_width, target_height, method='contain'):
+# 尝试导入 gradio，如果失败则使用基础的颜色选择器
+try:
+    import gradio as gr
+    HAS_GRADIO = True
+except ImportError:
+    HAS_GRADIO = False
+    print("Gradio not found, using basic color picker")
+
+def resize_image(image, target_width, target_height, method='contain', background_color='#000000'):
     """Resize an image while maintaining aspect ratio.
-       method: 'contain' (保持宽高比，缩放图像以完全适应容器),
-             'cover' (保持宽高比，缩放图像以覆盖整个容器),
-             'fill' (忽略宽高比，缩放图像以完全填充容器),
-             'inside' (保持宽高比，缩小或不改变图像使其完全适合容器),
-             'outside' (保持宽高比，放大或不改变图像使其完全覆盖容器).
-       """
+       method: 'contain', 'cover', 'fill', 'inside', 'outside'
+    """
     # 将ComfyUI的图像Tensor转换为PIL图像对象
     img = Image.fromarray(np.clip(255. * image.cpu().numpy(), 0, 255).astype(np.uint8))
     img_width, img_height = img.size
 
     if method == 'contain':
-        # Contain: 缩放图像以适应目标尺寸，保持宽高比，可能出现黑边
+        # Contain: 缩放图像以适应目标尺寸，保持宽高比，可能出现背景
         img_ratio = img_width / img_height
         target_ratio = target_width / target_height
         if img_ratio > target_ratio:
@@ -31,7 +38,14 @@ def resize_image(image, target_width, target_height, method='contain'):
             new_height = target_height
             new_width = int(target_height * img_ratio)
         resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-        padded_img = Image.new('RGB', (target_width, target_height), 'black')
+        
+        # 解析背景颜色
+        try:
+            color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+        except ValueError:
+            color = (0, 0, 0)  # 默认黑色
+            
+        padded_img = Image.new('RGB', (target_width, target_height), color)
         x_offset = (target_width - new_width) // 2
         y_offset = (target_height - new_height) // 2
         padded_img.paste(resized_img, (x_offset, y_offset))
@@ -91,34 +105,49 @@ def resize_image(image, target_width, target_height, method='contain'):
          cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
          return np.array(cropped_img).astype(np.float32)/255.0 , target_width, target_height
 
-def pad_image(image, target_width, target_height, position='center'):
-    """Pad an image to the target dimensions.
-       position: 'center' (居中), 'top' (顶部), 'bottom' (底部), 'left' (左边), 'right' (右边)
+def pad_image(image, target_width, target_height, position='center', background_color='#000000'):
+    """Pad an image to the target dimensions with specified background color.
+       position: 'center', 'top', 'bottom', 'left', 'right'
+       background_color: hex color string (e.g., '#FF0000' for red)
     """
+    # 将ComfyUI的图像Tensor转换为PIL图像对象
     img = Image.fromarray(np.clip(255. * image.cpu().numpy(), 0, 255).astype(np.uint8))
     img_width, img_height = img.size
 
-    padded_img = Image.new('RGB', (target_width, target_height), 'black') # 创建黑色背景
+    # 解析十六进制颜色
+    try:
+        # 移除井号并转换为RGB元组
+        color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+    except ValueError:
+        print(f"Invalid color format: {background_color}, using black")
+        color = (0, 0, 0)  # 如果解析失败，默认使用黑色
 
+    # 创建指定颜色的背景图像
+    padded_img = Image.new('RGB', (target_width, target_height), color)
+
+    # 计算粘贴位置
     if position == 'center':
         x_offset = (target_width - img_width) // 2
         y_offset = (target_height - img_height) // 2
     elif position == 'top':
-         x_offset = (target_width - img_width) // 2
-         y_offset = 0
+        x_offset = (target_width - img_width) // 2
+        y_offset = 0
     elif position == 'bottom':
         x_offset = (target_width - img_width) // 2
         y_offset = target_height - img_height
     elif position == 'left':
-         x_offset = 0
-         y_offset = (target_height - img_height) // 2
+        x_offset = 0
+        y_offset = (target_height - img_height) // 2
     elif position == 'right':
-         x_offset = target_width - img_width
-         y_offset = (target_height - img_height) // 2
+        x_offset = target_width - img_width
+        y_offset = (target_height - img_height) // 2
     else:
-         raise ValueError(f"Invalid pad position: {position}")
+        raise ValueError(f"Invalid pad position: {position}")
 
+    # 将原图粘贴到背景上
     padded_img.paste(img, (x_offset, y_offset))
+    
+    # 转换回ComfyUI需要的格式
     return np.array(padded_img).astype(np.float32) / 255.0, target_width, target_height
 
 def calculate_resolution(aspect_ratio, scale_factor, max_width, max_height, min_width, min_height):
@@ -192,9 +221,12 @@ def get_aspect_ratio_string(width, height):
     return f"{aspect_width}:{aspect_height}"
 
 class ImageResolutionAdjuster:
+    def __init__(self):
+        self.selected_color = "#000000"
+    
     @classmethod
-    def INPUT_TYPES(s):
-        # 只保留 SDXL 最佳分辨率
+    def get_resolution_options(cls):
+        """Generate resolution options for SDXL optimal resolutions"""
         base_resolutions = [
             (1024, 1024),  # 1:1
             (1152, 896),   # 9:7
@@ -207,31 +239,36 @@ class ImageResolutionAdjuster:
             (640, 1536),   # 5:12
         ]
         
-        # 生成分辨率选项列表
-        resolutions = []
+        options = []
         for width, height in base_resolutions:
-            aspect_ratio = get_aspect_ratio_string(width, height)
-            resolutions.append(f"{aspect_ratio} ({width}x{height})")
+            ratio = get_aspect_ratio_string(width, height)
+            options.append(f"{ratio} ({width}x{height})")
         
+        return options
+
+    @classmethod
+    def INPUT_TYPES(s):
         return {
             "required": {
                 "images": ("IMAGE",),
-                "target_resolution": (resolutions,),
+                "target_resolution": (s.get_resolution_options(),),
                 "extend_mode": (["contain", "cover", "fill", "inside", "outside", "top", "bottom", "left", "right", "center"],),
+                "background_color": ("STRING", {"default": "#000000", "multiline": False}),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
                 "max_width": ("INT", {"default": 2048, "min": 1, "max": 8192, "step": 1}),
                 "max_height": ("INT", {"default": 2048, "min": 1, "max": 8192, "step": 1}),
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
-            }
+            },
+            "hidden": {"color_widget": "COMBO"}
         }
 
+    CATEGORY = "🎨Painting👓Coder/🖼️Image"
     RETURN_TYPES = ("IMAGE", "INT", "INT")
     RETURN_NAMES = ("images", "width", "height")
     FUNCTION = "adjust_resolution"
-    CATEGORY = "🎨Painting👓Coder/🖼️Image"
 
-    def adjust_resolution(self, images, target_resolution, extend_mode, scale_factor, max_width, max_height, min_width, min_height):
+    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height):
         output_images = []
         
         # 从目标分辨率字符串中提取宽高比
@@ -244,12 +281,33 @@ class ImageResolutionAdjuster:
         
         for image in images:
             if extend_mode in ["contain", "cover", "fill", "inside", "outside"]:
-                scaled_image, width, height = resize_image(image, target_width, target_height, method=extend_mode)
+                scaled_image, width, height = resize_image(image, target_width, target_height, method=extend_mode, background_color=background_color)
             elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-                scaled_image, width, height = pad_image(image, target_width, target_height, position=extend_mode)
+                scaled_image, width, height = pad_image(image, target_width, target_height, 
+                                                      position=extend_mode, 
+                                                      background_color=background_color)
             else:
                 raise ValueError(f"Invalid extend_mode: {extend_mode}")
             
             output_images.append(torch.from_numpy(scaled_image).unsqueeze(0))
         
         return (torch.cat(output_images, dim=0), target_width, target_height)
+
+    @classmethod
+    def VALIDATE_INPUTS(s, **kwargs):
+        if "background_color" in kwargs:
+            color = kwargs["background_color"]
+            # 验证颜色格式
+            if not color.startswith('#') or len(color) != 7:
+                return False
+            try:
+                # 尝试解析十六进制颜色
+                int(color[1:], 16)
+            except ValueError:
+                return False
+        return True
+
+    # 添加 Widget 定义
+    @classmethod
+    def WIDGETS(s):
+        return {"color_widget": {"widget_type": "color_picker", "target": "background_color"}}

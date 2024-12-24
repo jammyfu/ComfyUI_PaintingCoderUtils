@@ -1,28 +1,27 @@
-from .image_scale_calculator import ImageScaleCalculator
-from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
-from .remove_empty_lines_advance import RemoveEmptyLinesAndLeadingSpacesAdvance
-from .dynamic_image_input import DynamicImageInputs
-from .image_resolution_adjuster import ImageResolutionAdjuster
+# 首先导入安装模块并执行安装
+from .install import setup
+setup()
 
+try:
+    from .image_resolution_adjuster import ImageResolutionAdjuster
+    # 暂时注释掉未实现的节点
+    # from .dynamic_image_input import DynamicImageInputs
+    from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 
-# 可以在此处添加任何初始化代码
+    # 节点映射
+    NODE_CLASS_MAPPINGS = {
+        "ImageResolutionAdjuster": ImageResolutionAdjuster,
+        # "DynamicImageInputs": DynamicImageInputs,
+        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+    }
 
-# 节点类映射
-NODE_CLASS_MAPPINGS = {
-    "ImageScaleCalculator": ImageScaleCalculator,
-    "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
-    "RemoveEmptyLinesAndLeadingSpacesAdvance": RemoveEmptyLinesAndLeadingSpacesAdvance,
-    "DynamicImageInputs": DynamicImageInputs,
-    "ImageResolutionAdjuster": ImageResolutionAdjuster
-}
-
-# 友好/人类可读的节点标题映射
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "ImageScaleCalculator": "Image Scale Calculator Node",
-    "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines & Leading Spaces",
-    "RemoveEmptyLinesAndLeadingSpacesAdvance": "Remove Empty Lines & Leading Spaces Advance",
-    "DynamicImageInputs": "Dynamic Image Inputs",
-    "ImageResolutionAdjuster": "Image Resolution Adjuster"
-}
-
-# 你可以在此处添加更多的配置或注册逻辑
+    NODE_DISPLAY_NAME_MAPPINGS = {
+        "ImageResolutionAdjuster": "Image Resolution Adjuster",
+        # "DynamicImageInputs": "Dynamic Image Inputs",
+        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And LeadingSpaces",
+    }
+except ImportError as e:
+    print(f"Error importing modules: {e}")
+    print("Please restart ComfyUI after the installation is complete.")
+    NODE_CLASS_MAPPINGS = {}
+    NODE_DISPLAY_NAME_MAPPINGS = {}

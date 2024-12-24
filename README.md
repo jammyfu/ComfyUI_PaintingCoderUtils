@@ -1,119 +1,115 @@
 # ComfyUI PaintingCoderUtils Nodes
 
-A collection of utility nodes designed for ComfyUI, offering a range of convenient image processing tools.
-      
-    
-[中文说明](./README_CN.md)    
-      
-    
+A collection of utility nodes designed for ComfyUI, offering convenient image processing tools.
 
-## 🌟 Features
+[中文说明](./README_CN.md)
 
-- 💡 Simple and easy to use
-- 🛠️ Practical functionality
-- 🔌 Fully compatible with ComfyUI
-- 🎨 Focused on image processing
-
-## 📦 Installation Instructions
+## 📦 Installation
 
 1. Navigate to ComfyUI's `custom_nodes` directory
-2. Download the `ComfyUI_PaintingCoderUtils` folder
+2. Clone the repository:
+   ```bash
+   cd custom_nodes
+   git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
+   ```
 3. Restart ComfyUI
 
-## 📚 Documentation
-
-Please refer to the `README.md` file inside the `ComfyUI_PaintingCoderUtils` folder.
-
-```bash
-cd custom_nodes
-git clone https://github.com/laofu-dev/ComfyUI_PaintingCoderUtils.git
-```
-
-3. Restart ComfyUI
-
-## 🎯 Functional Nodes
-
-### Dynamic Image Inputs
-A tool node that combines multiple image inputs into a single list output.
-
-Features:
-- Supports dynamic addition and removal of image input ports
-- Automatically ignores disconnected input ports
-- Outputs a standardized image list format
-
-Use Cases:
-- Batch processing multiple images
-- Merging multiple image sources
-- Providing data for nodes that require image list input
-
-### Remove Empty Lines
-A text processing tool for cleaning up empty lines in text.
-
-Features:
-- Supports removing empty lines
-- Supports trimming leading and trailing spaces
-- Flexible output format options
+## 🎯 Nodes
 
 ### Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
 Features:
-- Supports all SDXL optimal resolutions (1:1, 9:7, 7:9, 3:2, 2:3, etc.)
-- Adjustable scale factor for resolution scaling
-- Configurable maximum and minimum resolution constraints
-- Multiple extend modes (contain, cover, fill, etc.)
+- Supports all SDXL optimal resolutions:
+  - 1:1 (1024x1024)
+  - 9:7 (1152x896)
+  - 7:9 (896x1152)
+  - 3:2 (1216x832)
+  - 2:3 (832x1216)
+  - 7:4 (1344x768)
+  - 4:7 (768x1344)
+  - 12:5 (1536x640)
+  - 5:12 (640x1536)
+- Multiple extend modes:
+  - contain: Scale image to fit within target size
+  - cover: Scale image to cover target size
+  - fill: Stretch image to fill target size
+  - inside: Like contain, but only scales down
+  - outside: Like cover, but only scales up
+  - top/bottom/left/right/center: Position image within target size
+- Adjustable scale factor
+- Configurable maximum and minimum resolution limits
+- Color picker for background fill
 - Maintains aspect ratio while resizing
 
-Use Cases:
-- Preparing images for SDXL generation
-- Batch resizing images to specific aspect ratios
-- Standardizing image dimensions for consistent processing
-
-## 🎨 Usage Examples
-
-### Dynamic Image Inputs Node
+Usage:
 1. Add the node to your workflow
-2. Connect images to the input ports
-3. The outputted image list can be used for further processing
+2. Select target resolution from SDXL presets
+3. Choose extend mode based on your needs
+4. Use color picker to set background color
+5. Adjust scale factor and resolution limits if needed
 
-### Remove Empty Lines Node
-1. Input the text that needs processing
-2. Choose processing options
-3. Retrieve the processed text
+### Remove Empty Lines And Leading Spaces
+A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
 
-## 🔧 Development Notes
+Features:
+- Removes empty lines from text
+- Removes leading and trailing spaces
+- Option to keep single empty line between paragraphs
+- Option to preserve indentation
+- Supports batch text processing
 
-### Project Structure
-
+Usage Example:
 ```
-├── __init__.py
-├── dynamic_image_input.py
-├── remove_empty_lines.py
-├── README.md
-└── LICENSE
+Input text:
+    Hello World    
+  
+     This is a test    
+  
+  
+    Multiple empty lines above    
+
+Output text (with default settings):
+Hello World
+This is a test
+Multiple empty lines above
 ```
 
-### Adding New Nodes
-1. Create a new Python file in the project directory
-2. Implement the node class
-3. Register the node in `__init__.py`
+Parameters:
+- `keep_single_empty_line`: Keep one empty line between paragraphs
+- `preserve_indentation`: Keep the indentation of each line
+- `trim_trailing_spaces`: Remove spaces at the end of lines
+
+Use Cases:
+- Cleaning up prompt text
+- Formatting text for LoRA training
+- Preparing text for text-to-image generation
+- Standardizing text input format
 
 ## 📝 License
 
 MIT License
 
+## 🤝 Updates
+
+### v0.1.0 (2024-01-21)
+- Initial release
+- Added Image Resolution Adjuster:
+  - Support for SDXL optimal resolutions
+  - Multiple extend modes
+  - Color picker for background
+  - Scale factor adjustment
+  - Resolution limits
+- Added Remove Empty Lines And Leading Spaces:
+  - Text cleaning functionality
+  - Configurable preservation options
+  - Batch processing support
+
+### Planned Features
+- Dynamic image input combination
+- Text template system
+- More image processing utilities
+
 ## 🤝 Contributions
 
 Issues and Pull Requests are welcome!
-
-## 📞 Contact
-
-- GitHub: [Your GitHub Homepage]
-- Email: [Your Email]
-
-## 🙏 Acknowledgements
-
-- The ComfyUI Team
-- The Impact-Pack Project
-
-This README: 
