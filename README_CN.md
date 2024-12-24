@@ -67,12 +67,13 @@ git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
 
 ### 项目结构
 
-
+```
 ├── __init__.py
 ├── dynamic_image_input.py
 ├── remove_empty_lines.py
 ├── README.md
 └── LICENSE
+```
 
 ### 添加新节点
 1. 在项目目录创建新的 Python 文件
