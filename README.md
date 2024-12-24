@@ -1,5 +1,3 @@
-Below is the English translation of the provided markdown content:
-
 # ComfyUI PaintingCoderUtils Nodes
 
 A collection of utility nodes designed for ComfyUI, offering a range of convenient image processing tools.
