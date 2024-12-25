@@ -220,6 +220,29 @@ def get_aspect_ratio_string(width, height):
     aspect_height = height // common_divisor
     return f"{aspect_width}:{aspect_height}"
 
+def create_outline(image, background_color):
+    """给图片添加1像素的描边，使用背景色的反色"""
+    # 将背景色转换为RGB元组
+    try:
+        bg_color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+    except ValueError:
+        bg_color = (0, 0, 0)
+    
+    # 计算反色
+    outline_color = tuple(255 - c for c in bg_color)
+    
+    # 将图像转换为PIL图像
+    img = Image.fromarray(np.clip(255. * image, 0, 255).astype(np.uint8))
+    width, height = img.size
+    
+    # 创建新图像，比原图大2像素
+    outlined = Image.new('RGB', (width + 2, height + 2), outline_color)
+    # 将原图粘贴到中心
+    outlined.paste(img, (1, 1))
+    
+    # 转换回tensor格式
+    return np.array(outlined).astype(np.float32) / 255.0
+
 class ImageResolutionAdjuster:
     def __init__(self):
         self.selected_color = "#000000"
@@ -259,6 +282,7 @@ class ImageResolutionAdjuster:
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000", "multiline": False}),
+                "add_outline": ("BOOLEAN", {"default": False}),  # 保持参数名不变
             },
             "hidden": {"color_widget": "COMBO"}
         }
@@ -268,7 +292,7 @@ class ImageResolutionAdjuster:
     RETURN_NAMES = ("images", "width", "height")
     FUNCTION = "adjust_resolution"
 
-    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height):
+    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, add_outline):
         output_images = []
         
         # 从目标分辨率字符串中提取宽高比
@@ -289,9 +313,15 @@ class ImageResolutionAdjuster:
             else:
                 raise ValueError(f"Invalid extend_mode: {extend_mode}")
             
+            # 如果需要添加描边，使用新的函数名
+            if add_outline:
+                scaled_image = create_outline(scaled_image, background_color)
+                width += 2
+                height += 2
+            
             output_images.append(torch.from_numpy(scaled_image).unsqueeze(0))
         
-        return (torch.cat(output_images, dim=0), target_width, target_height)
+        return (torch.cat(output_images, dim=0), width, height)
 
     @classmethod
     def VALIDATE_INPUTS(s, **kwargs):
