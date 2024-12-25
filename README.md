@@ -86,6 +86,18 @@ Use Cases:
 - Preparing text for text-to-image generation
 - Standardizing text input format
 
+Parameter Settings:
+![Parameter Settings](docment/images/rm_line_and_space_cn01.png)
+
+Example with keep_single_empty_line=True:
+![Keep Single Empty Line](docment/images/rm_line_and_space_cn02.png)
+
+Example with preserve_indentation=True:
+![Preserve Indentation](docment/images/rm_line_and_space_cn03.png)
+
+Example with trim_trailing_spaces=True:
+![Trim Trailing Spaces](docment/images/rm_line_and_space_cn04.png)
+
 ## 📝 License
 
 MIT License

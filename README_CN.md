@@ -86,6 +86,18 @@
 - 准备文生图的输入文本
 - 标准化文本输入格式
 
+参数设置：
+![参数设置](docment/images/rm_line_and_space_cn01.png)
+
+保留单个空行的示例：
+![保留单个空行](docment/images/rm_line_and_space_cn02.png)
+
+保留缩进的示例：
+![保留缩进](docment/images/rm_line_and_space_cn03.png)
+
+移除尾随空格的示例：
+![移除尾随空格](docment/images/rm_line_and_space_cn04.png)
+
 ## 📝 许可证
 
 MIT License

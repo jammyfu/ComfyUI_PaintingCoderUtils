@@ -4,21 +4,20 @@ setup()
 
 try:
     from .image_resolution_adjuster import ImageResolutionAdjuster
-    # 暂时注释掉未实现的节点
-    # from .dynamic_image_input import DynamicImageInputs
+    from .color_picker import ColorPicker
     from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 
     # 节点映射
     NODE_CLASS_MAPPINGS = {
         "ImageResolutionAdjuster": ImageResolutionAdjuster,
-        # "DynamicImageInputs": DynamicImageInputs,
-        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+        "ColorPicker": ColorPicker,
+        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces
     }
 
     NODE_DISPLAY_NAME_MAPPINGS = {
         "ImageResolutionAdjuster": "Image Resolution Adjuster",
-        # "DynamicImageInputs": "Dynamic Image Inputs",
-        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And LeadingSpaces",
+        "ColorPicker": "Color Picker",
+        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces"
     }
 except ImportError as e:
     print(f"Error importing modules: {e}")
