@@ -19,6 +19,8 @@ A collection of utility nodes designed for ComfyUI, offering convenient image pr
 ### Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
+![Image Resolution Adjuster Settings](docment/images/image_resolution_adjuster01.png)
+
 Features:
 - Supports all SDXL optimal resolutions:
   - 1:1 (1024x1024)

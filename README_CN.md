@@ -19,6 +19,8 @@
 ### 图像分辨率调整器 (Image Resolution Adjuster)
 一个用于按照 SDXL 最佳宽高比调整图像分辨率的实用节点。
 
+![图像分辨率调整器设置](docment/images/image_resolution_adjuster01.png)
+
 特点：
 - 支持所有 SDXL 最佳分辨率：
   - 1:1 (1024x1024)
