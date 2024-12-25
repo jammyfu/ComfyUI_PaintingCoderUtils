@@ -16,7 +16,7 @@
 
 ## 🎯 功能节点
 
-### 图像分辨率调整器 (Image Resolution Adjuster)
+### 📐图像分辨率调整器 (Image Resolution Adjuster)
 一个用于按照 SDXL 最佳宽高比调整图像分辨率的实用节点。
 
 ![图像分辨率调整器设置](docs/images/image_resolution_adjuster01.png)
@@ -51,7 +51,7 @@
 4. 使用颜色选择器设置背景颜色
 5. 根据需要调整缩放系数和分辨率限制
 
-### 空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
+### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
 一个用于清理文本中的空行和前导/尾随空格的文本处理节点。
 
 特点：
