@@ -103,6 +103,7 @@ Remove empty lines and spaces to generate list:
 
 ### 🔗Text Combiner✨
 Added Text Combiner node for combining multiple text inputs into a single output.
+![Added Text Combiner node for combining multiple text inputs into a single output.](docs/images/text_combiner01.png)
 
 Features:
 - Dynamic inputs: automatically adds new input points when connected
