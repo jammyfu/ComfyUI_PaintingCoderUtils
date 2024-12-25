@@ -16,6 +16,41 @@ A collection of utility nodes designed for ComfyUI, offering convenient image pr
 
 ## 🎯 Nodes
 
+### 📝Text
+#### TextCombiner
+A text combiner that merges multiple text inputs into a single output.
+
+Features:
+- Dynamic Inputs: Automatically adds new input points when connected
+- Flexible Separators:
+  - Supports regular expressions
+  - Supports escape characters (e.g., \n, \r)
+  - Uses space as separator when left empty
+- Smart Line Breaks: Automatically splits output by lines when separator contains line breaks
+- Auto Filtering: Removes empty lines while preserving whitespace content
+
+Usage Examples:
+1. Basic Usage:
+   - Using comma as separator: `,`
+   - Output: text1, text2, text3
+
+2. Line Break Separator:
+   - Using newline: `\n`
+   - Output:
+     ```
+     text1
+     text2
+     text3
+     ```
+
+3. Mixed Separator:
+   - Using comma or newline: `,|\n`
+   - Supports both separation methods
+
+4. Empty Separator:
+   - Leave empty
+   - Directly connects texts with spaces
+
 ### Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
@@ -105,6 +140,14 @@ Remove empty lines and spaces to generate list:
 MIT License
 
 ## 🤝 Updates
+
+### v0.1.1 (2024-12-25)
+- Added TextCombiner node
+  - Implemented dynamic input connections
+  - Added support for regex separators
+  - Added support for newlines and escape characters
+  - Added empty separator handling
+  - Optimized text joining logic
 
 ### v0.1.0 (2024-12-23)
 - Initial release
