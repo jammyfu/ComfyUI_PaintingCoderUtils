@@ -1,45 +1,53 @@
-class DynamicImageInputs:
-    """动态图片输入节点
-    
-    这个节点允许动态添加多个图片输入端口，并将所有输入的图片合并成一个列表输出。
-    
-    特点：
-    1. 支持动态增减图片输入端口
-    2. 自动忽略未连接的输入端口
-    3. 输出一个包含所有输入图片的列表
-    
-    使用方法：
-    1. 将节点添加到工作流中
-    2. 连接图片到输入端口
-    3. 使用 get_input 方法动态增加更多输入端口
-    """
-    
+# -*- coding: utf-8 -*-
+# Filename: dynamic_image_input.py
+# Developer: jammyfu
+# Category: 🎨Painting👓Coder/🖼️Image
+
+import torch
+
+class DynamicImageCombiner:
     @classmethod
-    def INPUT_TYPES(cls):
-        """定义节点的输入类型
-        
-        Returns:
-            dict: 包含默认的单个图片输入端口
-        """
-        return {"required": {"image_1": ("IMAGE",)}}
+    def INPUT_TYPES(s):
+        return {
+            "required": {},  # 不需要默认输入
+            "optional": {}
+        }
+    
+    RETURN_TYPES = ("IMAGE",)
+    RETURN_NAMES = ("images",)
+    OUTPUT_IS_LIST = (True,)  # 标记输出为列表
+    FUNCTION = "combine_images"
+    CATEGORY = "🎨Painting👓Coder/🖼️Image"
 
-    RETURN_TYPES = ("IMAGE",)    # 返回图片类型
-    RETURN_NAMES = ("images",)   # 输出端口名称
-    OUTPUT_IS_LIST = (True,)     # 标记输出为列表类型
-    FUNCTION = "process_images"   # 处理函数名称
-    CATEGORY = "🎨Painting👓Coder/🖼️Image"  # 节点分类
+    def combine_images(self, **image_inputs):
+        try:
+            # 收集所有非空图像
+            images = []
+            for i in range(1, len(image_inputs) + 1):
+                key = f"image_{i}"
+                if key in image_inputs and image_inputs[key] is not None:
+                    if isinstance(image_inputs[key], torch.Tensor):
+                        images.append(image_inputs[key])
 
-    def process_images(self, **kwargs):
-        """处理所有输入的图片
-        
-        Args:
-            **kwargs: 包含所有输入图片的字典，键名格式为 "image_1", "image_2" 等
-            
-        Returns:
-            tuple: 包含所有输入图片的列表
-        """
-        images = []
-        for k, v in kwargs.items():
-            if k.startswith("image_") and v is not None:
-                images.append(v)
-        return (images,)
+            # 如果没有图像，返回一个包含空白图像的列表
+            if not images:
+                empty_image = torch.zeros((1, 512, 512, 3))
+                return ([empty_image],)
+
+            # 直接返回图像列表
+            return (images,)
+
+        except Exception as e:
+            print(f"Error in DynamicImageCombiner: {str(e)}")
+            # 发生错误时返回包含空白图像的列表
+            empty_image = torch.zeros((1, 512, 512, 3))
+            return ([empty_image],)
+
+# 添加到 ComfyUI 节点注册
+NODE_CLASS_MAPPINGS = {
+    "DynamicImageCombiner": DynamicImageCombiner,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "DynamicImageCombiner": "Dynamic Image Input 🖼️",
+}

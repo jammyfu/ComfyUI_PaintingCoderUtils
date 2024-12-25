@@ -19,6 +19,7 @@ try:
     from .text_combiner import TextCombiner
     from .multiline_text_input import MultilineTextInput
     from .click_popup import ClickPopup
+    from .dynamic_image_input import DynamicImageCombiner
     
     
     # 节点映射
@@ -29,6 +30,7 @@ try:
         "TextCombiner": TextCombiner,
         "MultilineTextInput": MultilineTextInput,
         "ClickPopup": ClickPopup,
+        "DynamicImageCombiner": DynamicImageCombiner,
     }
 
     NODE_DISPLAY_NAME_MAPPINGS = {
@@ -37,7 +39,8 @@ try:
         "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces",
         "TextCombiner": "Text Combiner",
         "MultilineTextInput": "Multiline Text Input",
-        "ClickPopup": "Click Popup"
+        "ClickPopup": "Click Popup",
+        "DynamicImageCombiner": "Dynamic Image Combiner"
     }
     
 
