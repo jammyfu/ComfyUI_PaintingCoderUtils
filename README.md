@@ -1,6 +1,6 @@
-# ComfyUI PaintingCoderUtils Nodes
+# ComfyUI Painting Coder Utilities Nodes
 
-A collection of utility nodes designed for ComfyUI, offering convenient image processing tools.
+A practical collection of nodes designed for ComfyUI by a programmer who enjoys painting, providing convenient tools for image and text processing.
 
 [中文说明](./README_CN.md)
 

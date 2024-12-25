@@ -1,6 +1,6 @@
-# ComfyUI PaintingCoderUtils Nodes（ComfyUI画画的程序员工具集）
+# ComfyUI画画的程序员工具集节点
 
-一个为 ComfyUI 设计的实用节点集合，提供便捷的图像处理工具。
+一个喜欢画画的程序员设计的 ComfyUI 设计的实用节点集合，提供便捷的图像、文本处理工具。
 
 [English](./README.md)
 
