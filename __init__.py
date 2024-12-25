@@ -6,18 +6,24 @@ try:
     from .image_resolution_adjuster import ImageResolutionAdjuster
     from .color_picker import ColorPicker
     from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
-
+    from .text_combiner import TextCombiner
+    from .multiline_text_input import MultilineTextInput
+    
     # 节点映射
     NODE_CLASS_MAPPINGS = {
         "ImageResolutionAdjuster": ImageResolutionAdjuster,
         "ColorPicker": ColorPicker,
-        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces
+        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+        "TextCombiner": TextCombiner,
+        "MultilineTextInput": MultilineTextInput,
     }
 
     NODE_DISPLAY_NAME_MAPPINGS = {
         "ImageResolutionAdjuster": "Image Resolution Adjuster",
         "ColorPicker": "Color Picker",
-        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces"
+        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces",
+        "TextCombiner": "Text Combiner",
+        "MultilineTextInput": "Multiline Text Input"
     }
 except ImportError as e:
     print(f"Error importing modules: {e}")
