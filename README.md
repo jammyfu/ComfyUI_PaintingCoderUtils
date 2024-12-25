@@ -33,25 +33,25 @@ Features:
   - 12:5 (1536x640)
   - 5:12 (640x1536)
 - Multiple extend modes:
-  - contain: Scale image to fit within target size
-  - cover: Scale image to cover target size
-  - fill: Stretch image to fill target size
-  - inside: Like contain, but only scales down
-  - outside: Like cover, but only scales up
+  - contain: Scale proportionally to fit within target size
+  - cover: Scale proportionally to cover target size
+  - fill: Stretch to fill target size
+  - inside: Like contain, but only downscale
+  - outside: Like cover, but only upscale
   - top/bottom/left/right/center: Position image within target size
-- Adjustable scale factor
+- Adjustable scaling factor
 - Configurable maximum and minimum resolution limits
-- Color picker for background fill
-- Maintains aspect ratio while resizing
+- Background color picker
+- Maintains aspect ratio during adjustment
 
 Usage:
 1. Add the node to your workflow
 2. Select target resolution from SDXL presets
-3. Choose extend mode based on your needs
+3. Choose extend mode as needed
 4. Use color picker to set background color
-5. Adjust scale factor and resolution limits if needed
+5. Adjust scaling factor and resolution limits as needed
 
-### Remove Empty Lines And Leading Spaces
+### ✂️Remove Empty Lines And Leading Spaces
 A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
 
 Features:
@@ -101,21 +101,21 @@ Remove empty lines and spaces to generate list:
 ![Remove empty lines and spaces to generate list](docs/images/rm_line_and_space_cn04.png)
 
 
-### 📝TextCombiner
-A text combiner that merges multiple text inputs into a single output.
+### Text Combiner
+Added Text Combiner node for combining multiple text inputs into a single output.
 
 Features:
-- Dynamic Inputs: Automatically adds new input points when connected
-- Flexible Separators:
+- Dynamic inputs: automatically adds new input points when connected
+- Flexible separators:
   - Supports regular expressions
   - Supports escape characters (e.g., \n, \r)
-  - Uses space as separator when left empty
-- Smart Line Breaks: Automatically splits output by lines when separator contains line breaks
-- Auto Filtering: Removes empty lines while preserving whitespace content
+  - Uses space when left empty
+- Smart line breaks: automatically splits output by line when separator includes newline
+- Auto filtering: removes empty lines while preserving pure space content
 
 Usage Examples:
 1. Basic Usage:
-   - Using comma as separator: `,`
+   - Using comma separator: `,`
    - Output: text1, text2, text3
 
 2. Line Break Separator:
@@ -129,17 +129,56 @@ Usage Examples:
 
 3. Mixed Separator:
    - Using comma or newline: `,|\n`
-   - Supports both separation methods
+   - Supports both separator types
 
 4. Empty Separator:
    - Leave empty
-   - Directly connects texts with spaces
+   - Directly joins text with spaces
+
+
+### 🖼️Dynamic Image Input
+A node for dynamically combining multiple image inputs. 
+Features:
+- Dynamic input ports: automatically adds new image input points when connected 
+- Smart image processing:
+  - Automatically filters empty inputs
+  - Maintains image format and quality
+  - Supports batch image processing
+- Error handling:
+  - Returns blank image when no valid inputs
+  - Gracefully handles exceptions
+- Output format: returns image list for further processing
+
+Usage:
+1. Add the node to your workflow
+2. Connect image inputs (new input ports will be created automatically)
+3. Node will automatically combine all non-empty image inputs
+4. Output can be connected to other nodes that require image lists
+
+Use Cases:
+- Batch image processing
+- Image collection management  
+- Dynamic workflow building
+- Image list generation
+
+
 
 ## 📝 License
 
 MIT License
 
 ## 🤝 Updates
+### v0.1.3 (2024-12-26)
+- Added Dynamic Image Input Combiner
+  - Implemented dynamic input ports
+  - Added smart image processing
+  - Optimized error handling mechanism
+  - Added support for image list output
+
+### v0.1.2 (2024-12-25)
+- Added image outline feature
+- Added text combiner node
+
 
 ### v0.1.1 (2024-12-25)
 - Added TextCombiner node
