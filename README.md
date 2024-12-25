@@ -76,9 +76,9 @@ Multiple empty lines above
 ```
 
 Parameters:
-- `keep_single_empty_line`: Keep one empty line between paragraphs
-- `preserve_indentation`: Keep the indentation of each line
-- `trim_trailing_spaces`: Remove spaces at the end of lines
+- `output type`: Output type (text, list)
+- `remove empty line option`: Remove empty lines
+- `remove loading space option`: Remove spaces
 
 Use Cases:
 - Cleaning up prompt text
@@ -87,16 +87,16 @@ Use Cases:
 - Standardizing text input format
 
 Parameter Settings:
-![Parameter Settings](docment/images/rm_line_and_space_cn01.png)
+![Remove extra empty lines and spaces to generate text](docment/images/rm_line_and_space_cn01.png)
 
-Example with keep_single_empty_line=True:
-![Keep Single Empty Line](docment/images/rm_line_and_space_cn02.png)
+Example with keeping single empty line:
+![Remove empty lines while keeping spaces to generate text](docment/images/rm_line_and_space_cn02.png)
 
-Example with preserve_indentation=True:
-![Preserve Indentation](docment/images/rm_line_and_space_cn03.png)
+Example with preserving indentation:
+![Remove spaces while keeping empty lines to generate text](docment/images/rm_line_and_space_cn03.png)
 
-Example with trim_trailing_spaces=True:
-![Trim Trailing Spaces](docment/images/rm_line_and_space_cn04.png)
+Example with removing trailing spaces:
+![Remove empty lines and spaces to generate list](docment/images/rm_line_and_space_cn04.png)
 
 ## 📝 License
 

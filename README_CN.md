@@ -76,9 +76,9 @@
 ```
 
 参数说明：
-- `keep_single_empty_line`：保留段落之间的一个空行
-- `preserve_indentation`：保持每行的缩进
-- `trim_trailing_spaces`：移除行尾的空格
+- `output type`：输出类型(文本、列表)
+- `remove empty line option`：移除空行
+- `remove loading space option`：移除空格
 
 使用场景：
 - 清理提示词文本
@@ -87,16 +87,16 @@
 - 标准化文本输入格式
 
 参数设置：
-![参数设置](docment/images/rm_line_and_space_cn01.png)
+![清除多余的空行及空格生成文本](docment/images/rm_line_and_space_cn01.png)
 
 保留单个空行的示例：
-![保留单个空行](docment/images/rm_line_and_space_cn02.png)
+![清除空行保留空格生成文本](docment/images/rm_line_and_space_cn02.png)
 
 保留缩进的示例：
-![保留缩进](docment/images/rm_line_and_space_cn03.png)
+![清除空格保留空号生成文本](docment/images/rm_line_and_space_cn03.png)
 
 移除尾随空格的示例：
-![移除尾随空格](docment/images/rm_line_and_space_cn04.png)
+![清除空行、空格生成列表](docment/images/rm_line_and_space_cn04.png)
 
 ## 📝 许可证
 
