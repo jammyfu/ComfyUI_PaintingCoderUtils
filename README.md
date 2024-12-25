@@ -16,45 +16,10 @@ A collection of utility nodes designed for ComfyUI, offering convenient image pr
 
 ## 🎯 Nodes
 
-### 📝Text
-#### TextCombiner
-A text combiner that merges multiple text inputs into a single output.
-
-Features:
-- Dynamic Inputs: Automatically adds new input points when connected
-- Flexible Separators:
-  - Supports regular expressions
-  - Supports escape characters (e.g., \n, \r)
-  - Uses space as separator when left empty
-- Smart Line Breaks: Automatically splits output by lines when separator contains line breaks
-- Auto Filtering: Removes empty lines while preserving whitespace content
-
-Usage Examples:
-1. Basic Usage:
-   - Using comma as separator: `,`
-   - Output: text1, text2, text3
-
-2. Line Break Separator:
-   - Using newline: `\n`
-   - Output:
-     ```
-     text1
-     text2
-     text3
-     ```
-
-3. Mixed Separator:
-   - Using comma or newline: `,|\n`
-   - Supports both separation methods
-
-4. Empty Separator:
-   - Leave empty
-   - Directly connects texts with spaces
-
 ### Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
-![Image Resolution Adjuster Settings](docment/images/image_resolution_adjuster01.png)
+![Image Resolution Adjuster Settings](docs/images/image_resolution_adjuster01.png)
 
 Features:
 - Supports all SDXL optimal resolutions:
@@ -124,16 +89,51 @@ Use Cases:
 - Standardizing text input format
 
 Remove extra empty lines and spaces to generate text:
-![Remove extra empty lines and spaces to generate text](docment/images/rm_line_and_space_cn01.png)
+![Remove extra empty lines and spaces to generate text](docs/images/rm_line_and_space_cn01.png)
 
 Remove empty lines while keeping spaces to generate text:
-![Remove empty lines while keeping spaces to generate text](docment/images/rm_line_and_space_cn02.png)
+![Remove empty lines while keeping spaces to generate text](docs/images/rm_line_and_space_cn02.png)
 
 Remove spaces while keeping empty lines to generate text:
-![Remove spaces while keeping empty lines to generate text](docment/images/rm_line_and_space_cn03.png)
+![Remove spaces while keeping empty lines to generate text](docs/images/rm_line_and_space_cn03.png)
 
 Remove empty lines and spaces to generate list:
-![Remove empty lines and spaces to generate list](docment/images/rm_line_and_space_cn04.png)
+![Remove empty lines and spaces to generate list](docs/images/rm_line_and_space_cn04.png)
+
+
+### 📝TextCombiner
+A text combiner that merges multiple text inputs into a single output.
+
+Features:
+- Dynamic Inputs: Automatically adds new input points when connected
+- Flexible Separators:
+  - Supports regular expressions
+  - Supports escape characters (e.g., \n, \r)
+  - Uses space as separator when left empty
+- Smart Line Breaks: Automatically splits output by lines when separator contains line breaks
+- Auto Filtering: Removes empty lines while preserving whitespace content
+
+Usage Examples:
+1. Basic Usage:
+   - Using comma as separator: `,`
+   - Output: text1, text2, text3
+
+2. Line Break Separator:
+   - Using newline: `\n`
+   - Output:
+     ```
+     text1
+     text2
+     text3
+     ```
+
+3. Mixed Separator:
+   - Using comma or newline: `,|\n`
+   - Supports both separation methods
+
+4. Empty Separator:
+   - Leave empty
+   - Directly connects texts with spaces
 
 ## 📝 License
 
