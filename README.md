@@ -88,16 +88,16 @@ Use Cases:
 - Preparing text for text-to-image generation
 - Standardizing text input format
 
-Parameter Settings:
+Remove extra empty lines and spaces to generate text:
 ![Remove extra empty lines and spaces to generate text](docment/images/rm_line_and_space_cn01.png)
 
-Example with keeping single empty line:
+Remove empty lines while keeping spaces to generate text:
 ![Remove empty lines while keeping spaces to generate text](docment/images/rm_line_and_space_cn02.png)
 
-Example with preserving indentation:
+Remove spaces while keeping empty lines to generate text:
 ![Remove spaces while keeping empty lines to generate text](docment/images/rm_line_and_space_cn03.png)
 
-Example with removing trailing spaces:
+Remove empty lines and spaces to generate list:
 ![Remove empty lines and spaces to generate list](docment/images/rm_line_and_space_cn04.png)
 
 ## 📝 License
