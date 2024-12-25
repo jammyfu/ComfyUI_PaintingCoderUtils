@@ -13,7 +13,7 @@ class TextCombiner:
                 "separator": ("STRING", {
                     "default": ",", 
                     "multiline": False,
-                    "placeholder": "支持正则表达式和转义字符，如: ,|\\n，留空则用空格连接"
+                    "placeholder": "支持正则表达式和转义字符，如: ,|\\n。使用特殊字符请加\\转义"
                 }),
             },
             "optional": {}
@@ -26,16 +26,15 @@ class TextCombiner:
 
     def combine_text(self, separator=",", **kwargs):
         try:
-            # 检查分隔符是否为空
-            if not separator.strip():
-                # 如果为空，使用空格作为分隔符
-                actual_separator = " "
-                is_newline_separator = False
-            else:
-                # 处理转义字符
-                actual_separator = bytes(separator, "utf-8").decode("unicode_escape")
-                # 检查分隔符是否包含换行相关字符
-                is_newline_separator = bool(re.search(r'\\[rn]|[\r\n]', actual_separator))
+            # 如果分隔符不是正则表达式，对特殊字符进行转义
+            if not any(c in separator for c in "[](){}?*+|^$\\"):
+                separator = re.escape(separator)
+            
+            # 处理转义字符
+            separator = bytes(separator, "utf-8").decode("unicode_escape")
+            
+            # 检查分隔符是否包含换行相关字符
+            is_newline_separator = bool(re.search(r'\\[rn]|[\r\n]', separator))
             
             # 收集所有非空文本
             texts = []
@@ -47,7 +46,7 @@ class TextCombiner:
                     input_text = input_text.replace('\r\n', '\n').replace('\r', '\n')
                     
                     # 使用正则表达式分割输入文本
-                    split_texts = re.split(actual_separator, input_text) if actual_separator != " " else [input_text]
+                    split_texts = re.split(separator, input_text) if separator != " " else [input_text]
                     # 过滤空字符串并添加到结果列表，保留纯空格字符串
                     texts.extend(t.rstrip('\n').rstrip('\r') for t in split_texts if t is not None)
             
@@ -66,10 +65,10 @@ class TextCombiner:
             
         except re.error as e:
             # 如果正则表达式无效，返回错误信息
-            return (f"正则表达式错误: {str(e)}",)
+            return (f"Regular expression error: {str(e)}",)
         except Exception as e:
             # 处理其他可能的错误
-            return (f"错误: {str(e)}",)
+            return (f"Error: {str(e)}",)
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
