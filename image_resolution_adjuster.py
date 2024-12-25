@@ -11,13 +11,6 @@ import folder_paths
 import json
 import os
 
-# 尝试导入 gradio，如果失败则使用基础的颜色选择器
-try:
-    import gradio as gr
-    HAS_GRADIO = True
-except ImportError:
-    HAS_GRADIO = False
-    print("Gradio not found, using basic color picker")
 
 def resize_image(image, target_width, target_height, method='contain', background_color='#000000'):
     """Resize an image while maintaining aspect ratio.

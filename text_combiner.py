@@ -3,22 +3,20 @@
 # Developer: jammyfu
 # Category: 🎨Painting👓Coder/📝Text
 
-import comfy
+import re
 
 class TextCombiner:
-    def __init__(self):
-        self.input_count = 1  # 初始输入节点数量
-
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "text_1": ("STRING", {"multiline": True}),
-                "refresh": ("BOOLEAN", {"default": False}),
+                "separator": ("STRING", {
+                    "default": ",", 
+                    "multiline": False,
+                    "placeholder": "支持正则表达式和转义字符，如: ,|\\n，留空则用空格连接"
+                }),
             },
-            "optional": {
-                "text_2": ("STRING", {"multiline": True}),  # 只保留一个可选输入
-            },
+            "optional": {}
         }
     
     RETURN_TYPES = ("STRING",)
@@ -26,38 +24,52 @@ class TextCombiner:
     FUNCTION = "combine_text"
     CATEGORY = "🎨Painting👓Coder/📝Text"
 
-    CONTEXT_MENU = {
-        "refresh_node": ["Refresh Node", "refresh_node"],
-        "add_input": ["Add Input", "add_input"],
-    }
-    
-    def combine_text(self, text_1, refresh=False, **kwargs):
-        # 检查是否需要添加新的输入
-        if kwargs.get(f"text_{self.input_count + 1}"):
-            self.add_input()
-
-        # 组合所有非空文本
-        texts = [text_1] + [v for k, v in kwargs.items() if v and v.strip()]
-        combined_text = ", ".join(t.strip() for t in texts if t.strip())
-        return (combined_text,)
-
-    def add_input(self):
-        self.input_count += 1
-        # 动态更新 INPUT_TYPES
-        self.INPUT_TYPES = lambda s: {
-            "required": {
-                "text_1": ("STRING", {"multiline": True}),
-                "refresh": ("BOOLEAN", {"default": False}),
-            },
-            "optional": {
-                f"text_{i}": ("STRING", {"multiline": True}) 
-                for i in range(2, self.input_count + 2)  # +2 是为了总是多一个空输入
-            },
-        }
-        return {"refresh": True}
-
-    def refresh_node(self):
-        return {"refresh": True}
+    def combine_text(self, separator=",", **kwargs):
+        try:
+            # 检查分隔符是否为空
+            if not separator.strip():
+                # 如果为空，使用空格作为分隔符
+                actual_separator = " "
+                is_newline_separator = False
+            else:
+                # 处理转义字符
+                actual_separator = bytes(separator, "utf-8").decode("unicode_escape")
+                # 检查分隔符是否包含换行相关字符
+                is_newline_separator = bool(re.search(r'\\[rn]|[\r\n]', actual_separator))
+            
+            # 收集所有非空文本
+            texts = []
+            for i in range(1, len(kwargs) + 1):
+                key = f"text_{i}"
+                if key in kwargs and kwargs[key] is not None:
+                    input_text = kwargs[key]
+                    # 标准化输入文本的换行符
+                    input_text = input_text.replace('\r\n', '\n').replace('\r', '\n')
+                    
+                    # 使用正则表达式分割输入文本
+                    split_texts = re.split(actual_separator, input_text) if actual_separator != " " else [input_text]
+                    # 过滤空字符串并添加到结果列表，保留纯空格字符串
+                    texts.extend(t.rstrip('\n').rstrip('\r') for t in split_texts if t is not None)
+            
+            # 根据分隔符类型选择拼接方式
+            if is_newline_separator:
+                # 如果分隔符包含换行，使用换行符拼接
+                combined_text = '\n'.join(t if t.strip() else '""' for t in texts) if texts else "等待输入文本"
+            elif not separator.strip():
+                # 如果分隔符为空，使用单个空格拼接
+                combined_text = ' '.join(t if t.strip() else '""' for t in texts) if texts else "等待输入文本"
+            else:
+                # 否则使用逗号和空格拼接
+                combined_text = ", ".join(t if t.strip() else '""' for t in texts) if texts else "等待输入文本"
+            
+            return (combined_text,)
+            
+        except re.error as e:
+            # 如果正则表达式无效，返回错误信息
+            return (f"正则表达式错误: {str(e)}",)
+        except Exception as e:
+            # 处理其他可能的错误
+            return (f"错误: {str(e)}",)
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
