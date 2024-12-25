@@ -76,7 +76,14 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
             new_height = target_height
             new_width = int(target_height * img_ratio)
          resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-         padded_img = Image.new('RGB', (target_width, target_height), 'black')
+         
+         # 解析背景颜色
+         try:
+             color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+         except ValueError:
+             color = (0, 0, 0)  # 默认黑色
+             
+         padded_img = Image.new('RGB', (target_width, target_height), color)
          x_offset = (target_width - new_width) // 2
          y_offset = (target_height - new_height) // 2
          padded_img.paste(resized_img, (x_offset, y_offset))
@@ -246,12 +253,12 @@ class ImageResolutionAdjuster:
                 "images": ("IMAGE",),
                 "target_resolution": (s.get_resolution_options(),),
                 "extend_mode": (["contain", "cover", "fill", "inside", "outside", "top", "bottom", "left", "right", "center"],),
-                "background_color": ("STRING", {"default": "#000000", "multiline": False}),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
                 "max_width": ("INT", {"default": 2048, "min": 1, "max": 8192, "step": 1}),
                 "max_height": ("INT", {"default": 2048, "min": 1, "max": 8192, "step": 1}),
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
+                "background_color": ("STRING", {"default": "#000000", "multiline": False}),
             },
             "hidden": {"color_widget": "COMBO"}
         }
