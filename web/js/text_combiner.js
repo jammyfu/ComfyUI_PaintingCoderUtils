@@ -4,49 +4,67 @@ app.registerExtension({
     name: "Comfy.PaintingCoder.TextCombiner",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "TextCombiner") {
+            // 添加 CSS 样式 - 使用更深的莫兰迪蓝
+            const style = document.createElement('style');
+            style.textContent = `
+                .comfy-node[data-type="TextCombiner"] {
+                    background-color: rgb(63, 77, 85) !important;
+                    color: rgb(255, 255, 255) !important;
+                }
+
+                .comfy-node[data-type="TextCombiner"] .title-box {
+                    background-color: rgb(45, 55, 65) !important;
+                    color: rgb(33, 37, 41) !important;
+                }
+
+                .comfy-node[data-type="TextCombiner"]:hover {
+                    background-color: rgba(63, 77, 85, 0.9) !important;
+                }
+            `;
+            document.head.appendChild(style);
+
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function() {
                 const result = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
                 
                 // 初始化状态
                 this.lastConnectedCount = 0;
-                
-                // 添加第一个输入点
-                console.log("初始化：添加第一个输入点");
                 this.addInput("text_1", "STRING");
+                
+                // 直接设置节点颜色 - 使用更深的莫兰迪蓝
+                if (this.constructor.nodeData?.name === "TextCombiner") {
+                    this.bgcolor = "#2e414a";  //（面板）
+                    this.color = "#132832"; 
+                    if (this.title_box) {
+                        this.title_box.style.backgroundColor = "rgb(45, 55, 65)";  // 更深的标题栏颜色
+                        this.title_box.style.color = "#212529";  // 黑色文字
+                    }
+                }
                 
                 return result;
             };
 
             nodeType.prototype.onConnectionsChange = function(connectionType, slot, isConnected) {
                 if (connectionType === 1) {  // 输入连接
-                    console.log(`连接变化 - 槽位: ${slot}, 已连接: ${isConnected}`);
-                    
                     const connectedCount = this.inputs.reduce((count, input) => 
                         count + (input.link ? 1 : 0), 0);
-                    
-                    console.log(`当前连接数量: ${connectedCount}, 上次连接数量: ${this.lastConnectedCount}`);
 
                     if (connectedCount !== this.lastConnectedCount) {
                         this.lastConnectedCount = connectedCount;
                         const targetCount = connectedCount + 1;
-                        console.log(`目标输入点数量: ${targetCount}`);
 
                         while (this.inputs.length < targetCount) {
                             const newIndex = this.inputs.length + 1;
-                            console.log(`添加新输入点: text_${newIndex}`);
                             this.addInput(`text_${newIndex}`, "STRING");
                         }
 
                         while (this.inputs.length > Math.max(targetCount, 1)) {
                             const lastInput = this.inputs[this.inputs.length - 1];
                             if (!lastInput.link) {
-                                console.log(`移除输入点: ${this.inputs.length}`);
                                 this.removeInput(this.inputs.length - 1);
                             }
                         }
 
-                        console.log(`更新节点大小，当前输入点数量: ${this.inputs.length}`);
                         this.setSize(this.computeSize());
                         app.graph.setDirtyCanvas(true);
                     }

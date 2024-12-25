@@ -17,7 +17,7 @@ class TextCombiner:
                 }),
                 "use_regex": ("BOOLEAN", {"default": False}),
             },
-            "optional": {}
+            "optional": {},
         }
     
     RETURN_TYPES = ("STRING",)
@@ -69,4 +69,16 @@ class TextCombiner:
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
     "TextCombiner": TextCombiner,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "TextCombiner": "Text Combiner 📝",
+}
+
+NODE_CATEGORY_MAPPINGS = {
+    "TextCombiner": "🎨Painting👓Coder/📝Text",
+}
+
+NODE_COLOR_MAPPINGS = {
+    "TextCombiner": (13, 110, 253),  # Bootstrap 蓝色
 }
