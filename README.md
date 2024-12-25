@@ -101,7 +101,7 @@ Remove empty lines and spaces to generate list:
 ![Remove empty lines and spaces to generate list](docs/images/rm_line_and_space_cn04.png)
 
 
-### Text Combiner
+### 🔗Text Combiner✨
 Added Text Combiner node for combining multiple text inputs into a single output.
 
 Features:
@@ -138,6 +138,7 @@ Usage Examples:
 
 ### 🖼️Dynamic Image Input
 A node for dynamically combining multiple image inputs. 
+![A node for dynamically combining multiple image inputs.](docs/images/dynamic_image_combiner01.png)
 Features:
 - Dynamic input ports: automatically adds new image input points when connected 
 - Smart image processing:

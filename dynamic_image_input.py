@@ -10,7 +10,11 @@ class DynamicImageCombiner:
     def INPUT_TYPES(s):
         return {
             "required": {},  # 不需要默认输入
-            "optional": {}
+            "optional": {},
+            "_meta": {
+                "preferred_width": 300,  # 设置默认宽度为300
+                "maintain_dimensions": True  # 保持刷新时的尺寸
+            }
         }
     
     RETURN_TYPES = ("IMAGE",)
