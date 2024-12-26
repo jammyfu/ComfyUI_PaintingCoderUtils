@@ -10,6 +10,7 @@ from math import gcd
 import folder_paths
 import json
 import os
+import torch.nn.functional as F
 
 
 def resize_image(image, target_width, target_height, method='contain', background_color='#000000'):
@@ -42,7 +43,10 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         x_offset = (target_width - new_width) // 2
         y_offset = (target_height - new_height) // 2
         padded_img.paste(resized_img, (x_offset, y_offset))
-        return np.array(padded_img).astype(np.float32)/255.0, new_width, new_height
+        
+        # 在返回之前计算mask
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        return np.array(padded_img).astype(np.float32)/255.0, mask, new_width, new_height
 
     elif method == 'cover':
         # Cover: 缩放图像以覆盖目标尺寸，保持宽高比，可能裁剪
@@ -243,6 +247,76 @@ def create_outline(image, background_color):
     # 转换回tensor格式
     return np.array(outlined).astype(np.float32) / 255.0
 
+def calculate_mask(original_size, target_size, extend_mode, feather=0):
+    """计算填充区域的mask
+    Args:
+        original_size: (width, height) 原始图像尺寸
+        target_size: (width, height) 目标尺寸
+        extend_mode: 扩展模式
+        feather: 羽化程度
+    Returns:
+        torch.Tensor: mask张量
+    """
+    orig_w, orig_h = original_size
+    target_w, target_h = target_size
+    
+    # 创建目标尺寸的mask，初始化为0（黑色，表示填充区域）
+    mask = torch.zeros((target_h, target_w))
+    
+    if extend_mode in ["contain", "inside"]:
+        # 计算缩放后的尺寸
+        ratio = min(target_w/orig_w, target_h/orig_h)
+        new_w = int(orig_w * ratio)
+        new_h = int(orig_h * ratio)
+        
+        # 计算偏移量（居中）
+        x_offset = (target_w - new_w) // 2
+        y_offset = (target_h - new_h) // 2
+        
+        # 设置非填充区域为1（白色）
+        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1
+        
+    elif extend_mode in ["top", "bottom", "left", "right", "center"]:
+        # 计算偏移量
+        if extend_mode == "top":
+            x_offset = (target_w - orig_w) // 2
+            y_offset = 0
+        elif extend_mode == "bottom":
+            x_offset = (target_w - orig_w) // 2
+            y_offset = target_h - orig_h
+        elif extend_mode == "left":
+            x_offset = 0
+            y_offset = (target_h - orig_h) // 2
+        elif extend_mode == "right":
+            x_offset = target_w - orig_w
+            y_offset = (target_h - orig_h) // 2
+        else:  # center
+            x_offset = (target_w - orig_w) // 2
+            y_offset = (target_h - orig_h) // 2
+            
+        # 设置非填充区域为1（白色）
+        mask[y_offset:y_offset + orig_h, x_offset:x_offset + orig_w] = 1
+    
+    # 应用羽化效果
+    if feather > 0:
+        # 将mask转换为适合卷积的格式 [B, C, H, W]
+        mask = mask.unsqueeze(0).unsqueeze(0)
+        
+        # 创建高斯核进行羽化
+        kernel_size = 2 * feather + 1
+        sigma = feather / 3
+        
+        # 应用高斯模糊
+        mask = F.gaussian_blur(mask, kernel_size=(kernel_size, kernel_size), sigma=(sigma, sigma))
+        
+        # 转换回原始格式
+        mask = mask.squeeze(0).squeeze(0)
+    
+    # 确保mask值在0-1范围内
+    mask = torch.clamp(mask, 0, 1)
+    
+    return mask
+
 class ImageResolutionAdjuster:
     def __init__(self):
         self.selected_color = "#000000"
@@ -282,7 +356,8 @@ class ImageResolutionAdjuster:
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000", "multiline": False}),
-                "add_outline": ("BOOLEAN", {"default": False}),  # 保持参数名不变
+                "add_outline": ("BOOLEAN", {"default": False}),
+                "feather": ("INT", {"default": 0, "min": 0, "max": 10, "step": 1}),
             },
             "hidden": {"color_widget": "COMBO"}
         }
@@ -292,8 +367,9 @@ class ImageResolutionAdjuster:
     RETURN_NAMES = ("images", "mask", "width", "height")
     FUNCTION = "adjust_resolution"
 
-    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, add_outline):
+    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, add_outline, feather=0):
         output_images = []
+        output_masks = []
         
         # 从目标分辨率字符串中提取宽高比
         aspect_ratio = target_resolution.split(" ")[0]
@@ -305,9 +381,9 @@ class ImageResolutionAdjuster:
         
         for image in images:
             if extend_mode in ["contain", "cover", "fill", "inside", "outside"]:
-                scaled_image, width, height = resize_image(image, target_width, target_height, method=extend_mode, background_color=background_color)
+                scaled_image, mask, width, height = resize_image(image, target_width, target_height, method=extend_mode, background_color=background_color)
             elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-                scaled_image, width, height = pad_image(image, target_width, target_height, 
+                scaled_image, mask, width, height = pad_image(image, target_width, target_height, 
                                                       position=extend_mode, 
                                                       background_color=background_color)
             else:
@@ -316,12 +392,19 @@ class ImageResolutionAdjuster:
             # 如果需要添加描边，使用新的函数名
             if add_outline:
                 scaled_image = create_outline(scaled_image, background_color)
+                # 更新mask尺寸以匹配新的图像尺寸
+                mask = F.pad(mask, (1, 1, 1, 1), mode='constant', value=0)
                 width += 2
                 height += 2
             
             output_images.append(torch.from_numpy(scaled_image).unsqueeze(0))
+            output_masks.append(mask.unsqueeze(0))
         
-        return (torch.cat(output_images, dim=0), width, height)
+        # 合并所有图像和mask
+        output_images = torch.cat(output_images, dim=0)
+        output_masks = torch.cat(output_masks, dim=0)
+        
+        return (output_images, output_masks, width, height)
 
     @classmethod
     def VALIDATE_INPUTS(s, **kwargs):
