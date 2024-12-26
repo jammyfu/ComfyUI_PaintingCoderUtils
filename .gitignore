@@ -2,3 +2,13 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# Specific cache files
+__pycache__/*.pyc
+__pycache__/*.pyo
+__pycache__/*.pyd
+
+# IDE cache files (可选)
+__pycache__/.idea/  
+__pycache__/.vscode/
+__pycache__/*.swp
+__pycache__/*.swo
