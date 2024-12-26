@@ -110,21 +110,17 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
          return np.array(cropped_img).astype(np.float32)/255.0 , target_width, target_height
 
 def pad_image(image, target_width, target_height, position='center', background_color='#000000'):
-    """Pad an image to the target dimensions with specified background color.
-       position: 'center', 'top', 'bottom', 'left', 'right'
-       background_color: hex color string (e.g., '#FF0000' for red)
-    """
+    """Pad an image to the target dimensions with specified background color."""
     # 将ComfyUI的图像Tensor转换为PIL图像对象
     img = Image.fromarray(np.clip(255. * image.cpu().numpy(), 0, 255).astype(np.uint8))
     img_width, img_height = img.size
 
     # 解析十六进制颜色
     try:
-        # 移除井号并转换为RGB元组
         color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
     except ValueError:
         print(f"Invalid color format: {background_color}, using black")
-        color = (0, 0, 0)  # 如果解析失败，默认使用黑色
+        color = (0, 0, 0)
 
     # 创建指定颜色的背景图像
     padded_img = Image.new('RGB', (target_width, target_height), color)
@@ -151,8 +147,11 @@ def pad_image(image, target_width, target_height, position='center', background_
     # 将原图粘贴到背景上
     padded_img.paste(img, (x_offset, y_offset))
     
+    # 生成mask
+    mask = calculate_mask((img_width, img_height), (target_width, target_height), position)
+    
     # 转换回ComfyUI需要的格式
-    return np.array(padded_img).astype(np.float32) / 255.0, target_width, target_height
+    return np.array(padded_img).astype(np.float32) / 255.0, mask, target_width, target_height
 
 def calculate_resolution(aspect_ratio, scale_factor, max_width, max_height, min_width, min_height):
     """Calculate the target resolution based on aspect ratio and scale factor."""
