@@ -288,8 +288,8 @@ class ImageResolutionAdjuster:
         }
 
     CATEGORY = "🎨Painting👓Coder/🖼️Image"
-    RETURN_TYPES = ("IMAGE", "INT", "INT")
-    RETURN_NAMES = ("images", "width", "height")
+    RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
+    RETURN_NAMES = ("images", "mask", "width", "height")
     FUNCTION = "adjust_resolution"
 
     def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, add_outline):
