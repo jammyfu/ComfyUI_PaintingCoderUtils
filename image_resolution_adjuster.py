@@ -44,70 +44,81 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         y_offset = (target_height - new_height) // 2
         padded_img.paste(resized_img, (x_offset, y_offset))
         
-        # 在返回之前计算mask
+        # 生成mask
         mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
-        return np.array(padded_img).astype(np.float32)/255.0, mask, new_width, new_height
+        return np.array(padded_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'cover':
         # Cover: 缩放图像以覆盖目标尺寸，保持宽高比，可能裁剪
-         img_ratio = img_width / img_height
-         target_ratio = target_width / target_height
-         if img_ratio > target_ratio:
+        img_ratio = img_width / img_height
+        target_ratio = target_width / target_height
+        if img_ratio > target_ratio:
             new_height = target_height
             new_width = int(target_height * img_ratio)
-         else:
+        else:
             new_width = target_width
             new_height = int(target_width / img_ratio)
-         resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-         x_offset = (new_width - target_width) // 2
-         y_offset = (new_height - target_height) // 2
-         cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
-         return np.array(cropped_img).astype(np.float32)/255.0 , target_width, target_height
+        resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        x_offset = (new_width - target_width) // 2
+        y_offset = (new_height - target_height) // 2
+        cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
+        
+        # 生成mask
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        return np.array(cropped_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'fill':
         # Fill: 拉伸图像以填充目标尺寸，忽略宽高比，可能变形
         resized_img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
-        return np.array(resized_img).astype(np.float32)/255.0, target_width, target_height
+        # 生成mask
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        return np.array(resized_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'inside':
-       # Inside: 和 contain 相同，保持宽高比，缩小或不改变图像使其完全适合容器
-         img_ratio = img_width / img_height
-         target_ratio = target_width / target_height
-         if img_ratio > target_ratio:
+        # Inside: 和 contain 相同，保持宽高比，缩小或不改变图像使其完全适合容器
+        img_ratio = img_width / img_height
+        target_ratio = target_width / target_height
+        if img_ratio > target_ratio:
             new_width = target_width
             new_height = int(target_width / img_ratio)
-         else:
+        else:
             new_height = target_height
             new_width = int(target_height * img_ratio)
-         resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-         
-         # 解析背景颜色
-         try:
-             color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
-         except ValueError:
-             color = (0, 0, 0)  # 默认黑色
-             
-         padded_img = Image.new('RGB', (target_width, target_height), color)
-         x_offset = (target_width - new_width) // 2
-         y_offset = (target_height - new_height) // 2
-         padded_img.paste(resized_img, (x_offset, y_offset))
-         return np.array(padded_img).astype(np.float32)/255.0, target_width, target_height
+        resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        
+        # 解析背景颜色
+        try:
+            color = tuple(int(background_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+        except ValueError:
+            color = (0, 0, 0)  # 默认黑色
+            
+        padded_img = Image.new('RGB', (target_width, target_height), color)
+        x_offset = (target_width - new_width) // 2
+        y_offset = (target_height - new_height) // 2
+        padded_img.paste(resized_img, (x_offset, y_offset))
+        
+        # 生成mask
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        return np.array(padded_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'outside':
-         # Outside: 和 cover 相同，保持宽高比，放大或不改变图像使其完全覆盖容器
-         img_ratio = img_width / img_height
-         target_ratio = target_width / target_height
-         if img_ratio > target_ratio:
-             new_height = target_height
-             new_width = int(target_height * img_ratio)
-         else:
-             new_width = target_width
-             new_height = int(target_width / img_ratio)
-         resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-         x_offset = (new_width - target_width) // 2
-         y_offset = (new_height - target_height) // 2
-         cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
-         return np.array(cropped_img).astype(np.float32)/255.0 , target_width, target_height
+        # Outside: 和 cover 相同，保持宽高比，放大或不改变图像使其完全覆盖容器
+        img_ratio = img_width / img_height
+        target_ratio = target_width / target_height
+        if img_ratio > target_ratio:
+            new_height = target_height
+            new_width = int(target_height * img_ratio)
+        else:
+            new_width = target_width
+            new_height = int(target_width / img_ratio)
+        resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        x_offset = (new_width - target_width) // 2
+        y_offset = (new_height - target_height) // 2
+        cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
+        
+        # 生成mask
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        return np.array(cropped_img).astype(np.float32)/255.0, mask, target_width, target_height
 
 def pad_image(image, target_width, target_height, position='center', background_color='#000000'):
     """Pad an image to the target dimensions with specified background color."""
@@ -247,72 +258,97 @@ def create_outline(image, background_color):
     return np.array(outlined).astype(np.float32) / 255.0
 
 def calculate_mask(original_size, target_size, extend_mode, feather=0):
-    """计算填充区域的mask
+    """计算填充区域的mask，白色(1)表示图像区域，黑色(0)表示背景/填充区域
     Args:
         original_size: (width, height) 原始图像尺寸
         target_size: (width, height) 目标尺寸
         extend_mode: 扩展模式
         feather: 羽化程度
     Returns:
-        torch.Tensor: mask张量
+        torch.Tensor: mask张量，1表示图像区域，0表示背景/填充区域
     """
     orig_w, orig_h = original_size
     target_w, target_h = target_size
     
-    # 创建目标尺寸的mask，初始化为0（黑色，表示填充区域）
+    # 创建目标尺寸的mask（默认全黑，表示背景）
     mask = torch.zeros((target_h, target_w))
     
-    if extend_mode in ["contain", "inside"]:
-        # 计算缩放后的尺寸
+    if extend_mode == "fill":
+        mask.fill_(1.0)
+        
+    elif extend_mode in ["cover", "outside"]:
+        mask.fill_(1.0)
+        
+    elif extend_mode in ["contain", "inside"]:
         ratio = min(target_w/orig_w, target_h/orig_h)
         new_w = int(orig_w * ratio)
         new_h = int(orig_h * ratio)
         
-        # 计算偏移量（居中）
         x_offset = (target_w - new_w) // 2
         y_offset = (target_h - new_h) // 2
         
-        # 设置非填充区域为1（白色）
-        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1
+        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1.0
         
     elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-        # 计算偏移量
-        if extend_mode == "top":
-            x_offset = (target_w - orig_w) // 2
+        # 1. 首先判断原始图像是否需要缩放
+        if orig_w <= target_w and orig_h <= target_h:
+            # 图像小于或等于目标尺寸，不需要缩放
+            new_w = orig_w
+            new_h = orig_h
+        else:
+            # 需要缩放，根据对齐方式选择缩放策略
+            if extend_mode in ["left", "right"]:
+                # 左右对齐优先考虑高度
+                ratio = target_h / orig_h
+                new_h = target_h
+                new_w = int(orig_w * ratio)
+                # 如果宽度超出，则按宽度重新计算
+                if new_w > target_w:
+                    ratio = target_w / orig_w
+                    new_w = target_w
+                    new_h = int(orig_h * ratio)
+            elif extend_mode in ["top", "bottom"]:
+                # 上下对齐优先考虑宽度
+                ratio = target_w / orig_w
+                new_w = target_w
+                new_h = int(orig_h * ratio)
+                # 如果高度超出，则按高度重新计算
+                if new_h > target_h:
+                    ratio = target_h / orig_h
+                    new_h = target_h
+                    new_w = int(orig_w * ratio)
+            else:  # center
+                # 居中对齐选择最适合的缩放比例
+                ratio = min(target_w / orig_w, target_h / orig_h)
+                new_w = int(orig_w * ratio)
+                new_h = int(orig_h * ratio)
+
+        # 2. 根据对齐方式计算偏移量
+        if extend_mode == "center":
+            x_offset = (target_w - new_w) // 2
+            y_offset = (target_h - new_h) // 2
+        elif extend_mode == "top":
+            x_offset = (target_w - new_w) // 2
             y_offset = 0
         elif extend_mode == "bottom":
-            x_offset = (target_w - orig_w) // 2
-            y_offset = target_h - orig_h
+            x_offset = (target_w - new_w) // 2
+            y_offset = target_h - new_h
         elif extend_mode == "left":
             x_offset = 0
-            y_offset = (target_h - orig_h) // 2
-        elif extend_mode == "right":
-            x_offset = target_w - orig_w
-            y_offset = (target_h - orig_h) // 2
-        else:  # center
-            x_offset = (target_w - orig_w) // 2
-            y_offset = (target_h - orig_h) // 2
-            
-        # 设置非填充区域为1（白色）
-        mask[y_offset:y_offset + orig_h, x_offset:x_offset + orig_w] = 1
-    
-    # 应用羽化效果
-    if feather > 0:
-        # 将mask转换为适合卷积的格式 [B, C, H, W]
-        mask = mask.unsqueeze(0).unsqueeze(0)
-        
-        # 创建高斯核进行羽化
-        kernel_size = 2 * feather + 1
-        sigma = feather / 3
-        
-        # 应用高斯模糊
-        mask = F.gaussian_blur(mask, kernel_size=(kernel_size, kernel_size), sigma=(sigma, sigma))
-        
-        # 转换回原始格式
-        mask = mask.squeeze(0).squeeze(0)
-    
-    # 确保mask值在0-1范围内
-    mask = torch.clamp(mask, 0, 1)
+            y_offset = (target_h - new_h) // 2
+        else:  # right
+            x_offset = target_w - new_w
+            y_offset = (target_h - new_h) // 2
+
+        # 3. 确保所有值都在有效范围内
+        x_offset = max(0, min(x_offset, target_w - new_w))
+        y_offset = max(0, min(y_offset, target_h - new_h))
+        new_w = min(new_w, target_w)
+        new_h = min(new_h, target_h)
+
+        # 4. 生成mask
+        if new_w > 0 and new_h > 0:
+            mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1.0
     
     return mask
 
@@ -356,7 +392,7 @@ class ImageResolutionAdjuster:
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000", "multiline": False}),
                 "add_outline": ("BOOLEAN", {"default": False}),
-                "feather": ("INT", {"default": 0, "min": 0, "max": 10, "step": 1}),
+                # "feather": ("INT", {"default": 0, "min": 0, "max": 10, "step": 1}),
             },
             "hidden": {"color_widget": "COMBO"}
         }
