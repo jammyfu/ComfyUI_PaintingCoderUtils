@@ -45,7 +45,7 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         padded_img.paste(resized_img, (x_offset, y_offset))
         
         # 生成mask
-        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method, scale_factor=1.0)
         return np.array(padded_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'cover':
@@ -64,14 +64,14 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
         
         # 生成mask
-        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method, scale_factor=1.0)
         return np.array(cropped_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'fill':
         # Fill: 拉伸图像以填充目标尺寸，忽略宽高比，可能变形
         resized_img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
         # 生成mask
-        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method, scale_factor=1.0)
         return np.array(resized_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'inside':
@@ -98,7 +98,7 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         padded_img.paste(resized_img, (x_offset, y_offset))
         
         # 生成mask
-        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method, scale_factor=1.0)
         return np.array(padded_img).astype(np.float32)/255.0, mask, target_width, target_height
 
     elif method == 'outside':
@@ -117,7 +117,7 @@ def resize_image(image, target_width, target_height, method='contain', backgroun
         cropped_img = resized_img.crop((x_offset, y_offset, x_offset + target_width, y_offset + target_height))
         
         # 生成mask
-        mask = calculate_mask((img_width, img_height), (target_width, target_height), method)
+        mask = calculate_mask((img_width, img_height), (target_width, target_height), method, scale_factor=1.0)
         return np.array(cropped_img).astype(np.float32)/255.0, mask, target_width, target_height
 
 def pad_image(image, target_width, target_height, position='center', background_color='#000000'):
@@ -159,7 +159,7 @@ def pad_image(image, target_width, target_height, position='center', background_
     padded_img.paste(img, (x_offset, y_offset))
     
     # 生成mask
-    mask = calculate_mask((img_width, img_height), (target_width, target_height), position)
+    mask = calculate_mask((img_width, img_height), (target_width, target_height), position, scale_factor=1.0)
     
     # 转换回ComfyUI需要的格式
     return np.array(padded_img).astype(np.float32) / 255.0, mask, target_width, target_height
@@ -257,15 +257,14 @@ def create_outline(image, background_color):
     # 转换回tensor格式
     return np.array(outlined).astype(np.float32) / 255.0
 
-def calculate_mask(original_size, target_size, extend_mode, feather=0):
-    """计算填充区域的mask，白色(1)表示图像区域，黑色(0)表示背景/填充区域
+def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_factor=1.0):
+    """计算填充区域的mask
     Args:
         original_size: (width, height) 原始图像尺寸
         target_size: (width, height) 目标尺寸
         extend_mode: 扩展模式
         feather: 羽化程度
-    Returns:
-        torch.Tensor: mask张量，1表示图像区域，0表示背景/填充区域
+        scale_factor: 缩放因子
     """
     orig_w, orig_h = original_size
     target_w, target_h = target_size
@@ -290,66 +289,45 @@ def calculate_mask(original_size, target_size, extend_mode, feather=0):
         mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1.0
         
     elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-        # 1. 首先判断原始图像是否需要缩放
-        if orig_w <= target_w and orig_h <= target_h:
-            # 图像小于或等于目标尺寸，不需要缩放
+        # 1. 只应用 scale_factor 缩放，其他情况不缩放
+        if scale_factor != 1.0:
+            new_w = int(orig_w * scale_factor)
+            new_h = int(orig_h * scale_factor)
+        else:
             new_w = orig_w
             new_h = orig_h
-        else:
-            # 需要缩放，根据对齐方式选择缩放策略
-            if extend_mode in ["left", "right"]:
-                # 左右对齐优先考虑高度
-                ratio = target_h / orig_h
-                new_h = target_h
-                new_w = int(orig_w * ratio)
-                # 如果宽度超出，则按宽度重新计算
-                if new_w > target_w:
-                    ratio = target_w / orig_w
-                    new_w = target_w
-                    new_h = int(orig_h * ratio)
-            elif extend_mode in ["top", "bottom"]:
-                # 上下对齐优先考虑宽度
-                ratio = target_w / orig_w
-                new_w = target_w
-                new_h = int(orig_h * ratio)
-                # 如果高度超出，则按高度重新计算
-                if new_h > target_h:
-                    ratio = target_h / orig_h
-                    new_h = target_h
-                    new_w = int(orig_w * ratio)
-            else:  # center
-                # 居中对齐选择最适合的缩放比例
-                ratio = min(target_w / orig_w, target_h / orig_h)
-                new_w = int(orig_w * ratio)
-                new_h = int(orig_h * ratio)
 
-        # 2. 根据对齐方式计算偏移量
+        # 2. 计算有效的偏移量，确保图片完全在目标区域内
         if extend_mode == "center":
-            x_offset = (target_w - new_w) // 2
-            y_offset = (target_h - new_h) // 2
+            # 居中对齐：在两个方向上都居中
+            x_offset = max(0, (target_w - new_w) // 2)
+            y_offset = max(0, (target_h - new_h) // 2)
         elif extend_mode == "top":
-            x_offset = (target_w - new_w) // 2
+            # 顶部对齐：水平居中，垂直靠上
+            x_offset = max(0, (target_w - new_w) // 2)
             y_offset = 0
         elif extend_mode == "bottom":
-            x_offset = (target_w - new_w) // 2
-            y_offset = target_h - new_h
+            # 底部对齐：水平居中，垂直靠下
+            x_offset = max(0, (target_w - new_w) // 2)
+            y_offset = max(0, target_h - new_h)
         elif extend_mode == "left":
+            # 左对齐：垂直居中，水平靠左
             x_offset = 0
-            y_offset = (target_h - new_h) // 2
+            y_offset = max(0, (target_h - new_h) // 2)
         else:  # right
-            x_offset = target_w - new_w
-            y_offset = (target_h - new_h) // 2
+            # 右对齐：垂直居中，水平靠右
+            x_offset = max(0, target_w - new_w)
+            y_offset = max(0, (target_h - new_h) // 2)
 
-        # 3. 确保所有值都在有效范围内
-        x_offset = max(0, min(x_offset, target_w - new_w))
-        y_offset = max(0, min(y_offset, target_h - new_h))
-        new_w = min(new_w, target_w)
-        new_h = min(new_h, target_h)
+        # 3. 确保图片区域不超出目标范围
+        actual_w = min(new_w, target_w - x_offset)
+        actual_h = min(new_h, target_h - y_offset)
 
-        # 4. 生成mask
-        if new_w > 0 and new_h > 0:
-            mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1.0
-    
+        # 4. 设置mask区域（有图的地方是白色(1)，没图的地方是黑色(0)）
+        mask.fill_(0.0)  # 先将整个区域设为0（未填充）
+        if actual_w > 0 and actual_h > 0:  # 确保有效的图像区域
+            mask[y_offset:y_offset + actual_h, x_offset:x_offset + actual_w] = 1.0
+
     return mask
 
 class ImageResolutionAdjuster:
