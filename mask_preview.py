@@ -25,6 +25,7 @@ class MaskPreview(PreviewImage):
 
     RETURN_TYPES = ("MASK", "IMAGE",)  # 同时返回mask和image
     RETURN_NAMES = ("masks", "images",)  # 指定返回值名称
+    OUTPUT_IS_LIST = (True, True)  # 标记输出为列表
     FUNCTION = "preview_mask"
     CATEGORY = "🎨Painting👓Coder/🖼️Image"
 
@@ -44,28 +45,28 @@ class MaskPreview(PreviewImage):
         
         preview_results = []
         converted_images = []
+        converted_masks = []
         
         # 处理每个mask
         for i in range(masks.shape[0]):
             mask = masks[i]
             
-            # 将mask转换为3通道图像
-            mask_np = mask.cpu().numpy()
-            mask_rgb = np.stack([mask_np, mask_np, mask_np], axis=2)  # 改为HWC格式
+            # 将mask转换为单通道图像tensor
+            mask_tensor = mask.unsqueeze(0)  # 添加通道维度
             
-            # 确保值在0-255范围内
-            mask_rgb = (mask_rgb * 255).astype(np.uint8)
+            # 确保值在0-1范围内
+            mask_tensor = torch.clamp(mask_tensor, 0, 1)
             
-            # 创建PIL图像
-            pil_image = Image.fromarray(mask_rgb)
-            
-            # 转换回tensor格式（CHW格式）
-            mask_tensor = torch.from_numpy(np.array(pil_image)).float() / 255.0
-            mask_tensor = mask_tensor.permute(2, 0, 1)
+            # 添加到转换后的图像列表和mask列表
             converted_images.append(mask_tensor)
+            converted_masks.append(mask)
             
             # 如果启用预览，则生成预览图像
             if preview_enabled:
+                # 为预览转换为PIL图像
+                preview_img = (mask.cpu().numpy() * 255).astype(np.uint8)
+                pil_image = Image.fromarray(preview_img, mode='L')
+                
                 # 生成预览
                 filename = self.get_filename()
                 subfolder = self.get_subfolder()
@@ -81,12 +82,9 @@ class MaskPreview(PreviewImage):
                     "type": self.type
                 })
         
-        # 将转换后的图像堆叠为批次
-        converted_images = torch.stack(converted_images) if converted_images else None
-        
         # 根据预览开关返回不同的结果
         if preview_enabled:
             return {"ui": {"images": preview_results}, 
-                    "result": (masks, converted_images,)}
+                    "result": (converted_masks, converted_images,)}
         else:
-            return {"result": (masks, converted_images,)} 
+            return {"result": (converted_masks, converted_images,)} 

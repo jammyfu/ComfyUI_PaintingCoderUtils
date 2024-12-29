@@ -20,6 +20,7 @@ try:
     from .multiline_text_input import MultilineTextInput
     from .click_popup import ClickPopup
     from .dynamic_image_input import DynamicImageCombiner
+    from .mask_preview import MaskPreview
     
     
     # 节点映射
@@ -31,6 +32,7 @@ try:
         "MultilineTextInput": MultilineTextInput,
         "ClickPopup": ClickPopup,
         "DynamicImageCombiner": DynamicImageCombiner,
+        "MaskPreview": MaskPreview,
     }
 
     NODE_DISPLAY_NAME_MAPPINGS = {
@@ -40,7 +42,8 @@ try:
         "TextCombiner": "Text Combiner",
         "MultilineTextInput": "Multiline Text Input",
         "ClickPopup": "Click Popup",
-        "DynamicImageCombiner": "Dynamic Image Combiner"
+        "DynamicImageCombiner": "Dynamic Image Combiner",
+        "MaskPreview": "Mask Preview",
     }
     
 
