@@ -100,22 +100,22 @@
 - 标准化文本输入格式
 
 清除多余的空行及空格生成文本：
-![清除多余的空行及空格生成文本](./docs/images/rm_line_and_space_cn01.png)
+![清除多余的空行及空格生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn01.png)
 
 清除空行保留空格生成文本：
-![清除空行保留空格生成文本](./docs/images/rm_line_and_space_cn02.png)
+![清除空行保留空格生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn02.png)
 
 清除空格保留空号生成文本：
-![清除空格保留空号生成文本](./docs/images/rm_line_and_space_cn03.png)
+![清除空格保留空号生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn03.png)
 
 清除空行、空格生成列表：
-![清除空行、空格生成列表](./docs/images/rm_line_and_space_cn04.png)
+![清除空行、空格生成列表](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn04.png)
 
 
 
 ### 🔗文本组合器（TextCombiner）✨
 新增文本组合器节点，可以将多个文本输入组合成一个文本输出。
-![新增文本组合器节点，可以将多个文本输入组合成一个文本输出。](./docs/images/text_combiner01.png)
+![新增文本组合器节点，可以将多个文本输入组合成一个文本输出。](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/text_combiner01.png)
 
 功能特点：
 - 支持动态输入：连接输入时自动增加新的输入点
@@ -151,7 +151,7 @@
 
 ### 🖼️动态图像输入组合器 (Dynamic Image Input)
 一个用于动态组合多个图像输入的节点。
-![一个用于动态组合多个图像输入的节点](./docs/images/dynamic_image_combiner01.png)
+![一个用于动态组合多个图像输入的节点](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/dynamic_image_combiner01.png)
 
 特点：
 - 动态输入端口：连接时自动增加新的图像输入点
