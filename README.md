@@ -19,7 +19,7 @@ A practical collection of nodes designed for ComfyUI by a programmer who enjoys 
 ### 📐Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
-![Image Resolution Adjuster Settings](docs/images/image_resolution_adjuster01.png)
+![Image Resolution Adjuster Settings](./docs/images/image_resolution_adjuster01.png)
 
 Features:
 - Supports all SDXL optimal resolutions:
@@ -89,21 +89,21 @@ Use Cases:
 - Standardizing text input format
 
 Remove extra empty lines and spaces to generate text:
-![Remove extra empty lines and spaces to generate text](docs/images/rm_line_and_space_cn01.png)
+![Remove extra empty lines and spaces to generate text](./docs/images/rm_line_and_space_cn01.png)
 
 Remove empty lines while keeping spaces to generate text:
-![Remove empty lines while keeping spaces to generate text](docs/images/rm_line_and_space_cn02.png)
+![Remove empty lines while keeping spaces to generate text](./docs/images/rm_line_and_space_cn02.png)
 
 Remove spaces while keeping empty lines to generate text:
-![Remove spaces while keeping empty lines to generate text](docs/images/rm_line_and_space_cn03.png)
+![Remove spaces while keeping empty lines to generate text](./docs/images/rm_line_and_space_cn03.png)
 
 Remove empty lines and spaces to generate list:
-![Remove empty lines and spaces to generate list](docs/images/rm_line_and_space_cn04.png)
+![Remove empty lines and spaces to generate list](./docs/images/rm_line_and_space_cn04.png)
 
 
 ### 🔗Text Combiner✨
 Added Text Combiner node for combining multiple text inputs into a single output.
-![Added Text Combiner node for combining multiple text inputs into a single output.](docs/images/text_combiner01.png)
+![Added Text Combiner node for combining multiple text inputs into a single output.](./docs/images/text_combiner01.png)
 
 Features:
 - Dynamic inputs: automatically adds new input points when connected
@@ -139,7 +139,7 @@ Usage Examples:
 
 ### 🖼️Dynamic Image Input
 A node for dynamically combining multiple image inputs. 
-![A node for dynamically combining multiple image inputs.](docs/images/dynamic_image_combiner01.png)
+![A node for dynamically combining multiple image inputs.](./docs/images/dynamic_image_combiner01.png)
 Features:
 - Dynamic input ports: automatically adds new image input points when connected 
 - Smart image processing:
