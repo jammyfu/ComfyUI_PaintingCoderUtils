@@ -49,8 +49,3 @@ __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 # 添加 Web 目录到 ComfyUI
 def get_web_dirs():
     return [WEB_DIRECTORY]
-
-# 打印调试信息
-print(f"Initialized PaintingCoderUtils from: {EXTENSION_FOLDER}")
-print(f"Available nodes: {list(NODE_CLASS_MAPPINGS.keys())}")
-print(f"Web directory: {WEB_DIRECTORY}")
