@@ -12,3 +12,13 @@ __pycache__/.idea/
 __pycache__/.vscode/
 __pycache__/*.swp
 __pycache__/*.swo
+__pycache__/__init__.cpython-311.pyc
+__pycache__/click_popup.cpython-311.pyc
+__pycache__/color_picker.cpython-311.pyc
+__pycache__/dynamic_image_input.cpython-311.pyc
+__pycache__/image_resolution_adjuster.cpython-311.pyc
+__pycache__/install.cpython-311.pyc
+__pycache__/multiline_text_input.cpython-311.pyc
+__pycache__/remove_empty_lines.cpython-311.pyc
+__pycache__/text_combiner.cpython-311.pyc
+__pycache__/show_text.cpython-311.pyc

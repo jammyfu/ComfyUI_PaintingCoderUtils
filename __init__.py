@@ -1,57 +1,56 @@
-# 首先导入安装模块并执行安装
-from .install import setup
-setup()
+# -*- coding: utf-8 -*-
+# Filename: __init__.py
+# Developer: jammyfu
 
 import os
 
-NODE_CLASS_MAPPINGS = {}
-NODE_DISPLAY_NAME_MAPPINGS = {}
+# 获取当前文件所在目录
+EXTENSION_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
-# 设置 web 目录
+# 导入所有非测试节点类
+from .modules.images.mask_preview import MaskPreview
+from .modules.images.dynamic_image_input import DynamicImageCombiner
+from .modules.images.image_resolution_adjuster import ImageResolutionAdjuster
+from .modules.text.text_combiner import TextCombiner
+from .modules.text.show_text_plus import ShowTextPlus
+from .modules.text.multiline_text_input import MultilineTextInput
+from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
+
+
+# 节点类映射
+NODE_CLASS_MAPPINGS = {
+    "MaskPreview": MaskPreview,
+    "DynamicImageCombiner": DynamicImageCombiner,
+    "ImageResolutionAdjuster": ImageResolutionAdjuster,
+    "TextCombiner": TextCombiner,
+    "ShowTextPlus": ShowTextPlus,
+    "MultilineTextInput": MultilineTextInput,
+    "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+}
+
+# 节点显示名称映射
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "MaskPreview": "Mask Preview 🖼️",
+    "DynamicImageCombiner": "Dynamic Image Input 🖼️",
+    "ImageResolutionAdjuster": "Image Resolution Adjuster 📐",
+    "TextCombiner": "Text Combiner ✍️",
+    "ShowTextPlus": "Show Text Plus 📝",
+    "MultilineTextInput": "Multiline Text Input 📝",
+    "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
+}
+
+# Web 目录配置
 WEB_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "web")
+print(f"Loading web directory from: {WEB_DIRECTORY}")
 
-__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
+# 导出必要的变量
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
-try:
-    from .image_resolution_adjuster import ImageResolutionAdjuster
-    from .color_picker import ColorPicker
-    from .remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
-    from .text_combiner import TextCombiner
-    from .multiline_text_input import MultilineTextInput
-    from .click_popup import ClickPopup
-    from .dynamic_image_input import DynamicImageCombiner
-    from .mask_preview import MaskPreview
-    
-    
-    # 节点映射
-    NODE_CLASS_MAPPINGS = {
-        "ImageResolutionAdjuster": ImageResolutionAdjuster,
-        "ColorPicker": ColorPicker,
-        "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
-        "TextCombiner": TextCombiner,
-        "MultilineTextInput": MultilineTextInput,
-        "ClickPopup": ClickPopup,
-        "DynamicImageCombiner": DynamicImageCombiner,
-        "MaskPreview": MaskPreview,
-    }
+# 添加 Web 目录到 ComfyUI
+def get_web_dirs():
+    return [WEB_DIRECTORY]
 
-    NODE_DISPLAY_NAME_MAPPINGS = {
-        "ImageResolutionAdjuster": "Image Resolution Adjuster",
-        "ColorPicker": "Color Picker",
-        "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces",
-        "TextCombiner": "Text Combiner",
-        "MultilineTextInput": "Multiline Text Input",
-        "ClickPopup": "Click Popup",
-        "DynamicImageCombiner": "Dynamic Image Combiner",
-        "MaskPreview": "Mask Preview",
-    }
-    
-
-    
-
-except ImportError as e:
-    print(f"Error importing modules: {e}")
-    print("Please restart ComfyUI after the installation is complete.")
-    NODE_CLASS_MAPPINGS = {}
-    NODE_DISPLAY_NAME_MAPPINGS = {}
-    
+# 打印调试信息
+print(f"Initialized PaintingCoderUtils from: {EXTENSION_FOLDER}")
+print(f"Available nodes: {list(NODE_CLASS_MAPPINGS.keys())}")
+print(f"Web directory: {WEB_DIRECTORY}")
