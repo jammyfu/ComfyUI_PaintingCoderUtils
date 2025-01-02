@@ -207,11 +207,47 @@ Usage Scenarios:
 - Batch text processing
 - Preparing texts for LoRA training
 
+### 🎭Mask Preview
+A utility node for previewing and inspecting image masks.
+
+![Mask Preview Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/mask_preview01.png)
+
+Features:
+- Intuitive mask area visualization
+- Multiple preview modes:
+  - Original mask
+  - Color overlay
+  - Outline highlight
+- Adjustable preview transparency
+- Support for batch mask preview
+- Real-time preview updates
+
+Usage:
+1. Add the node to your workflow
+2. Connect mask input
+3. Select preview mode
+4. Adjust display parameters
+
 ## 📝 License
 
 MIT License
 
 ## 🤝 Updates
+
+### v0.1.5 (2024-12-28)
+- Added Mask Preview node
+  - Added multiple preview modes
+  - Added support for transparent display
+  - Added real-time preview update
+  - Added batch mask preview
+
+### v0.1.4 (2024-12-27)
+- Added Show Text Plus node
+  - Added multiple display modes
+  - Implemented text statistics functionality
+  - Added support for custom display options
+  - Optimized long text display
+
 ### v0.1.3 (2024-12-26)
 - Added Dynamic Image Input Combiner
   - Implemented dynamic input ports
@@ -244,6 +280,7 @@ MIT License
   - Text cleaning functionality
   - Configurable preservation options
   - Batch processing support
+
 
 ### Planned Features
 - Dynamic image input combination
