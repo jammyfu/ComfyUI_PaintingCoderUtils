@@ -216,9 +216,7 @@ Features:
 - Intuitive mask area visualization
 - Multiple preview modes:
   - Original mask
-  - Color overlay
   - Outline highlight
-- Adjustable preview transparency
 - Support for batch mask preview
 - Real-time preview updates
 
@@ -236,8 +234,6 @@ MIT License
 
 ### v0.1.5 (2024-12-28)
 - Added Mask Preview node
-  - Added multiple preview modes
-  - Added support for transparent display
   - Added real-time preview update
   - Added batch mask preview
 
