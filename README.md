@@ -163,7 +163,49 @@ Use Cases:
 - Dynamic workflow building
 - Image list generation
 
+### 📝 Text Display Enhancer (Show Text Plus)
+An enhanced text display node that provides more text formatting and display options.
 
+![Text Display Enhancer Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/muti_text_and_show_text_plus01.jpg)
+
+Features:
+- Display Mode Options:
+  - Normal Mode: Displays text directly
+- Text Statistics Functionality:
+  - Character Count
+  - Word Count
+  - Line Count
+- Supports automatic line wrapping for long texts
+- Supports multilingual text
+
+Usage Instructions:
+1. Add the node to your workflow
+2. Connect the text input
+3. Select the display mode
+
+### 📝 Multiline Text Input (Multiline Text)
+A node that supports multiline text input, making it easy to input and edit long text content.
+
+![Multiline Text Input Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/muti_text_and_show_text_plus01.jpg)
+
+Features:
+- Supports multiline text input and editing
+- Retains text formatting and line breaks
+- Compatible with both Chinese and English input
+- User-friendly text editing interface
+- Supports copy and paste operations
+
+Usage Instructions:
+1. Add the node to your workflow
+2. Double-click the text box to edit
+3. Supports direct pasting of multiline text
+4. Click outside the area to save after editing
+
+Usage Scenarios:
+- Inputting long prompt phrases
+- Editing multiline descriptive texts
+- Batch text processing
+- Preparing texts for LoRA training
 
 ## 📝 License
 
