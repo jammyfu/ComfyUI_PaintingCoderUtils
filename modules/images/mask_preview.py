@@ -50,41 +50,25 @@ class MaskPreview(PreviewImage):
         # 处理每个mask
         for i in range(masks.shape[0]):
             mask = masks[i]
-            
-            # 将mask转换为单通道图像tensor
-            mask_tensor = mask.unsqueeze(0)  # 添加通道维度
-            
-            # 确保值在0-1范围内
+            mask_tensor = mask.unsqueeze(0)
             mask_tensor = torch.clamp(mask_tensor, 0, 1)
-            
-            # 添加到转换后的图像列表和mask列表
             converted_images.append(mask_tensor)
             converted_masks.append(mask)
             
-            # 如果启用预览，则生成预览图像
+            # 只在启用预览时生成预览图像
             if preview_enabled:
-                # 为预览转换为PIL图像
                 preview_img = (mask.cpu().numpy() * 255).astype(np.uint8)
                 pil_image = Image.fromarray(preview_img, mode='L')
-                
-                # 生成预览
                 filename = self.get_filename()
                 subfolder = self.get_subfolder()
-                
-                # 保存图像
                 preview_path = f"{subfolder}/{filename}"
                 pil_image.save(preview_path)
-                
-                # 添加到预览结果
                 preview_results.append({
                     "filename": filename,
                     "subfolder": subfolder,
                     "type": self.type
                 })
         
-        # 根据预览开关返回不同的结果
-        if preview_enabled:
-            return {"ui": {"images": preview_results}, 
-                    "result": (converted_masks, converted_images,)}
-        else:
-            return {"result": (converted_masks, converted_images,)} 
+        # 返回结果
+        return {"ui": {"images": preview_results}, 
+                "result": (converted_masks, converted_images,)} 
