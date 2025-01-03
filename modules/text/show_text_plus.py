@@ -22,18 +22,17 @@ class ShowTextPlus:
     CATEGORY = "🎨Painting👓Coder/📝Text"
     OUTPUT_NODE = True
 
+    def __init__(self):
+        # 初始化时设置默认值
+        self.widget_value = ""
+
     def show_text(self, input_text, unique_id=None, extra_pnginfo=None):
         try:
-            print(f"[ShowTextPlus] Input text: {input_text}")  # 调试日志
-
             # 处理输入文本
             if isinstance(input_text, list):
-                # 将列表内容拼接成字符串，每项一行
                 display_text = "\n".join(str(item) for item in input_text)
             else:
                 display_text = str(input_text)
-
-            print(f"[ShowTextPlus] Processed text: {display_text}")  # 调试日志
 
             # 更新节点UI显示
             if unique_id is not None and extra_pnginfo is not None:
@@ -45,14 +44,19 @@ class ShowTextPlus:
                             None,
                         )
                         if node:
-                            # 更新节点的显示值
-                            node["widgets_values"] = [display_text]
-                            print(f"[ShowTextPlus] Updated widget values: {display_text}")  # 调试日志
+                            # 只在值发生变化时更新
+                            if "widgets_values" not in node or node["widgets_values"] != [display_text]:
+                                node["widgets_values"] = [display_text]
+                                self.widget_value = display_text
 
-            return {"ui": {"text": [display_text]}, "result": (input_text,)}
+            # 如果没有存储的值，使用当前显示文本
+            if not hasattr(self, 'widget_value') or self.widget_value != display_text:
+                self.widget_value = display_text
+
+            return {"ui": {"text": [self.widget_value]}, "result": (input_text,)}
 
         except Exception as e:
-            print(f"[ShowTextPlus] Error: {str(e)}")  # 错误日志
+            print(f"[ShowTextPlus] Error: {str(e)}")
             return {
                 "ui": {"text": ["Error occurred"]},
                 "result": ("Error occurred",)

@@ -30,6 +30,11 @@ app.registerExtension({
 
                 // 为每个文本创建widget
                 v.forEach((list, index) => {
+                    // 跳过值为 "true" 的情况
+                    if (list === "true" || list === true || list === "" || list === null || list === undefined || list === "false" || list === false) {
+                        return;
+                    }
+
                     console.log(`[ShowTextPlus] Creating widget ${index + 1} for:`, list);
                     const w = ComfyWidgets["STRING"](
                         this,
@@ -45,13 +50,13 @@ app.registerExtension({
                 });
 
                 // 调整节点大小
-                 requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
                     adjustNodeSize.call(this);
-                 });
+                });
             }
 
 
-             function updateWidgetDisplay(widget, show) {
+            function updateWidgetDisplay(widget, show) {
                 if (widget && widget.inputEl) {
                     widget.inputEl.style.display = show ? "block" : "none";
                     widget.inputEl.style.visibility = show ? "visible" : "hidden";
@@ -67,8 +72,8 @@ app.registerExtension({
                     }
                     // 动态计算并设置文本框的高度，修复高度设置为0px之后不能完全展开的问题
                     requestAnimationFrame(() => {
-                        if(show){
-                             widget.inputEl.style.height = `${widget.inputEl.scrollHeight}px`;
+                        if (show) {
+                            widget.inputEl.style.height = `${widget.inputEl.scrollHeight}px`;
                         }
                     });
                 }
@@ -87,9 +92,9 @@ app.registerExtension({
             }
 
 
-           // 添加显示开关的创建
+            // 添加显示开关的创建
             const onNodeCreated = nodeType.prototype.onNodeCreated;
-            nodeType.prototype.onNodeCreated = function() {
+            nodeType.prototype.onNodeCreated = function () {
                 onNodeCreated?.apply(this, arguments);
 
                 // 添加显示开关
@@ -103,11 +108,11 @@ app.registerExtension({
                     }
 
                     // 重新计算节点大小
-                     requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
                         adjustNodeSize.call(this);
-                     });
+                    });
                 });
-             };
+            };
 
 
             // 执行时更新显示
@@ -121,7 +126,7 @@ app.registerExtension({
                 }
                 // 在执行完成后调整节点大小
                 requestAnimationFrame(() => {
-                      adjustNodeSize.call(this);
+                    adjustNodeSize.call(this);
                 });
             };
 
@@ -129,18 +134,18 @@ app.registerExtension({
             // 加载时恢复显示
             const onConfigure = nodeType.prototype.onConfigure;
             nodeType.prototype.onConfigure = function () {
-               console.log("[ShowTextPlus] Node configured, values:", this.widgets_values);
-               onConfigure?.apply(this, arguments);
+                console.log("[ShowTextPlus] Node configured, values:", this.widgets_values);
+                onConfigure?.apply(this, arguments);
                 if (this.widgets_values?.length) {
-                   console.log("[ShowTextPlus] Restoring from config:", this.widgets_values);
-                   const textValues = this.widgets_values.slice(1); //从第二个值开始，跳过toggle
+                    console.log("[ShowTextPlus] Restoring from config:", this.widgets_values);
+                    const textValues = this.widgets_values.slice(1); //从第二个值开始，跳过toggle
                     populate.call(this, textValues);
                 }
                 // 在配置完成后调整节点大小
-               requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
                     adjustNodeSize.call(this);
-               });
-           };
+                });
+            };
         }
     },
 });
