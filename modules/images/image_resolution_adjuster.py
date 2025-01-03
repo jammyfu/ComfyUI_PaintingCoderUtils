@@ -369,8 +369,8 @@ class ImageResolutionAdjuster:
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000", "multiline": False}),
+                "invert_mask": ("BOOLEAN", {"default": False}),
                 "add_outline": ("BOOLEAN", {"default": False}),
-                # "feather": ("INT", {"default": 0, "min": 0, "max": 10, "step": 1}),
             },
             "hidden": {"color_widget": "COMBO"}
         }
@@ -380,7 +380,7 @@ class ImageResolutionAdjuster:
     RETURN_NAMES = ("images", "mask", "width", "height")
     FUNCTION = "adjust_resolution"
 
-    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, add_outline, feather=0):
+    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, invert_mask,add_outline, feather=0):
         output_images = []
         output_masks = []
         
@@ -416,6 +416,10 @@ class ImageResolutionAdjuster:
         # 合并所有图像和mask
         output_images = torch.cat(output_images, dim=0)
         output_masks = torch.cat(output_masks, dim=0)
+        
+        # 如果需要反向mask
+        if invert_mask:
+            output_masks = 1.0 - output_masks
         
         return (output_images, output_masks, width, height)
 
