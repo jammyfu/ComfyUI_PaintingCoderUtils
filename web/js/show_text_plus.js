@@ -4,11 +4,11 @@ import { ComfyWidgets } from "../../../scripts/widgets.js";
 app.registerExtension({
     name: "PaintingCoder.ShowTextPlus",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        console.log("[ShowTextPlus] Registering node:", nodeData.name);
+        // console.log("[ShowTextPlus] Registering node:", nodeData.name);
 
         if (nodeData.name === "ShowTextPlus") {
             function populate(text) {
-                console.log("[ShowTextPlus] Populating with:", text);
+                // console.log("[ShowTextPlus] Populating with:", text);
 
                 // 清理现有widgets（保留第一个输入框和显示开关）
                 if (this.widgets) {
@@ -31,11 +31,11 @@ app.registerExtension({
                 // 为每个文本创建widget
                 v.forEach((list, index) => {
                     // 跳过值为 "true" 的情况
-                    if (list === "true" || list === true || list === "" || list === null || list === undefined || list === "false" || list === false) {
+                    if (list === true || list === "" || list === null || list === undefined || list === false) {
                         return;
                     }
 
-                    console.log(`[ShowTextPlus] Creating widget ${index + 1} for:`, list);
+                    // console.log(`[ShowTextPlus] Creating widget ${index + 1} for:`, list);
                     const w = ComfyWidgets["STRING"](
                         this,
                         `text_output_${index}`, // 为每个文本输出widget设置不同的name
@@ -99,7 +99,7 @@ app.registerExtension({
 
                 // 添加显示开关
                 this.addWidget("toggle", "show_output", true, (value) => {
-                    console.log("[ShowTextPlus] Toggle output display:", value);
+                    // console.log("[ShowTextPlus] Toggle output display:", value);
                     // 更新所有输出文本框的显示状态
                     for (let i = 2; i < this.widgets.length; i++) {
                         if (this.widgets[i].inputEl) {
@@ -118,10 +118,10 @@ app.registerExtension({
             // 执行时更新显示
             const onExecuted = nodeType.prototype.onExecuted;
             nodeType.prototype.onExecuted = function (message) {
-                console.log("[ShowTextPlus] Node executed, message:", message);
+                // console.log("[ShowTextPlus] Node executed, message:", message);
                 onExecuted?.apply(this, arguments);
                 if (message?.text) {
-                    console.log("[ShowTextPlus] Updating from execution:", message.text);
+                    // console.log("[ShowTextPlus] Updating from execution:", message.text);
                     populate.call(this, message.text);
                 }
                 // 在执行完成后调整节点大小
@@ -134,10 +134,10 @@ app.registerExtension({
             // 加载时恢复显示
             const onConfigure = nodeType.prototype.onConfigure;
             nodeType.prototype.onConfigure = function () {
-                console.log("[ShowTextPlus] Node configured, values:", this.widgets_values);
+                // console.log("[ShowTextPlus] Node configured, values:", this.widgets_values);
                 onConfigure?.apply(this, arguments);
                 if (this.widgets_values?.length) {
-                    console.log("[ShowTextPlus] Restoring from config:", this.widgets_values);
+                    // console.log("[ShowTextPlus] Restoring from config:", this.widgets_values);
                     const textValues = this.widgets_values.slice(1); //从第二个值开始，跳过toggle
                     populate.call(this, textValues);
                 }
