@@ -265,50 +265,10 @@ def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_fac
     # 创建目标尺寸的mask（默认全白，表示背景）
     mask = torch.ones((target_h, target_w))
     
-    if extend_mode == "fill":
-        mask.fill_(0.0)
-        
-    elif extend_mode in ["cover", "outside"]:
-        mask.fill_(0.0)
-        
-    elif extend_mode in ["contain", "inside"]:
-        ratio = min(target_w/orig_w, target_h/orig_h)
-        new_w = int(orig_w * ratio)
-        new_h = int(orig_h * ratio)
-        
-        x_offset = (target_w - new_w) // 2
-        y_offset = (target_h - new_h) // 2
-        
-        # 创建基础mask
-        base_mask = torch.zeros((new_h, new_w))
-        
-        # 只在有背景区域时添加羽化效果
-        if feather > 0 and x_offset > 0 or y_offset > 0:
-            for i in range(new_h):
-                for j in range(new_w):
-                    # 只在边缘有背景时计算羽化
-                    dt = i if y_offset > 0 else new_h
-                    db = new_h - i - 1 if y_offset > 0 else new_h
-                    dl = j if x_offset > 0 else new_w
-                    dr = new_w - j - 1 if x_offset > 0 else new_w
-                    
-                    d = min(dt, db, dl, dr)
-                    
-                    if d >= feather:
-                        continue
-                        
-                    v = (feather - d) / feather
-                    base_mask[i, j] = v * v
-        
-        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = base_mask
-        
-    elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-        if scale_factor != 1.0:
-            new_w = int(orig_w * scale_factor)
-            new_h = int(orig_h * scale_factor)
-        else:
-            new_w = orig_w
-            new_h = orig_h
+    if extend_mode in ["top", "bottom", "left", "right", "center"]:
+        # 这些模式下原始图像尺寸不变，只有目标尺寸受scale_factor影响
+        new_w = orig_w  # 不对原始尺寸应用scale_factor
+        new_h = orig_h
 
         if extend_mode == "center":
             x_offset = max(0, (target_w - new_w) // 2)
@@ -330,32 +290,70 @@ def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_fac
         actual_h = min(new_h, target_h - y_offset)
 
         if actual_w > 0 and actual_h > 0:
-            base_mask = torch.zeros((actual_h, actual_w))
+            content_area = torch.zeros((actual_h, actual_w))
+            mask[y_offset:y_offset + actual_h, x_offset:x_offset + actual_w] = content_area
             
-            # 只在有背景区域的边缘添加羽化
             if feather > 0:
+                scaled_feather = int(feather * scale_factor)
+                
+                # 判断哪些边需要羽化
                 has_top = y_offset > 0
                 has_bottom = y_offset + actual_h < target_h
                 has_left = x_offset > 0
                 has_right = x_offset + actual_w < target_w
                 
-                if has_top or has_bottom or has_left or has_right:
-                    for i in range(actual_h):
-                        for j in range(actual_w):
-                            dt = i if has_top else actual_h
-                            db = actual_h - i - 1 if has_bottom else actual_h
-                            dl = j if has_left else actual_w
-                            dr = actual_w - j - 1 if has_right else actual_w
+                for i in range(target_h):
+                    for j in range(target_w):
+                        if i < y_offset or i >= y_offset + actual_h or j < x_offset or j >= x_offset + actual_w:
+                            continue
                             
-                            d = min(dt, db, dl, dr)
-                            
-                            if d >= feather:
-                                continue
-                                
-                            v = (feather - d) / feather
-                            base_mask[i, j] = v * v
-            
-            mask[y_offset:y_offset + actual_h, x_offset:x_offset + actual_w] = base_mask
+                        # 只计算需要羽化的边的距离
+                        dt = i - y_offset if has_top and i - y_offset < scaled_feather else scaled_feather
+                        db = (y_offset + actual_h - i - 1) if has_bottom and (y_offset + actual_h - i - 1) < scaled_feather else scaled_feather
+                        dl = j - x_offset if has_left and j - x_offset < scaled_feather else scaled_feather
+                        dr = (x_offset + actual_w - j - 1) if has_right and (x_offset + actual_w - j - 1) < scaled_feather else scaled_feather
+                        
+                        d = min(dt, db, dl, dr)
+                        if d < scaled_feather:
+                            v = 1.0 - (d / scaled_feather)
+                            mask[i, j] = v * v
+    
+    elif extend_mode == "fill":
+        mask.fill_(0.0)
+        
+    elif extend_mode in ["cover", "outside"]:
+        mask.fill_(0.0)
+        
+    elif extend_mode in ["contain", "inside"]:
+        ratio = min(target_w/orig_w, target_h/orig_h)
+        new_w = int(orig_w * ratio)
+        new_h = int(orig_h * ratio)
+        
+        x_offset = (target_w - new_w) // 2
+        y_offset = (target_h - new_h) // 2
+        
+        # 创建基础mask
+        base_mask = torch.zeros((new_h, new_w))
+        
+        # 只在有背景区域时添加羽化效果
+        if feather > 0 and (x_offset > 0 or y_offset > 0):
+            for i in range(new_h):
+                for j in range(new_w):
+                    # 只在边缘有背景时计算羽化
+                    dt = i if y_offset > 0 else new_h
+                    db = new_h - i - 1 if y_offset > 0 else new_h
+                    dl = j if x_offset > 0 else new_w
+                    dr = new_w - j - 1 if x_offset > 0 else new_w
+                    
+                    d = min(dt, db, dl, dr)
+                    
+                    if d >= feather:
+                        continue
+                        
+                    v = (feather - d) / feather
+                    base_mask[i, j] = v * v
+        
+        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = base_mask
 
     return mask
 
