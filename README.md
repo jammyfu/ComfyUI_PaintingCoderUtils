@@ -232,6 +232,35 @@ MIT License
 
 ## 🤝 Updates
 
+### v0.1.9 (2024-01-05)
+- Enhanced Image Resolution Adjuster
+  - Added mask feathering functionality
+  - Improved mask edge processing algorithm
+  - Enhanced mask processing performance
+  - Optimized edge smoothing effects
+
+### v0.1.8 (2024-01-04)
+- Optimized Text Combiner
+  - Improved text concatenation logic
+  - Enhanced performance for large text processing
+  - Fixed special character handling issues
+  - Optimized memory usage
+
+### v0.1.7 (2024-01-03)
+- Enhanced Image Resolution Adjuster
+  - Improved extend mode algorithms
+  - Enhanced image processing performance
+  - Fixed edge handling issues
+  - Optimized memory usage
+
+### v0.1.6 (2024-01-02)
+- Added Multiline Text Input node
+  - Support for multiline text input and editing
+  - Preserves text formatting and line breaks
+  - Compatible with both Chinese and English input
+  - User-friendly text editing interface
+  - Supports copy and paste operations
+
 ### v0.1.5 (2024-12-28)
 - Added Mask Preview node
   - Added real-time preview update
