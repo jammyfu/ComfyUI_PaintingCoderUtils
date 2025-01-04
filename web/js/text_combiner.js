@@ -63,7 +63,7 @@ app.registerExtension({
                     if (connectedCount !== this.lastConnectedCount) {
                         this.lastConnectedCount = connectedCount;
                         const targetCount = Math.max(connectedCount + 1, 1); // 确保至少保留一个输入
-
+                        
                         // 获取所有text输入
                         const textInputs = this.inputs
                             .map((input, index) => ({ index, name: input.name }))

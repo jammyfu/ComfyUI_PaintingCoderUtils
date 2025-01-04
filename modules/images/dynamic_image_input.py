@@ -9,41 +9,50 @@ class DynamicImageCombiner:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {},  # 不需要默认输入
+            "required": {},
             "optional": {},
             "_meta": {
-                "preferred_width": 300,  # 设置默认宽度为300
-                "maintain_dimensions": True  # 保持刷新时的尺寸
+                "preferred_width": 300,
+                "maintain_dimensions": True
             }
         }
     
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("images",)
-    OUTPUT_IS_LIST = (True,)  # 标记输出为列表
+    OUTPUT_IS_LIST = (True,)
     FUNCTION = "combine_images"
     CATEGORY = "🎨Painting👓Coder/🖼️Image"
 
-    def combine_images(self, **image_inputs):
+    def combine_images(self, **kwargs):
         try:
-            # 收集所有非空图像
             images = []
-            for i in range(1, len(image_inputs) + 1):
-                key = f"image_{i}"
-                if key in image_inputs and image_inputs[key] is not None:
-                    if isinstance(image_inputs[key], torch.Tensor):
-                        images.append(image_inputs[key])
+            # 获取所有图像输入键
+            image_inputs = sorted(
+                [k for k in kwargs.keys() if k.startswith('image_')],
+                key=lambda x: int(x.split('_')[1])
+            )
+            
+            # 只处理非None的输入（已连接的输入）
+            for key in image_inputs:
+                input_image = kwargs.get(key)
+                
+                # 跳过未连接的输入（None值）
+                if input_image is None:
+                    continue
+                    
+                # 处理已连接的输入
+                if isinstance(input_image, torch.Tensor):
+                    images.append(input_image)
 
-            # 如果没有图像，返回一个包含空白图像的列表
+            # 如果没有有效的图像输入，返回空图像
             if not images:
                 empty_image = torch.zeros((1, 512, 512, 3))
                 return ([empty_image],)
 
-            # 直接返回图像列表
             return (images,)
 
         except Exception as e:
             print(f"Error in DynamicImageCombiner: {str(e)}")
-            # 发生错误时返回包含空白图像的列表
             empty_image = torch.zeros((1, 512, 512, 3))
             return ([empty_image],)
 
