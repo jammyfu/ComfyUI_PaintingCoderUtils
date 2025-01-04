@@ -3,6 +3,8 @@
 # Developer: jammyfu
 
 import os
+import locale
+from .modules.text.i18n import I18n
 
 # 获取当前文件所在目录
 EXTENSION_FOLDER = os.path.dirname(os.path.realpath(__file__))
@@ -49,3 +51,14 @@ __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 # 添加 Web 目录到 ComfyUI
 def get_web_dirs():
     return [WEB_DIRECTORY]
+
+def init():
+    try:
+        # 获取系统语言设置
+        system_lang = locale.getdefaultlocale()[0]
+        if system_lang:
+            lang_code = system_lang.split('_')[0].lower()
+            I18n.set_language(lang_code)
+    except:
+        # 如果获取失败，默认使用英文
+        I18n.set_language('en')
