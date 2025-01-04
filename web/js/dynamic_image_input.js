@@ -22,26 +22,34 @@ app.registerExtension({
             nodeType.prototype.onConnectionsChange = function(connectionType, slot, isConnected) {
                 // 只处理输入连接的变化
                 if (connectionType === 1) {
-                    // 计算当前已连接的输入数量
+                    // 计算当前已连接的图像输入数量
                     const connectedCount = this.inputs.reduce((count, input) => 
-                        count + (input.link ? 1 : 0), 0);
+                        input.name.startsWith('image_') ? (count + (input.link ? 1 : 0)) : count, 0);
 
                     // 如果连接数量发生变化
                     if (connectedCount !== this.lastConnectedCount) {
                         this.lastConnectedCount = connectedCount;
-                        const targetCount = connectedCount + 1;
+                        const targetCount = Math.max(connectedCount + 1, 1); // 确保至少保留一个输入
+
+                        // 获取所有image输入
+                        const imageInputs = this.inputs
+                            .map((input, index) => ({ index, name: input.name }))
+                            .filter(input => input.name.startsWith('image_'));
 
                         // 添加新的输入槽位
-                        while (this.inputs.length < targetCount) {
-                            const newIndex = this.inputs.length + 1;
+                        if (imageInputs.length < targetCount) {
+                            const newIndex = imageInputs.length + 1;
                             this.addInput(`image_${newIndex}`, "IMAGE");
                         }
 
-                        // 移除未使用的输入槽位
-                        while (this.inputs.length > Math.max(targetCount, 1)) {
-                            const lastInput = this.inputs[this.inputs.length - 1];
-                            if (!lastInput.link) {
-                                this.removeInput(this.inputs.length - 1);
+                        // 只在确实需要移除时才移除多余的输入槽位
+                        if (imageInputs.length > targetCount) {
+                            // 从后向前检查未连接的输入
+                            for (let i = imageInputs.length - 1; i >= targetCount; i--) {
+                                const input = this.inputs[imageInputs[i].index];
+                                if (!input.link) {
+                                    this.removeInput(imageInputs[i].index);
+                                }
                             }
                         }
 
