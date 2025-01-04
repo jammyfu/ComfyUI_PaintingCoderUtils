@@ -12,20 +12,25 @@ EXTENSION_FOLDER = os.path.dirname(os.path.realpath(__file__))
 # 导入所有非测试节点类
 from .modules.images.mask_preview import MaskPreview
 from .modules.images.dynamic_image_input import DynamicImageCombiner
+from .modules.images.dynamic_mask_input import DynamicMaskCombiner
 from .modules.images.image_resolution_adjuster import ImageResolutionAdjuster
 from .modules.text.text_combiner import TextCombiner
 from .modules.text.show_text_plus import ShowTextPlus
+from .modules.text.simple_text_input import SimpleTextInput
 from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
+
 
 
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
     "MaskPreview": MaskPreview,
     "DynamicImageCombiner": DynamicImageCombiner,
+    "DynamicMaskCombiner": DynamicMaskCombiner,
     "ImageResolutionAdjuster": ImageResolutionAdjuster,
     "TextCombiner": TextCombiner,
     "ShowTextPlus": ShowTextPlus,
+    "SimpleTextInput": SimpleTextInput,
     "MultilineTextInput": MultilineTextInput,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
 }
@@ -34,9 +39,11 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskPreview": "Mask Preview 🖼️",
     "DynamicImageCombiner": "Dynamic Image Input 🖼️",
+    "DynamicMaskCombiner": "Dynamic Mask Input 🎭",
     "ImageResolutionAdjuster": "Image Resolution Adjuster 📐",
     "TextCombiner": "Text Combiner ✍️",
     "ShowTextPlus": "Show Text Plus 📝",
+    "SimpleTextInput": "Simple Text Input 📝",
     "MultilineTextInput": "Multiline Text Input 📝",
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
 }

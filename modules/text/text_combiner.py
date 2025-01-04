@@ -14,7 +14,7 @@ class TextCombiner:
                 "separator": ("STRING", {
                     "default": ",", 
                     "multiline": False,
-                    "placeholder": I18n.get_text('separator_placeholder')
+                    "placeholder": I18n.get_text('text_combiner.separator_placeholder', "输入分隔符...", app_language=True),
                 }),
                 "use_regex": ("BOOLEAN", {"default": False}),
             },
@@ -50,7 +50,7 @@ class TextCombiner:
                     texts.extend(t for t in split_texts if t is not None and t != '')
             
             if not texts:
-                return (I18n.get_text('waiting_input'),)
+                return (I18n.get_text('text_combiner.waiting_input', "等待输入...", app_language=True),)
             
             if '\n' in (separator if not use_regex else bytes(separator, "utf-8").decode("unicode_escape")):
                 combined_text = '\n'.join(texts)
@@ -62,7 +62,7 @@ class TextCombiner:
             return (combined_text,)
             
         except Exception as e:
-            return (f"Error: {str(e)}",)
+            return (I18n.get_text('text_combiner.error', f"错误: {str(e)}", app_language=True),)
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
@@ -70,7 +70,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "TextCombiner": "Text Combiner 📝",
+    "TextCombiner": I18n.get_text('text_combiner.name', "文本合并器 📝", app_language=True),
 }
 
 NODE_CATEGORY_MAPPINGS = {

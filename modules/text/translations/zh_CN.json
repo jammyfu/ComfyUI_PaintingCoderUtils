@@ -1,0 +1,6 @@
+{
+    "text_combiner.name": "文本合并器 📝",
+    "text_combiner.separator_placeholder": "输入分隔符...",
+    "text_combiner.waiting_input": "等待输入...",
+    "text_combiner.error": "错误: {}"
+} 

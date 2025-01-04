@@ -1,0 +1,6 @@
+{
+    "text_combiner.name": "Text Combiner 📝",
+    "text_combiner.separator_placeholder": "Enter separator...",
+    "text_combiner.waiting_input": "Waiting for input...",
+    "text_combiner.error": "Error: {}"
+} 
