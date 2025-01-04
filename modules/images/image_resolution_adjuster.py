@@ -425,10 +425,14 @@ class ImageResolutionAdjuster:
         for image in images:
             if extend_mode in ["contain", "cover", "fill", "inside", "outside"]:
                 scaled_image, mask, width, height = resize_image(image, target_width, target_height, method=extend_mode, background_color=background_color)
+                # 更新mask以使用feathering参数
+                mask = calculate_mask((image.shape[1], image.shape[0]), (width, height), extend_mode, feather=feathering, scale_factor=scale_factor)
             elif extend_mode in ["top", "bottom", "left", "right", "center"]:
                 scaled_image, mask, width, height = pad_image(image, target_width, target_height, 
                                                       position=extend_mode, 
                                                       background_color=background_color)
+                # 更新mask以使用feathering参数
+                mask = calculate_mask((image.shape[1], image.shape[0]), (width, height), extend_mode, feather=feathering, scale_factor=scale_factor)
             else:
                 raise ValueError(f"Invalid extend_mode: {extend_mode}")
             
