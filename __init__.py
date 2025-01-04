@@ -37,7 +37,7 @@ NODE_CLASS_MAPPINGS = {
 
 # 节点显示名称映射
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "MaskPreview": "Mask Preview 🖼️",
+    "MaskPreview": "Mask Preview 🎭",
     "DynamicImageCombiner": "Dynamic Image Input 🖼️",
     "DynamicMaskCombiner": "Dynamic Mask Input 🎭",
     "ImageResolutionAdjuster": "Image Resolution Adjuster 📐",

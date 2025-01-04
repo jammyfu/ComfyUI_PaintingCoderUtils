@@ -258,25 +258,18 @@ def create_outline(image, background_color):
     return np.array(outlined).astype(np.float32) / 255.0
 
 def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_factor=1.0):
-    """计算填充区域的mask
-    Args:
-        original_size: (width, height) 原始图像尺寸
-        target_size: (width, height) 目标尺寸
-        extend_mode: 扩展模式
-        feather: 羽化程度
-        scale_factor: 缩放因子
-    """
+    """计算填充区域的mask，只在有背景区域时添加羽化效果"""
     orig_w, orig_h = original_size
     target_w, target_h = target_size
     
-    # 创建目标尺寸的mask（默认全黑，表示背景）
-    mask = torch.zeros((target_h, target_w))
+    # 创建目标尺寸的mask（默认全白，表示背景）
+    mask = torch.ones((target_h, target_w))
     
     if extend_mode == "fill":
-        mask.fill_(1.0)
+        mask.fill_(0.0)
         
     elif extend_mode in ["cover", "outside"]:
-        mask.fill_(1.0)
+        mask.fill_(0.0)
         
     elif extend_mode in ["contain", "inside"]:
         ratio = min(target_w/orig_w, target_h/orig_h)
@@ -286,10 +279,30 @@ def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_fac
         x_offset = (target_w - new_w) // 2
         y_offset = (target_h - new_h) // 2
         
-        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = 1.0
+        # 创建基础mask
+        base_mask = torch.zeros((new_h, new_w))
+        
+        # 只在有背景区域时添加羽化效果
+        if feather > 0 and x_offset > 0 or y_offset > 0:
+            for i in range(new_h):
+                for j in range(new_w):
+                    # 只在边缘有背景时计算羽化
+                    dt = i if y_offset > 0 else new_h
+                    db = new_h - i - 1 if y_offset > 0 else new_h
+                    dl = j if x_offset > 0 else new_w
+                    dr = new_w - j - 1 if x_offset > 0 else new_w
+                    
+                    d = min(dt, db, dl, dr)
+                    
+                    if d >= feather:
+                        continue
+                        
+                    v = (feather - d) / feather
+                    base_mask[i, j] = v * v
+        
+        mask[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = base_mask
         
     elif extend_mode in ["top", "bottom", "left", "right", "center"]:
-        # 1. 只应用 scale_factor 缩放，其他情况不缩放
         if scale_factor != 1.0:
             new_w = int(orig_w * scale_factor)
             new_h = int(orig_h * scale_factor)
@@ -297,36 +310,52 @@ def calculate_mask(original_size, target_size, extend_mode, feather=0, scale_fac
             new_w = orig_w
             new_h = orig_h
 
-        # 2. 计算有效的偏移量，确保图片完全在目标区域内
         if extend_mode == "center":
-            # 居中对齐：在两个方向上都居中
             x_offset = max(0, (target_w - new_w) // 2)
             y_offset = max(0, (target_h - new_h) // 2)
         elif extend_mode == "top":
-            # 顶部对齐：水平居中，垂直靠上
             x_offset = max(0, (target_w - new_w) // 2)
             y_offset = 0
         elif extend_mode == "bottom":
-            # 底部对齐：水平居中，垂直靠下
             x_offset = max(0, (target_w - new_w) // 2)
             y_offset = max(0, target_h - new_h)
         elif extend_mode == "left":
-            # 左对齐：垂直居中，水平靠左
             x_offset = 0
             y_offset = max(0, (target_h - new_h) // 2)
         else:  # right
-            # 右对齐：垂直居中，水平靠右
             x_offset = max(0, target_w - new_w)
             y_offset = max(0, (target_h - new_h) // 2)
 
-        # 3. 确保图片区域不超出目标范围
         actual_w = min(new_w, target_w - x_offset)
         actual_h = min(new_h, target_h - y_offset)
 
-        # 4. 设置mask区域（有图的地方是白色(1)，没图的地方是黑色(0)）
-        mask.fill_(0.0)  # 先将整个区域设为0（未填充）
-        if actual_w > 0 and actual_h > 0:  # 确保有效的图像区域
-            mask[y_offset:y_offset + actual_h, x_offset:x_offset + actual_w] = 1.0
+        if actual_w > 0 and actual_h > 0:
+            base_mask = torch.zeros((actual_h, actual_w))
+            
+            # 只在有背景区域的边缘添加羽化
+            if feather > 0:
+                has_top = y_offset > 0
+                has_bottom = y_offset + actual_h < target_h
+                has_left = x_offset > 0
+                has_right = x_offset + actual_w < target_w
+                
+                if has_top or has_bottom or has_left or has_right:
+                    for i in range(actual_h):
+                        for j in range(actual_w):
+                            dt = i if has_top else actual_h
+                            db = actual_h - i - 1 if has_bottom else actual_h
+                            dl = j if has_left else actual_w
+                            dr = actual_w - j - 1 if has_right else actual_w
+                            
+                            d = min(dt, db, dl, dr)
+                            
+                            if d >= feather:
+                                continue
+                                
+                            v = (feather - d) / feather
+                            base_mask[i, j] = v * v
+            
+            mask[y_offset:y_offset + actual_h, x_offset:x_offset + actual_w] = base_mask
 
     return mask
 
@@ -369,6 +398,7 @@ class ImageResolutionAdjuster:
                 "min_width": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "min_height": ("INT", {"default": 640, "min": 1, "max": 8192, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000", "multiline": False}),
+                "feathering": ("INT", {"default": 40, "min": 0, "max": 512, "step": 1}),
                 "invert_mask": ("BOOLEAN", {"default": False}),
                 "add_outline": ("BOOLEAN", {"default": False}),
             },
@@ -380,7 +410,7 @@ class ImageResolutionAdjuster:
     RETURN_NAMES = ("images", "mask", "width", "height")
     FUNCTION = "adjust_resolution"
 
-    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, invert_mask,add_outline, feather=0):
+    def adjust_resolution(self, images, target_resolution, extend_mode, background_color, scale_factor, max_width, max_height, min_width, min_height, invert_mask, add_outline, feathering=40):
         output_images = []
         output_masks = []
         
