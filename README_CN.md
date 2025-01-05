@@ -71,6 +71,7 @@
 
 ### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
 一个用于清理文本中的空行和前导/尾随空格的文本处理节点。
+![空行和前导空格清理器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
 
 特点：
 - 移除文本中的空行
