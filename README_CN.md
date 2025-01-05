@@ -18,8 +18,13 @@
 
 ### 📐图像分辨率调整器 (Image Resolution Adjuster)
 一个用于按照 SDXL 最佳宽高比调整图像分辨率的实用节点。
+![图像分辨率调整器设置](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster00.png)
 
-![图像分辨率调整器设置](docs/images/image_resolution_adjuster01.png)
+图像分辨率调整，可自由设置填充背景颜色
+![图像分辨率调整器设置](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster01.png)
+
+图像按比例批量重绘
+![图像按比例批量重绘](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
 
 特点：
 - 支持所有 SDXL 最佳分辨率：

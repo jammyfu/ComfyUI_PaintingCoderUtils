@@ -19,7 +19,14 @@ A practical collection of nodes designed for ComfyUI by a programmer who enjoys 
 ### 📐Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
+A practical node for adjusting image resolutions according to SDXL optimal aspect ratios.
+![Image Resolution Adjuster Settings](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster00.png)
+
+Image resolution adjustment with customizable background color fill
 ![Image Resolution Adjuster Settings](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster01.png)
+
+Batch image redrawing with aspect ratio preservation
+![Batch Image Redrawing](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
 
 Features:
 - Supports all SDXL optimal resolutions:
