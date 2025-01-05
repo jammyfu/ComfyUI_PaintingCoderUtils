@@ -1,3 +1,4 @@
+![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo.jpg)
 # ComfyUI Painting Coder Utilities Nodes
 
 A practical collection of nodes designed for ComfyUI by a programmer who enjoys painting, providing convenient tools for image and text processing.
