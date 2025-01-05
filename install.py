@@ -13,20 +13,30 @@ def install_requirements():
     requirements_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "requirements.txt")
     
     if not os.path.exists(requirements_path):
-        print("No requirements.txt found")
+        print("未找到 requirements.txt 文件")
         return False
     
+    required_packages = {
+        "numpy": "1.21.0",
+        "Pillow": "9.0.0",
+        "torch": "1.7.0",
+        "gradio": "4.0.0"
+    }
+    
+    need_install = False
+    
     try:
-        # 检查是否需要安装 gradio
-        if not is_package_installed("gradio"):
-            print("Installing gradio...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "gradio>=4.0.0"])
-            time.sleep(2)  # 等待安装完成
-            print("Successfully installed gradio")
-            return True
-        return False
+        for package, min_version in required_packages.items():
+            if not is_package_installed(package):
+                print(f"正在安装 {package}>={min_version}...")
+                subprocess.check_call([sys.executable, "-m", "pip", "install", f"{package}>={min_version}"])
+                need_install = True
+                time.sleep(1)  # 等待安装完成
+                print(f"成功安装 {package}")
+        
+        return need_install
     except subprocess.CalledProcessError as e:
-        print(f"Error installing requirements: {e}")
+        print(f"安装依赖时出错: {e}")
         return False
 
 def setup():
