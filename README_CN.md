@@ -1,7 +1,7 @@
 ![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo.jpg)
 # ComfyUI画画的程序员工具集节点
 
-一个喜欢画画的程序员设计的 ComfyUI 设计的实用节点集合，提供便捷的图像、文本处理工具。
+一个为 ComfyUI 设计的实用节点集合，旨在简化图像和文本处理工作流程。功能包括优化的分辨率调整、文本清理工具、动态图像/文本组合和蒙版预览工具。这个集合由一位喜欢绘画的程序员创建，非常适合希望提升 AI 艺术创作流程的艺术家和开发者。
 
 [English](./README.md)
 

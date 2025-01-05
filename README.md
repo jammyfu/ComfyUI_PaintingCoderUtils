@@ -1,7 +1,7 @@
 ![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo.jpg)
 # ComfyUI Painting Coder Utilities Nodes
 
-A practical collection of nodes designed for ComfyUI by a programmer who enjoys painting, providing convenient tools for image and text processing.
+A practical collection of nodes designed for ComfyUI that streamlines image and text processing workflows. Features include optimized resolution adjustment, text cleaning tools, dynamic image/text combination, and mask preview utilities. Created by a programmer who enjoys painting, this collection is perfect for artists and developers looking to enhance their AI art creation pipeline.
 
 [中文说明](./README_CN.md)
 
