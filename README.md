@@ -29,7 +29,7 @@ Batch image redrawing with aspect ratio preservation
 ![Batch Image Redrawing](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
 
 #### Flux Image Resolution Adjuster Batch Workflow Download
-<a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ Download Workflow JSON</a> 
+<a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ Download Workflow JSON (Right Click Save As)</a> 
 
 Features:
 - Supports all SDXL optimal resolutions:

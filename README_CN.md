@@ -29,7 +29,7 @@
 ![图像按比例批量重绘](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
 
 ### Flux图像按比例批量重绘工作流下载
-<a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ 下载工作流JSON</a> 
+<a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ 下载工作流JSON（右键另存为）</a> 
 
 特点：
 - 支持所有 SDXL 最佳分辨率：
