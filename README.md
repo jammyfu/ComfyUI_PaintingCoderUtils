@@ -3,7 +3,7 @@
 
 A practical collection of nodes designed for ComfyUI that streamlines image and text processing workflows. Features include optimized resolution adjustment, text cleaning tools, dynamic image/text combination, and mask preview utilities. Created by a programmer who enjoys painting, this collection is perfect for artists and developers looking to enhance their AI art creation pipeline.
 
-[中文说明](./README_CN.md)
+[English](./README.md) | [简体中文](./README_CN.md)
 
 ## 📦 Installation
 
@@ -27,6 +27,8 @@ Image resolution adjustment with customizable background color fill
 
 Batch image redrawing with aspect ratio preservation
 ![Batch Image Redrawing](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
+
+### [Flux Image Resolution Adjuster Batch Workflow Download](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json)
 
 Features:
 - Supports all SDXL optimal resolutions:

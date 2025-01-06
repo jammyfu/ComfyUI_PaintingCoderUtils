@@ -3,7 +3,7 @@
 
 一个为 ComfyUI 设计的实用节点集合，旨在简化图像和文本处理工作流程。功能包括优化的分辨率调整、文本清理工具、动态图像/文本组合和蒙版预览工具。这个集合由一位喜欢绘画的程序员创建，非常适合希望提升 AI 艺术创作流程的艺术家和开发者。
 
-[English](./README.md)
+[English](./README.md) | [简体中文](./README_CN.md)
 
 ## 📦 安装方法
 
@@ -27,6 +27,8 @@
 
 图像按比例批量重绘
 ![图像按比例批量重绘](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
+
+### [Flux图像按比例批量重绘工作流下载](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json)
 
 特点：
 - 支持所有 SDXL 最佳分辨率：
