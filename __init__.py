@@ -11,6 +11,8 @@ EXTENSION_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 # 导入所有非测试节点类
 from .modules.images.mask_preview import MaskPreview
+from .modules.images.image_resolution_creator import ImageSizeCreator
+from .modules.images.image_resolution_creator import ImageLatentCreator
 from .modules.images.dynamic_image_input import DynamicImageCombiner
 from .modules.images.dynamic_mask_input import DynamicMaskCombiner
 from .modules.images.image_resolution_adjuster import ImageResolutionAdjuster
@@ -19,13 +21,14 @@ from .modules.text.show_text_plus import ShowTextPlus
 from .modules.text.simple_text_input import SimpleTextInput
 from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
-from .modules.images.image_latent_creator import ImageLatentCreator
+
 
 
 
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
     "MaskPreview": MaskPreview,
+    "ImageSizeCreator": ImageSizeCreator,
     "ImageLatentCreator": ImageLatentCreator,
     "DynamicImageCombiner": DynamicImageCombiner,
     "DynamicMaskCombiner": DynamicMaskCombiner,
@@ -35,12 +38,12 @@ NODE_CLASS_MAPPINGS = {
     "SimpleTextInput": SimpleTextInput,
     "MultilineTextInput": MultilineTextInput,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
-    
 }
 
 # 节点显示名称映射
 NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskPreview": "Mask Preview 🎭",
+    "ImageSizeCreator": "Image Size Creator 📏",
     "ImageLatentCreator": "Image Latent Creator 🎨",
     "DynamicImageCombiner": "Dynamic Image Input 🖼️",
     "DynamicMaskCombiner": "Dynamic Mask Input 🎭",
@@ -54,7 +57,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 }
 
 # Web 目录配置
-WEB_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "web")
+WEB_DIRECTORY = "./web"
 print(f"Loading web directory from: {WEB_DIRECTORY}")
 
 # 导出必要的变量
