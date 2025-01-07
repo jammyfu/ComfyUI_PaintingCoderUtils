@@ -5,16 +5,6 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 
 [English](./README.md) | [简体中文](./README_CN.md)
 
-## 📦 Installation
-
-1. Navigate to ComfyUI's `custom_nodes` directory
-2. Clone the repository:
-   ```bash
-   cd custom_nodes
-   git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
-   ```
-3. Restart ComfyUI
-
 ## 🎯 Nodes
 
 ### 📐Image Resolution Adjuster
@@ -237,6 +227,18 @@ Usage:
 3. Select preview mode
 4. Adjust display parameters
 
+
+## 📦 Installation
+
+1. Navigate to ComfyUI's `custom_nodes` directory
+2. Clone the repository:
+   ```bash
+   cd custom_nodes
+   git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
+   ```
+3. Restart ComfyUI
+
+
 ## 📝 License
 
 MIT License
@@ -326,3 +328,8 @@ MIT License
 ## 🤝 Contributions
 
 Issues and Pull Requests are welcome!
+
+## 🙏 Acknowledgements
+
+- ComfyUI Team
+- Impact-Pack Project

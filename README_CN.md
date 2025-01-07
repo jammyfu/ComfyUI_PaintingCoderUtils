@@ -5,16 +5,6 @@
 
 [English](./README.md) | [简体中文](./README_CN.md)
 
-## 📦 安装方法
-
-1. 进入 ComfyUI 的 `custom_nodes` 目录
-2. 克隆仓库：
-   ```bash
-   cd custom_nodes
-   git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
-   ```
-3. 重启 ComfyUI
-
 ## 🎯 功能节点
 
 ### 📐图像分辨率调整器 (Image Resolution Adjuster)
@@ -254,6 +244,15 @@
 3. 选择预览模式
 4. 调整显示参数
 
+## 📦 安装方法
+
+1. 进入 ComfyUI 的 `custom_nodes` 目录
+2. 克隆仓库：
+   ```bash
+   cd custom_nodes
+   git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git
+   ```
+3. 重启 ComfyUI
 
 
 ## 📝 许可证
@@ -351,7 +350,3 @@ MIT License
 
 - ComfyUI 团队
 - Impact-Pack 项目
-
-
-
-这个 README：
