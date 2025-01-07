@@ -19,12 +19,14 @@ from .modules.text.show_text_plus import ShowTextPlus
 from .modules.text.simple_text_input import SimpleTextInput
 from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
+from .modules.images.image_latent_creator import ImageLatentCreator
 
 
 
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
     "MaskPreview": MaskPreview,
+    "ImageLatentCreator": ImageLatentCreator,
     "DynamicImageCombiner": DynamicImageCombiner,
     "DynamicMaskCombiner": DynamicMaskCombiner,
     "ImageResolutionAdjuster": ImageResolutionAdjuster,
@@ -33,11 +35,13 @@ NODE_CLASS_MAPPINGS = {
     "SimpleTextInput": SimpleTextInput,
     "MultilineTextInput": MultilineTextInput,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+    
 }
 
 # 节点显示名称映射
 NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskPreview": "Mask Preview 🎭",
+    "ImageLatentCreator": "Image Latent Creator 🎨",
     "DynamicImageCombiner": "Dynamic Image Input 🖼️",
     "DynamicMaskCombiner": "Dynamic Mask Input 🎭",
     "ImageResolutionAdjuster": "Image Resolution Adjuster 📐",
@@ -46,6 +50,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SimpleTextInput": "Simple Text Input 📝",
     "MultilineTextInput": "Multiline Text Input 📝",
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
+    
 }
 
 # Web 目录配置
