@@ -24,22 +24,21 @@ class ImageSwitch:
 
     def switch_image(self, use_first, image_1=None, image_2=None):
         try:
-            # 如果两个输入都为空，返回白色图像
-            if image_1 is None and image_2 is None:
-                return (torch.ones((1, 512, 512, 3)),)
+            # 创建空白图像作为默认值
+            empty_image = torch.ones((1, 512, 512, 3))
             
-            # 如果只有一个输入不为空，返回该输入
-            if image_1 is None:
-                return (image_2,)
-            if image_2 is None:
-                return (image_1,)
+            # 如果两个输入都为空，返回空白图像
+            if image_1 is None and image_2 is None:
+                return (empty_image,)
             
             # 根据use_first选择输出
-            return (image_1,) if use_first else (image_2,)
+            if use_first:
+                return (image_1,) if image_1 is not None else (empty_image,)
+            else:
+                return (image_2,) if image_2 is not None else (empty_image,)
 
         except Exception as e:
             print(f"Error in ImageSwitch: {str(e)}")
-            # 发生错误时返回白色图像
             return (torch.ones((1, 512, 512, 3)),)
 
 class TextSwitch:
@@ -70,18 +69,14 @@ class TextSwitch:
             if text_1 is None and text_2 is None:
                 return ("",)
             
-            # 如果只有一个输入不为空，返回该输入
-            if text_1 is None:
-                return (text_2 if text_2 is not None else "",)
-            if text_2 is None:
-                return (text_1 if text_1 is not None else "",)
-            
             # 根据use_first选择输出
-            return (text_1,) if use_first else (text_2,)
+            if use_first:
+                return (text_1,) if text_1 is not None else ("",)
+            else:
+                return (text_2,) if text_2 is not None else ("",)
 
         except Exception as e:
             print(f"Error in TextSwitch: {str(e)}")
-            # 发生错误时返回空字符串
             return ("",)
 
 # 添加到 ComfyUI 节点注册
