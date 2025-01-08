@@ -21,6 +21,9 @@ from .modules.text.show_text_plus import ShowTextPlus
 from .modules.text.simple_text_input import SimpleTextInput
 from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
+from .modules.switch.switch_node import TextSwitch
+from .modules.switch.switch_node import ImageSwitch
+
 
 
 
@@ -38,6 +41,8 @@ NODE_CLASS_MAPPINGS = {
     "SimpleTextInput": SimpleTextInput,
     "MultilineTextInput": MultilineTextInput,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
+    "TextSwitch": TextSwitch,
+    "ImageSwitch": ImageSwitch,
 }
 
 # 节点显示名称映射
@@ -53,7 +58,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SimpleTextInput": "Simple Text Input 📝",
     "MultilineTextInput": "Multiline Text Input 📝",
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
-    
+    "TextSwitch": "Text Switch 🔄",
+    "ImageSwitch": "Image Switch 🔄",
 }
 
 # Web 目录配置
