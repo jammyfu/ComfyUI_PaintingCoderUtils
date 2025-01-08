@@ -7,7 +7,7 @@ import hashlib
 import base64
 import re
 import numpy as np
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 class WebImageLoader:
     cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "cache")
@@ -143,6 +143,36 @@ class WebImageLoader:
             print(f"Error loading cache: {str(e)}")
         return False, None
 
+    def process_single_source(self, source: str, use_cache: bool) -> Image.Image:
+        """处理单个图像源"""
+        try:
+            cache_path = self.get_cache_path(source)
+            image = None
+
+            # 尝试从缓存加载
+            if use_cache:
+                cache_exists, cached_image = self.load_from_cache(cache_path)
+                if cache_exists:
+                    return cached_image
+
+            # 如果没有缓存或不使用缓存，根据输入类型加载
+            if self.is_url(source):
+                image = self.download_image(source)
+            elif self.is_base64(source):
+                image = self.decode_base64(source)
+            else:
+                print(f"Invalid image source format: {source}")
+                return self.create_error_image()
+
+            if use_cache and image is not None:
+                self.save_to_cache(image, cache_path)
+
+            return image
+
+        except Exception as e:
+            print(f"Error processing source: {str(e)}")
+            return self.create_error_image()
+
     def load_image(self, image_source: str, use_cache: bool) -> Tuple[torch.Tensor]:
         """主要加载函数"""
         try:
@@ -150,33 +180,24 @@ class WebImageLoader:
             if not image_source.strip():
                 return (torch.ones((1, 1024, 1024, 3)),)
 
-            cache_path = self.get_cache_path(image_source)
-            image = None
-
-            # 尝试从缓存加载
-            if use_cache:
-                cache_exists, cached_image = self.load_from_cache(cache_path)
-                if cache_exists:
-                    image = cached_image
-
-            # 如果没有缓存或不使用缓存，根据输入类型加载
-            if image is None:
-                if self.is_url(image_source):
-                    image = self.download_image(image_source)
-                elif self.is_base64(image_source):
-                    image = self.decode_base64(image_source)
-                else:
-                    print("Invalid image source format")
-                    image = self.create_error_image()
-
-                if use_cache:
-                    self.save_to_cache(image, cache_path)
+            # 分割多行输入
+            sources = [s.strip() for s in image_source.split('\n') if s.strip()]
+            
+            # 处理所有图像源
+            images = []
+            for source in sources:
+                image = self.process_single_source(source, use_cache)
+                images.append(np.array(image))
 
             # 转换为tensor
-            image_tensor = torch.from_numpy(np.array(image)).float() / 255.0
-            image_tensor = image_tensor.unsqueeze(0)
+            if not images:
+                return (torch.ones((1, 1024, 1024, 3)),)
             
-            return (image_tensor,)
+            image_tensors = [torch.from_numpy(img).float() / 255.0 for img in images]
+            # 堆叠所有图像
+            stacked_tensor = torch.stack(image_tensors)
+            
+            return (stacked_tensor,)
 
         except Exception as e:
             print(f"Error in WebImageLoader: {str(e)}")
