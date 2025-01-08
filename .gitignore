@@ -22,3 +22,4 @@ __pycache__/multiline_text_input.cpython-311.pyc
 __pycache__/remove_empty_lines.cpython-311.pyc
 __pycache__/text_combiner.cpython-311.pyc
 __pycache__/show_text.cpython-311.pyc
+cache/*.*

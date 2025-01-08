@@ -1,6 +1,6 @@
 import torch
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import io
 import os
 import hashlib
@@ -36,6 +36,54 @@ class WebImageLoader:
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
 
+    def create_error_image(self) -> Image.Image:
+        """创建错误提示图像"""
+        # 创建白色背景图像
+        img = Image.new('RGB', (512, 512), color='white')
+        draw = ImageDraw.Draw(img)
+        
+        try:
+            # 尝试加载系统字体
+            font_size = 40
+            try:
+                # 尝试加载微软雅黑（Windows）
+                font = ImageFont.truetype("msyh.ttc", font_size)
+            except:
+                try:
+                    # 尝试加载PingFang（MacOS）
+                    font = ImageFont.truetype("/System/Library/Fonts/PingFang.ttc", font_size)
+                except:
+                    # 使用默认字体
+                    font = ImageFont.load_default()
+        except:
+            font = ImageFont.load_default()
+
+        # 错误信息
+        error_message = "Load Image Error"
+        text_color = (255, 0, 0)  # 红色
+        
+        # 计算文本大小以居中显示
+        try:
+            text_bbox = draw.textbbox((0, 0), error_message, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+        except:
+            # 如果无法获取文本大小，使用估计值
+            text_width = len(error_message) * font_size * 0.6
+            text_height = font_size
+
+        # 计算居中位置
+        x = (512 - text_width) / 2
+        y = (512 - text_height) / 2
+        
+        # 绘制文本
+        draw.text((x, y), error_message, fill=text_color, font=font)
+        
+        # 绘制红色边框
+        draw.rectangle([(0, 0), (511, 511)], outline=text_color, width=2)
+        
+        return img
+
     def is_url(self, text: str) -> bool:
         """判断是否为URL"""
         url_pattern = re.compile(
@@ -64,8 +112,8 @@ class WebImageLoader:
             response.raise_for_status()
             return Image.open(io.BytesIO(response.content)).convert('RGB')
         except Exception as e:
-            print(f"Error downloading image from {url}: {str(e)}")
-            return Image.new('RGB', (1, 1), color='red')
+            print(f"Error loading URL: {str(e)}")
+            return self.create_error_image()
 
     def decode_base64(self, base64_str: str) -> Image.Image:
         """解码base64图像"""
@@ -76,8 +124,8 @@ class WebImageLoader:
             image_data = base64.b64decode(base64_data)
             return Image.open(io.BytesIO(image_data)).convert('RGB')
         except Exception as e:
-            print(f"Error decoding base64 image: {str(e)}")
-            return Image.new('RGB', (1, 1), color='red')
+            print(f"Error decoding Base64: {str(e)}")
+            return self.create_error_image()
 
     def save_to_cache(self, image: Image.Image, cache_path: str):
         """保存图像到缓存"""
@@ -119,7 +167,7 @@ class WebImageLoader:
                     image = self.decode_base64(image_source)
                 else:
                     print("Invalid image source format")
-                    return (torch.ones((1, 1024, 1024, 3)),)  # 返回白色图像
+                    image = self.create_error_image()
 
                 if use_cache:
                     self.save_to_cache(image, cache_path)
@@ -132,8 +180,9 @@ class WebImageLoader:
 
         except Exception as e:
             print(f"Error in WebImageLoader: {str(e)}")
-            # 返回1024x1024的白色图像作为错误提示
-            return (torch.ones((1, 1024, 1024, 3)),)
+            error_image = self.create_error_image()
+            image_tensor = torch.from_numpy(np.array(error_image)).float() / 255.0
+            return (image_tensor.unsqueeze(0),)
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
@@ -141,5 +190,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "WebImageLoader": "Web Image Loader 🌐"
+    "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）"
 } 

@@ -62,7 +62,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
     "TextSwitch": "Text Switch 🔄",
     "ImageSwitch": "Image Switch 🔄",
-    "WebImageLoader": "Web Image Loader 🌐",
+    "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
 }
 
 # Web 目录配置
