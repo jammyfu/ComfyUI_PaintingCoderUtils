@@ -23,6 +23,7 @@ from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 from .modules.switch.switch_node import TextSwitch
 from .modules.switch.switch_node import ImageSwitch
+from .modules.web.web_image_loader import WebImageLoader
 
 
 
@@ -43,6 +44,7 @@ NODE_CLASS_MAPPINGS = {
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
     "TextSwitch": TextSwitch,
     "ImageSwitch": ImageSwitch,
+    "WebImageLoader": WebImageLoader,
 }
 
 # 节点显示名称映射
@@ -60,6 +62,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
     "TextSwitch": "Text Switch 🔄",
     "ImageSwitch": "Image Switch 🔄",
+    "WebImageLoader": "Web Image Loader 🌐",
 }
 
 # Web 目录配置

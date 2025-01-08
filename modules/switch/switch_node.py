@@ -25,7 +25,7 @@ class ImageSwitch:
     def switch_image(self, use_first, image_1=None, image_2=None):
         try:
             # 创建空白图像作为默认值
-            empty_image = torch.ones((1, 512, 512, 3))
+            empty_image = torch.ones((1, 1024, 1024, 3))
             
             # 如果两个输入都为空，返回空白图像
             if image_1 is None and image_2 is None:
