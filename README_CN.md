@@ -62,8 +62,81 @@
 8. 描边颜色会自动根据 `background_color` 设置的背景色计算反色
 9. 输出图像尺寸会自动调整（宽高各增加 2 像素）
 
+### 🌐Web图像加载器 (Web Image Loader)
+一个用于从网络加载图像的节点。
+
+![Web图像加载器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader01.png)
+![Web图像加载器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader02.png)
+
+特点：
+- 支持从URL加载图像,支持Base64格式
+- 自动处理图像格式
+- 支持批量图像加载
+- 错误处理：
+  - 无效URL时返回占位图像
+  - 优雅处理异常，自动剔除错误图像
+
+使用方法：
+1. 将节点添加到工作流
+2. 输入图像URL
+3. 节点将自动加载并处理图像
+4. 输出图像可连接到需要图像输入的其他节点
+
+使用场景：
+- 从网络资源加载图像
+- 动态图像处理工作流
+- 批量图像下载和处理
+
+### 🖼️图像转Base64编码器 (Image to Base64 Encoder)
+一个用于将图像转换为Base64编码的节点。
+
+![图像转Base64编码器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_to_base64.png)
+
+特点：
+- 支持多种图像格式（JPEG, PNG, BMP等）
+- 自动处理图像大小和格式
+- 支持批量图像编码
+- 错误处理：
+  - 无效图像时返回错误信息
+  - 优雅处理异常，确保工作流不中断
+
+使用方法：
+1. 将节点添加到工作流
+2. 输入图像文件或图像路径
+3. 节点将自动将图像转换为Base64编码
+4. 输出Base64编码字符串可连接到需要Base64输入的其他节点
+
+使用场景：
+- 图像数据传输
+- 图像嵌入HTML或JSON
+- 动态图像处理工作流
+- 批量图像编码和处理
+
+### 🔀 Switch节点（Image Switch,Text Switch）
+Switch节点用于在工作流中动态切换不同的输入或输出路径。
+
+![Switch节点](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/switch_nodes_01.png)
+
+特点：
+- 支持多种输入和输出类型
+- 可配置的切换条件
+- 自动处理输入输出连接
+
+使用方法：
+1. 将Switch节点添加到工作流
+2. 配置切换条件（如布尔值、数值范围等）
+3. 连接不同的输入和输出路径
+4. 根据条件自动切换路径
+
+使用场景：
+- 动态调整工作流
+- 条件分支处理
+- 多路径选择
+
+
 ### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
 一个用于清理文本中的空行和前导/尾随空格的文本处理节点。
+
 ![空行和前导空格清理器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
 
 特点：
@@ -260,6 +333,35 @@
 MIT License
 
 ## 🤝 更新说明
+
+### v0.2.2 (2024-01-09)
+- 新增 Mask Switch 节点
+  - 支持根据条件在两个蒙版之间切换
+  - 提供默认空白蒙版处理
+  - 优化异常处理机制
+  - 保持蒙版格式和质量
+
+### v0.2.1 (2024-01-07)
+- 新增 Web图像加载器 节点
+  - 支持从 URL 和 Base64 加载图像
+  - 自动处理图像格式
+  - 支持批量图像加载
+  - 错误处理：无效 URL 时返回占位图像，优雅处理异常
+  - 支持缓存功能，提升加载效率
+  - 预览功能：生成预览图像并保存
+
+### v0.2.0 (2024-01-06)
+- 新增图像切换器节点
+  - 支持根据条件在两个图像之间切换
+  - 提供默认空白图像处理
+  - 优化异常处理机制
+  - 保持图像格式和质量
+
+- 新增文本切换器节点
+  - 支持根据条件在两个文本之间切换
+  - 提供默认空白文本处理
+  - 优化异常处理机制
+  - 保持文本格式和内容
 
 ### v0.1.9 (2024-01-05)
 - 优化图像分辨率调整器

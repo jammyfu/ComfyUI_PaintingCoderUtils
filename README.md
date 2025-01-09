@@ -51,6 +51,77 @@ Usage:
 4. Use color picker to set background color
 5. Adjust scaling factor and resolution limits as needed
 
+### 🌐Web Image Loader
+A node for loading images from the web.
+
+![Web Image Loader Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader01.png)
+![Web Image Loader Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader02.png)
+
+Features:
+- Supports loading images from URLs and Base64 format
+- Automatically handles image formats
+- Supports batch image loading
+- Error handling:
+  - Returns a placeholder image for invalid URLs
+  - Gracefully handles exceptions, automatically removing erroneous images
+
+Usage:
+1. Add the node to your workflow
+2. Input the image URL
+3. The node will automatically load and process the image
+4. The output image can be connected to other nodes requiring image input
+
+Use Cases:
+- Loading images from online resources
+- Dynamic image processing workflows
+- Batch image downloading and processing
+
+### 🖼️Image to Base64 Encoder
+A node for converting images to Base64 encoding.
+
+![Image to Base64 Encoder Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_to_base64.png)
+
+Features:
+- Supports various image formats (JPEG, PNG, BMP, etc.)
+- Automatically handles image size and format
+- Supports batch image encoding
+- Error handling:
+  - Returns error information for invalid images
+  - Gracefully handles exceptions, ensuring workflow continuity
+
+Usage:
+1. Add the node to your workflow
+2. Input the image file or image path
+3. The node will automatically convert the image to Base64 encoding
+4. The output Base64 string can be connected to other nodes requiring Base64 input
+
+Use Cases:
+- Image data transmission
+- Embedding images in HTML or JSON
+- Dynamic image processing workflows
+- Batch image encoding and processing
+
+### 🔀 Switch Node (Image Switch, Text Switch)
+Switch nodes are used to dynamically switch between different input or output paths in a workflow.
+
+![Switch Node](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/switch_nodes_01.png)
+
+Features:
+- Supports multiple input and output types
+- Configurable switching conditions
+- Automatically handles input and output connections
+
+Usage:
+1. Add the Switch node to your workflow
+2. Configure switching conditions (e.g., boolean values, numerical ranges, etc.)
+3. Connect different input and output paths
+4. Automatically switch paths based on conditions
+
+Use Cases:
+- Dynamically adjusting workflows
+- Conditional branch processing
+- Multi-path selection
+
 ### ✂️Remove Empty Lines And Leading Spaces
 A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
 ![Remove Empty Lines And Leading Spaces](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
@@ -244,6 +315,33 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.2.2 (2024-01-09)
+- Added Mask Switch node
+  - Support switching between two masks based on conditions
+  - Provides default blank mask handling
+  - Optimized exception handling mechanism
+  - Maintains mask format and quality
+
+### v0.2.1 (2024-01-07)
+- Added Web Image Loader node
+  - Support loading images from URLs and Base64
+  - Automatic image format handling
+  - Support batch image loading
+  - Error handling: returns placeholder image for invalid URLs, graceful exception handling
+  - Cache support for improved loading efficiency
+  - Preview feature: generates and saves preview images
+
+### v0.2.0 (2024-01-06)
+- Added Image Switch node
+  - Support switching between two images based on conditions
+  - Provides default blank image handling
+  - Optimized exception handling mechanism
+  - Maintains image format and quality
+
+- Added Text Switch node
+  - Support switching between two texts based on conditions
+  - Provides default blank text handling
+  - Optimized exception handling mechanism
 
 ### v0.1.9 (2024-01-05)
 - Enhanced Image Resolution Adjuster

@@ -23,8 +23,10 @@ from .modules.text.multiline_text_input import MultilineTextInput
 from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 from .modules.switch.switch_node import TextSwitch
 from .modules.switch.switch_node import ImageSwitch
+from .modules.switch.switch_node import MaskSwitch
 from .modules.web.web_image_loader import WebImageLoader
 from .modules.images.image_base64_converter import ImageToBase64
+
 
 
 
@@ -46,6 +48,7 @@ NODE_CLASS_MAPPINGS = {
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
     "TextSwitch": TextSwitch,
     "ImageSwitch": ImageSwitch,
+    "MaskSwitch": MaskSwitch,
     "WebImageLoader": WebImageLoader,
 }
 
@@ -65,6 +68,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
     "TextSwitch": "Text Switch 🔄",
     "ImageSwitch": "Image Switch 🔄",
+    "MaskSwitch": "Mask Switch 🔄",
     "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
 }
 

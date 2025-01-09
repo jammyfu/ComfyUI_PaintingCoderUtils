@@ -79,13 +79,56 @@ class TextSwitch:
             print(f"Error in TextSwitch: {str(e)}")
             return ("",)
 
+class MaskSwitch:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "use_first": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "mask_1": ("MASK",),
+                "mask_2": ("MASK",),
+            },
+            "_meta": {
+                "preferred_width": 300,
+                "maintain_dimensions": True
+            }
+        }
+    
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("mask",)
+    FUNCTION = "switch_mask"
+    CATEGORY = "🎨Painting👓Coder/🔄Switch"
+
+    def switch_mask(self, use_first, mask_1=None, mask_2=None):
+        try:
+            # 创建空白掩码作为默认值
+            empty_mask = torch.zeros((1, 1024, 1024))
+            
+            # 如果两个输入都为空，返回空白掩码
+            if mask_1 is None and mask_2 is None:
+                return (empty_mask,)
+            
+            # 根据use_first选择输出
+            if use_first:
+                return (mask_1,) if mask_1 is not None else (empty_mask,)
+            else:
+                return (mask_2,) if mask_2 is not None else (empty_mask,)
+
+        except Exception as e:
+            print(f"Error in MaskSwitch: {str(e)}")
+            return (torch.zeros((1, 512, 512)),)
+
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
     "ImageSwitch": ImageSwitch,
-    "TextSwitch": TextSwitch
+    "TextSwitch": TextSwitch,
+    "MaskSwitch": MaskSwitch
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageSwitch": "Image Switch 🔄",
-    "TextSwitch": "Text Switch 🔄"
+    "TextSwitch": "Text Switch 🔄",
+    "MaskSwitch": "Mask Switch 🔄"
 } 
