@@ -8,10 +8,22 @@ import base64
 import re
 import numpy as np
 from typing import Tuple, Union, List
+import random
+import folder_paths
+from nodes import PreviewImage
+import traceback
 
-class WebImageLoader:
+class WebImageLoader(PreviewImage):
     cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "cache")
     image_cache = {}
+    
+    def __init__(self):
+        super().__init__()
+        # 确保缓存目录存在
+        if not os.path.exists(self.cache_dir):
+            os.makedirs(self.cache_dir)
+        self.output_dir = folder_paths.get_temp_directory()
+        self.type = "temp"
     
     @classmethod
     def INPUT_TYPES(s):
@@ -19,6 +31,7 @@ class WebImageLoader:
             "required": {
                 "image_source": ("STRING", {"default": "", "multiline": True}),
                 "use_cache": ("BOOLEAN", {"default": True}),
+                "preview_enabled": ("BOOLEAN", {"default": True}),  # 重命名为 preview_enabled
             },
             "_meta": {
                 "preferred_width": 300,
@@ -31,10 +44,14 @@ class WebImageLoader:
     FUNCTION = "load_image"
     CATEGORY = "🎨Painting👓Coder/🌐Web"
 
-    def __init__(self):
-        # 确保缓存目录存在
-        if not os.path.exists(self.cache_dir):
-            os.makedirs(self.cache_dir)
+    def get_filename(self):
+        """生成临时文件名"""
+        random_num = str(random.randint(0, 0xffffffff))
+        return f"web_image_{random_num}.png"
+
+    def get_subfolder(self):
+        """获取子文件夹路径"""
+        return self.output_dir
 
     def create_error_image(self) -> Image.Image:
         """创建错误提示图像"""
@@ -143,7 +160,7 @@ class WebImageLoader:
             print(f"Error loading cache: {str(e)}")
         return False, None
 
-    def process_single_source(self, source: str, use_cache: bool) -> Image.Image:
+    def process_single_source(self, source: str, use_cache: bool) -> Union[Image.Image, None]:
         """处理单个图像源"""
         try:
             cache_path = self.get_cache_path(source)
@@ -162,7 +179,7 @@ class WebImageLoader:
                 image = self.decode_base64(source)
             else:
                 print(f"Invalid image source format: {source}")
-                return self.create_error_image()
+                return None
 
             if use_cache and image is not None:
                 self.save_to_cache(image, cache_path)
@@ -171,39 +188,108 @@ class WebImageLoader:
 
         except Exception as e:
             print(f"Error processing source: {str(e)}")
-            return self.create_error_image()
+            return None
 
-    def load_image(self, image_source: str, use_cache: bool) -> Tuple[torch.Tensor]:
-        """主要加载函数"""
+    def load_image(self, image_source: str, use_cache: bool, preview_enabled: bool = True):
         try:
-            # 如果输入为空，返回1024x1024的白色图像
+            # 如果输入为空，返回空列表
             if not image_source.strip():
-                return (torch.ones((1, 1024, 1024, 3)),)
+                empty_result = torch.ones((1, 1024, 1024, 3))
+                return {"ui": {"images": []}, "result": (empty_result,)}
 
             # 分割多行输入
             sources = [s.strip() for s in image_source.split('\n') if s.strip()]
+            if not sources:
+                empty_result = torch.ones((1, 1024, 1024, 3))
+                return {"ui": {"images": []}, "result": (empty_result,)}
             
             # 处理所有图像源
-            images = []
-            for source in sources:
-                image = self.process_single_source(source, use_cache)
-                images.append(np.array(image))
-
-            # 转换为tensor
-            if not images:
-                return (torch.ones((1, 1024, 1024, 3)),)
+            tensors = []  # 存储最终的tensor列表
+            preview_results = []
             
-            image_tensors = [torch.from_numpy(img).float() / 255.0 for img in images]
-            # 堆叠所有图像
-            stacked_tensor = torch.stack(image_tensors)
+            for i, source in enumerate(sources):
+                current_image = None
+                current_tensor = None
+                
+                try:
+                    # 尝试处理单个图像
+                    image = self.process_single_source(source, use_cache)
+                    if image is None:  # 如果处理结果为空
+                        raise Exception("Failed to load image")
+                    
+                    # 直接使用 PIL Image 对象
+                    if image.mode != 'RGB':
+                        image = image.convert('RGB')
+                    
+                    # 转换为 numpy 数组并创建 tensor
+                    img_array = np.array(image)
+                    current_tensor = torch.from_numpy(img_array).float() / 255.0
+                    current_image = image
+                    
+                except Exception as e:
+                    print(f"Error loading image {i+1}: {str(e)}")
+                    # 创建错误提示图像
+                    error_image = self.create_error_image()
+                    img_array = np.array(error_image)
+                    current_tensor = torch.from_numpy(img_array).float() / 255.0
+                    current_image = error_image
+                
+                # 添加到tensor列表，确保维度正确
+                if len(current_tensor.shape) == 2:
+                    current_tensor = current_tensor.unsqueeze(-1).repeat(1, 1, 3)
+                elif len(current_tensor.shape) == 3 and current_tensor.shape[-1] != 3:
+                    current_tensor = current_tensor[..., :3]
+                
+                # 添加batch维度
+                current_tensor = current_tensor.unsqueeze(0)
+                
+                # 只添加成功的图像到 tensors 列表
+                if current_image is not None and not isinstance(current_image, Image.Image) or current_image != self.create_error_image():
+                    tensors.append(current_tensor)
+                
+                # 生成预览图像
+                if preview_enabled:
+                    filename = self.get_filename()
+                    subfolder = self.get_subfolder()
+                    preview_path = f"{subfolder}/{filename}"
+                    
+                    # 保存预览图像
+                    if current_image is not None:
+                        current_image.save(preview_path)
+                    else:
+                        Image.fromarray((current_tensor.squeeze(0).numpy() * 255).astype(np.uint8)).save(preview_path)
+                    
+                    preview_results.append({
+                        "filename": filename,
+                        "subfolder": subfolder,
+                        "type": self.type
+                    })
             
-            return (stacked_tensor,)
+            # 创建最终输出
+            if tensors:
+                # 将所有 tensor 沿 batch 维度拼接
+                output_tensor = torch.cat(tensors, dim=0)
+                return {"ui": {"images": preview_results}, "result": (output_tensor,)}
+            else:
+                empty_result = torch.ones((1, 1024, 1024, 3))
+                return {"ui": {"images": []}, "result": (empty_result,)}
 
         except Exception as e:
-            print(f"Error in WebImageLoader: {str(e)}")
+            print(f"Critical error in WebImageLoader: {str(e)}")
+            traceback.print_exc()
             error_image = self.create_error_image()
-            image_tensor = torch.from_numpy(np.array(error_image)).float() / 255.0
-            return (image_tensor.unsqueeze(0),)
+            error_tensor = torch.from_numpy(np.array(error_image)).float() / 255.0
+            return {"ui": {"images": []}, "result": (error_tensor.unsqueeze(0),)}
+
+    @classmethod
+    def IS_CHANGED(s, image_source: str, use_cache: bool, preview_enabled: bool) -> float:
+        # 更新参数名为 preview_enabled
+        return float(hash(f"{image_source}_{use_cache}_{preview_enabled}"))
+
+    @classmethod
+    def VALIDATE_INPUTS(s, image_source: str, use_cache: bool, preview_enabled: bool) -> bool:
+        # 更新参数名为 preview_enabled
+        return True
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
@@ -212,4 +298,4 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）"
-} 
+}
