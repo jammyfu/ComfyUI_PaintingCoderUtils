@@ -24,6 +24,7 @@ from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 from .modules.switch.switch_node import TextSwitch
 from .modules.switch.switch_node import ImageSwitch
 from .modules.web.web_image_loader import WebImageLoader
+from .modules.images.image_base64_converter import ImageToBase64
 
 
 
@@ -33,6 +34,7 @@ from .modules.web.web_image_loader import WebImageLoader
 NODE_CLASS_MAPPINGS = {
     "MaskPreview": MaskPreview,
     "ImageSizeCreator": ImageSizeCreator,
+    "ImageToBase64": ImageToBase64,
     "ImageLatentCreator": ImageLatentCreator,
     "DynamicImageCombiner": DynamicImageCombiner,
     "DynamicMaskCombiner": DynamicMaskCombiner,
@@ -51,6 +53,7 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskPreview": "Mask Preview 🎭",
     "ImageSizeCreator": "Image Size Creator 📏",
+    "ImageToBase64": "Image To Base64 🎨",
     "ImageLatentCreator": "Image Latent Creator 🎨",
     "DynamicImageCombiner": "Dynamic Image Input 🖼️",
     "DynamicMaskCombiner": "Dynamic Mask Input 🎭",
