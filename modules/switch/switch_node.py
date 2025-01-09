@@ -120,15 +120,61 @@ class MaskSwitch:
             print(f"Error in MaskSwitch: {str(e)}")
             return (torch.zeros((1, 512, 512)),)
 
+class LatentSwitch:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "use_first": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "latent_1": ("LATENT",),
+                "latent_2": ("LATENT",),
+            },
+            "_meta": {
+                "preferred_width": 300,
+                "maintain_dimensions": True
+            }
+        }
+    
+    RETURN_TYPES = ("LATENT",)
+    RETURN_NAMES = ("latent",)
+    FUNCTION = "switch_latent"
+    CATEGORY = "🎨Painting👓Coder/🔄Switch"
+
+    def switch_latent(self, use_first, latent_1=None, latent_2=None):
+        try:
+            # 创建空白latent作为默认值
+            empty_latent = {
+                "samples": torch.zeros((1, 4, 64, 64)),
+                "batch_size": 1
+            }
+            
+            # 如果两个输入都为空，返回空白latent
+            if latent_1 is None and latent_2 is None:
+                return (empty_latent,)
+            
+            # 根据use_first选择输出
+            if use_first:
+                return (latent_1,) if latent_1 is not None else (empty_latent,)
+            else:
+                return (latent_2,) if latent_2 is not None else (empty_latent,)
+
+        except Exception as e:
+            print(f"Error in LatentSwitch: {str(e)}")
+            return (empty_latent,)
+
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
     "ImageSwitch": ImageSwitch,
     "TextSwitch": TextSwitch,
-    "MaskSwitch": MaskSwitch
+    "MaskSwitch": MaskSwitch,
+    "LatentSwitch": LatentSwitch
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageSwitch": "Image Switch 🔄",
     "TextSwitch": "Text Switch 🔄",
-    "MaskSwitch": "Mask Switch 🔄"
+    "MaskSwitch": "Mask Switch 🔄",
+    "LatentSwitch": "Latent Switch 🔄"
 } 
