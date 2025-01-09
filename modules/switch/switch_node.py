@@ -142,6 +142,14 @@ class LatentSwitch:
     FUNCTION = "switch_latent"
     CATEGORY = "🎨Painting👓Coder/🔄Switch"
 
+    # 添加命名空间信息
+    VERSION = "1.0.0"
+    NAMESPACE = "PaintingCoder"
+
+    @classmethod
+    def IS_CHANGED(s, use_first, latent_1=None, latent_2=None):
+        return ""
+
     def switch_latent(self, use_first, latent_1=None, latent_2=None):
         try:
             # 创建空白latent作为默认值
@@ -164,17 +172,17 @@ class LatentSwitch:
             print(f"Error in LatentSwitch: {str(e)}")
             return (empty_latent,)
 
-# 添加到 ComfyUI 节点注册
+# 添加命名空间前缀到注册名称
 NODE_CLASS_MAPPINGS = {
-    "ImageSwitch": ImageSwitch,
-    "TextSwitch": TextSwitch,
-    "MaskSwitch": MaskSwitch,
-    "LatentSwitch": LatentSwitch
+    "PaintingCoder::ImageSwitch": ImageSwitch,
+    "PaintingCoder::TextSwitch": TextSwitch,
+    "PaintingCoder::MaskSwitch": MaskSwitch,
+    "PaintingCoder::LatentSwitch": LatentSwitch  # 使用双冒号作为命名空间分隔符
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ImageSwitch": "Image Switch 🔄",
-    "TextSwitch": "Text Switch 🔄",
-    "MaskSwitch": "Mask Switch 🔄",
-    "LatentSwitch": "Latent Switch 🔄"
+    "PaintingCoder::ImageSwitch": "Image Switch 🔄",
+    "PaintingCoder::TextSwitch": "Text Switch 🔄",
+    "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
+    "PaintingCoder::LatentSwitch": "Latent Switch 🔄"  # 保持显示名称简单
 } 

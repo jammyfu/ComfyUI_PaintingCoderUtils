@@ -24,6 +24,7 @@ from .modules.text.remove_empty_lines import RemoveEmptyLinesAndLeadingSpaces
 from .modules.switch.switch_node import TextSwitch
 from .modules.switch.switch_node import ImageSwitch
 from .modules.switch.switch_node import MaskSwitch
+from .modules.switch.switch_node import LatentSwitch
 from .modules.web.web_image_loader import WebImageLoader
 from .modules.images.image_base64_converter import ImageToBase64
 
@@ -46,9 +47,10 @@ NODE_CLASS_MAPPINGS = {
     "SimpleTextInput": SimpleTextInput,
     "MultilineTextInput": MultilineTextInput,
     "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
-    "TextSwitch": TextSwitch,
-    "ImageSwitch": ImageSwitch,
-    "MaskSwitch": MaskSwitch,
+    "PaintingCoder::TextSwitch": TextSwitch,
+    "PaintingCoder::ImageSwitch": ImageSwitch,
+    "PaintingCoder::MaskSwitch": MaskSwitch,
+    "PaintingCoder::LatentSwitch": LatentSwitch,
     "WebImageLoader": WebImageLoader,
 }
 
@@ -66,9 +68,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SimpleTextInput": "Simple Text Input 📝",
     "MultilineTextInput": "Multiline Text Input 📝",
     "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
-    "TextSwitch": "Text Switch 🔄",
-    "ImageSwitch": "Image Switch 🔄",
-    "MaskSwitch": "Mask Switch 🔄",
+    "PaintingCoder::TextSwitch": "Text Switch 🔄",
+    "PaintingCoder::ImageSwitch": "Image Switch 🔄",
+    "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
+    "PaintingCoder::LatentSwitch": "Latent Switch 🔄",
     "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
 }
 

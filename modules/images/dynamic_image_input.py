@@ -58,9 +58,9 @@ class DynamicImageCombiner:
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
-    "DynamicImageCombiner": DynamicImageCombiner,
+    "DynamicImageCombiner": DynamicImageCombiner
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "DynamicImageCombiner": "Dynamic Image Input 🖼️",
+    "DynamicImageCombiner": "Dynamic Image Input 🖼️"
 }
