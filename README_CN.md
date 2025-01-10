@@ -134,6 +134,61 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 - 多路径选择
 
 
+### 🖼️图像尺寸创建器 (Image Size Creator)
+一个用于创建图像尺寸的节点。
+
+![图像尺寸创建器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_size_creator01.png)
+
+特点：
+- 支持所有SDXL最优分辨率：
+  - 1:1 (1024x1024)
+  - 9:7 (1152x896)
+  - 7:9 (896x1152)
+  - 3:2 (1216x832)
+  - 2:3 (832x1216)
+  - 7:4 (1344x768)
+  - 4:7 (768x1344)
+  - 12:5 (1536x640)
+  - 5:12 (640x1536)
+- 可调节的缩放因子
+- 支持横向、纵向和方形模式
+- 自动计算最佳分辨率
+
+使用方法：
+1. 将节点添加到工作流
+2. 选择图像模式(横向/纵向/方形)
+3. 选择目标分辨率
+4. 调整缩放因子(可选)
+
+使用场景：
+- 创建特定尺寸的图像
+- SDXL图像生成优化
+- 批量图像处理工作流
+
+### 🖼️图像潜空间创建器 (Image Latent Creator)
+一个用于创建空的图像潜空间的节点。
+
+![图像潜空间创建器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_latent_creator01.png)
+特点：
+- 继承图像尺寸创建器的所有功能
+- 支持批量大小设置
+- 自动创建优化的潜空间尺寸
+- 支持额外的PNG信息
+
+使用方法：
+1. 将节点添加到工作流
+2. 设置所需的图像尺寸参数
+3. 设置批量大小
+4. 连接到需要潜空间输入的节点
+
+使用场景：
+- 创建空白潜空间
+- SDXL工作流初始化
+- 批量图像生成
+- 自定义潜空间处理
+
+
+
 ### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
 一个用于清理文本中的空行和前导/尾随空格的文本处理节点。
 

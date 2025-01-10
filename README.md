@@ -122,6 +122,62 @@ Use Cases:
 - Conditional branch processing
 - Multi-path selection
 
+
+### 🖼️Image Size Creator
+A node for creating image dimensions.
+
+![Image Size Creator](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_size_creator01.png)
+
+Features:
+- Supports all SDXL optimal resolutions:
+  - 1:1 (1024x1024)
+  - 9:7 (1152x896)
+  - 7:9 (896x1152)
+  - 3:2 (1216x832)
+  - 2:3 (832x1216)
+  - 7:4 (1344x768)
+  - 4:7 (768x1344)
+  - 12:5 (1536x640)
+  - 5:12 (640x1536)
+- Adjustable scale factor
+- Supports landscape, portrait and square modes
+- Automatic calculation of optimal resolution
+
+Usage:
+1. Add the node to your workflow
+2. Select image mode (landscape/portrait/square)
+3. Choose target resolution
+4. Adjust scale factor (optional)
+
+Use Cases:
+- Creating images with specific dimensions
+- SDXL image generation optimization
+- Batch image processing workflows
+
+### 🖼️Image Latent Creator
+A node for creating empty image latent spaces.
+
+![Image Latent Creator](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_latent_creator01.png)
+Features:
+- Inherits all functionality from Image Size Creator
+- Supports batch size settings
+- Automatically creates optimized latent space dimensions
+- Supports additional PNG information
+
+Usage:
+1. Add the node to your workflow
+2. Set desired image dimension parameters
+3. Set batch size
+4. Connect to nodes requiring latent space input
+
+Use Cases:
+- Creating empty latent spaces
+- SDXL workflow initialization
+- Batch image generation
+- Custom latent space processing
+
+
+
 ### ✂️Remove Empty Lines And Leading Spaces
 A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
 ![Remove Empty Lines And Leading Spaces](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
