@@ -1,0 +1,15 @@
+[project]
+name = "paintingcoderutils"
+description = "A practical collection of nodes for ComfyUI that streamlines image and text processing workflows. Features include image optimized resolution adjustment, text cleaning tools, dynamic image/text combination, and mask preview utilities. Perfect for artists and developers looking to enhance their AI art creation pipeline."
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["numpy>=1.21.0", "Pillow>=9.0.0", "torch>=1.7.0", "gradio>=4.0.0"]
+
+[project.urls]
+Repository = "https://github.com/jammyfu/ComfyUI_PaintingCoderUtils"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI_PaintingCoderUtils"
+Icon = ""
