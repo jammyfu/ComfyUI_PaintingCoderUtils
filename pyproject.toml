@@ -13,4 +13,4 @@ Repository = "https://github.com/jammyfu/ComfyUI_PaintingCoderUtils"
 [tool.comfy]
 PublisherId = "jammyfu"
 DisplayName = "Painting Coder Utils"
-Icon = ""
+Icon = "https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/docs/images/paiting_coder_icon.jpg"
