@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaintingCoder Workflow Fixer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .file-input {
+            margin: 20px 0;
+        }
+        .file-input input[type="file"] {
+            display: none;
+        }
+        .file-input label {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .file-input label:hover {
+            background-color: #45a049;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+        .file-name {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PaintingCoder Workflow Fixer</h1>
+        <p>This tool helps fix old workflow JSON files by adding the PaintingCoder namespace to node types.</p>
+        
+        <div class="file-input">
+            <label for="fileInput">Choose Workflow File</label>
+            <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
+            <div id="fileName" class="file-name"></div>
+        </div>
+        
+        <div>
+            <button id="fixButton" onclick="fixAndDownload()" disabled>Fix & Download</button>
+        </div>
+        
+        <div id="error" class="error"></div>
+        <div id="success" class="success"></div>
+    </div>
+
+    <script>
+        // 需要添加命名空间的节点映射
+        const nodeMapping = {
+            "MaskPreview": "PaintingCoder::MaskPreview",
+            "ImageSizeCreator": "PaintingCoder::ImageSizeCreator",
+            "ImageToBase64": "PaintingCoder::ImageToBase64",
+            "ImageLatentCreator": "PaintingCoder::ImageLatentCreator",
+            "DynamicImageCombiner": "PaintingCoder::DynamicImageCombiner",
+            "DynamicMaskCombiner": "PaintingCoder::DynamicMaskCombiner",
+            "ImageResolutionAdjuster": "PaintingCoder::ImageResolutionAdjuster",
+            "TextCombiner": "PaintingCoder::TextCombiner",
+            "ShowTextPlus": "PaintingCoder::ShowTextPlus",
+            "SimpleTextInput": "PaintingCoder::SimpleTextInput",
+            "MultilineTextInput": "PaintingCoder::MultilineTextInput",
+            "RemoveEmptyLinesAndLeadingSpaces": "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces",
+            "ImageSwitch": "PaintingCoder::ImageSwitch",
+            "TextSwitch": "PaintingCoder::TextSwitch",
+            "MaskSwitch": "PaintingCoder::MaskSwitch",
+            "LatentSwitch": "PaintingCoder::LatentSwitch",
+            "WebImageLoader": "PaintingCoder::WebImageLoader"
+        };
+
+        let currentFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                currentFile = file;
+                document.getElementById('fileName').textContent = `Selected file: ${file.name}`;
+                document.getElementById('fixButton').disabled = false;
+                document.getElementById('error').textContent = '';
+                document.getElementById('success').textContent = '';
+            }
+        }
+
+        function fixAndDownload() {
+            if (!currentFile) {
+                document.getElementById('error').textContent = 'Please select a file first.';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    // 解析JSON
+                    const workflow = JSON.parse(e.target.result);
+                    
+                    // 修复节点类型
+                    Object.keys(workflow.nodes).forEach(nodeId => {
+                        const node = workflow.nodes[nodeId];
+                        if (nodeMapping[node.type]) {
+                            node.type = nodeMapping[node.type];
+                        }
+                    });
+                    
+                    // 创建修复后的文件名
+                    const originalName = currentFile.name;
+                    const newName = originalName.replace('.json', '_fixed.json');
+                    
+                    // 创建并下载文件
+                    const blob = new Blob([JSON.stringify(workflow, null, 2)], {type: 'application/json'});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = newName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    document.getElementById('success').textContent = `File fixed and saved as ${newName}`;
+                    document.getElementById('error').textContent = '';
+                } catch (e) {
+                    document.getElementById('error').textContent = `Error: ${e.message}`;
+                    document.getElementById('success').textContent = '';
+                }
+            };
+            reader.readAsText(currentFile);
+        }
+    </script>
+</body>
+</html> 
