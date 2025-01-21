@@ -172,17 +172,17 @@ class LatentSwitch:
             print(f"Error in LatentSwitch: {str(e)}")
             return (empty_latent,)
 
-# 添加命名空间前缀到注册名称
+# 更新节点映射
 NODE_CLASS_MAPPINGS = {
     "PaintingCoder::ImageSwitch": ImageSwitch,
     "PaintingCoder::TextSwitch": TextSwitch,
     "PaintingCoder::MaskSwitch": MaskSwitch,
-    "PaintingCoder::LatentSwitch": LatentSwitch  # 使用双冒号作为命名空间分隔符
+    "PaintingCoder::LatentSwitch": LatentSwitch
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "PaintingCoder::ImageSwitch": "Image Switch 🔄",
     "PaintingCoder::TextSwitch": "Text Switch 🔄",
     "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
-    "PaintingCoder::LatentSwitch": "Latent Switch 🔄"  # 保持显示名称简单
+    "PaintingCoder::LatentSwitch": "Latent Switch 🔄"
 } 

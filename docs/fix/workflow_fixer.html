@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PaintingCoder Workflow Fixer</title>
+    <title>Workflow Fixer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,8 +15,10 @@
         .container {
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 0 0 8px 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            max-width: 800px;
         }
         .file-input {
             margin: 20px 0;
@@ -63,28 +65,265 @@
             margin: 10px 0;
             color: #666;
         }
+        
+        /* 添加语言切换按钮样式 */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .lang-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .lang-btn:hover {
+            background-color: #1976D2;
+        }
+        
+        /* 添加下拉菜单样式 */
+        .fix-type-select {
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: white;
+            font-size: 16px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        /* 添加路径转换选项样式 */
+        .path-options {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;  /* 默认隐藏 */
+        }
+        
+        .path-options.show {
+            display: block;
+        }
+        
+        .path-option {
+            margin: 10px 0;
+        }
+        
+        .path-option label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        
+        .path-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        /* 修改头图容器样式 */
+        .header-image {
+            text-align: center;
+            margin: 20px auto 0;  /* 上边距20px，左右自动居中，下边距0 */
+            max-width: 800px;     /* 与container保持相同宽度 */
+            padding: 20px 20px 0; /* 上左右内边距20px，下内边距0 */
+        }
+        
+        .header-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px 8px 0 0;  /* 只设置上方圆角 */
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);  /* 添加上方阴影 */
+        }
+        
+        .header-image a {
+            display: block;  /* 使链接块级化，完整覆盖图片区域 */
+            text-decoration: none;  /* 移除链接下划线 */
+            cursor: pointer;  /* 显示手型光标 */
+        }
+        
+        .header-image a:hover img {
+            opacity: 0.9;  /* 鼠标悬停时轻微透明效果 */
+            transition: opacity 0.3s ease;  /* 平滑过渡效果 */
+        }
+        
+        /* 整体包装容器 */
+        .wrapper {
+            background-color: white;
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>PaintingCoder Workflow Fixer</h1>
-        <p>This tool helps fix old workflow JSON files by adding the PaintingCoder namespace to node types.</p>
-        
-        <div class="file-input">
-            <label for="fileInput">Choose Workflow File</label>
-            <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
-            <div id="fileName" class="file-name"></div>
+    <div class="wrapper">
+        <!-- 头图容器 -->
+        <div class="header-image">
+            <a href="https://github.com/jammyfu/ComfyUI_PaintingCoderUtils" target="_blank" title="Visit PaintingCoder on GitHub">
+                <img src="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo01.jpg" alt="Painting Coder Logo">
+            </a>
         </div>
         
-        <div>
-            <button id="fixButton" onclick="fixAndDownload()" disabled>Fix & Download</button>
+        <!-- 主内容容器 -->
+        <div class="container">
+            <h1 id="title">PaintingCoder Workflow Fixer</h1>
+            <p id="description">This tool helps fix old workflow JSON files by adding the PaintingCoder namespace to node types.</p>
+            
+            <!-- 添加功能选择下拉菜单 -->
+            <div class="fix-type-select">
+                <select id="fixType" onchange="updateUI()">
+                    <option value="namespace">Fix PaintingCoder Namespace</option>
+                    <option value="path">Fix Path Separator</option>
+                </select>
+            </div>
+            
+            <!-- 添加路径转换选项 -->
+            <div id="pathOptions" class="path-options">
+                <div class="path-option">
+                    <label>
+                        <input type="radio" name="pathType" value="auto" checked>
+                        <span id="autoLabel">Auto Detect</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="pathType" value="toWindows">
+                        <span id="toWindowsLabel">To Windows Format</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="pathType" value="toUnix">
+                        <span id="toUnixLabel">To Unix Format (Linux/Mac)</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="file-input">
+                <label for="fileInput" id="fileLabel">Choose Workflow File</label>
+                <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
+                <div id="fileName" class="file-name"></div>
+            </div>
+            
+            <div>
+                <button id="fixButton" onclick="fixAndDownload()" disabled>Fix & Download</button>
+            </div>
+            
+            <div id="error" class="error"></div>
+            <div id="success" class="success"></div>
         </div>
-        
-        <div id="error" class="error"></div>
-        <div id="success" class="success"></div>
     </div>
+    
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer style="text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid #eee;">
+        <p>© 2025 jammyfu. All rights reserved.</p>
+    </footer>
 
     <script>
+        // 语言配置
+        const translations = {
+            en: {
+                title: "PaintingCoder Workflow Fixer",
+                description: {
+                    namespace: "This tool helps fix old workflow JSON files by adding the PaintingCoder namespace to node types.",
+                    path: "This tool helps convert path separators between Windows (\\) and Unix-style (Linux/Mac) (/) formats."
+                },
+                fileLabel: "Choose Workflow File",
+                fixButton: "Fix & Download",
+                selectedFile: "Selected file: ",
+                errorSelectFile: "Please select a file first.",
+                successMessage: "File fixed and saved as ",
+                switchLang: "中文",
+                fixTypeNamespace: "Fix PaintingCoder Namespace",
+                fixTypePath: "Fix Path Separator",
+                pathOptions: {
+                    auto: "Auto Detect",
+                    toWindows: "To Windows Format (\\)",
+                    toUnix: "To Unix Format (Linux/Mac) (/)"
+                }
+            },
+            zh: {
+                title: "PaintingCoder 工作流修复工具",
+                description: {
+                    namespace: "此工具可以通过添加 PaintingCoder 命名空间来修复旧的工作流 JSON 文件。",
+                    path: "此工具可以在 Windows (\\) 和 Unix (Linux/Mac) (/) 格式之间转换路径分隔符。"
+                },
+                fileLabel: "选择工作流文件",
+                fixButton: "修复并下载",
+                selectedFile: "已选择文件：",
+                errorSelectFile: "请先选择一个文件。",
+                successMessage: "文件已修复并保存为 ",
+                switchLang: "English",
+                fixTypeNamespace: "修复 PaintingCoder 命名空间",
+                fixTypePath: "修复路径分隔符",
+                pathOptions: {
+                    auto: "自动检测",
+                    toWindows: "转换为 Windows 格式 (\\)",
+                    toUnix: "转换为 Unix 格式 (Linux/Mac) (/)"
+                }
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('title').textContent = t.title;
+            updateDescription();
+            document.getElementById('fileLabel').textContent = t.fileLabel;
+            document.getElementById('fixButton').textContent = t.fixButton;
+            document.getElementById('langBtn').textContent = t.switchLang;
+            
+            // 更新下拉菜单选项
+            const select = document.getElementById('fixType');
+            select.options[0].text = t.fixTypeNamespace;
+            select.options[1].text = t.fixTypePath;
+            
+            // 更新动态内容
+            if (currentFile) {
+                document.getElementById('fileName').textContent = 
+                    `${t.selectedFile}${currentFile.name}`;
+            }
+            
+            // 更新错误和成功消息
+            const errorEl = document.getElementById('error');
+            if (errorEl.textContent === translations.en.errorSelectFile) {
+                errorEl.textContent = t.errorSelectFile;
+            }
+            
+            const successEl = document.getElementById('success');
+            if (successEl.textContent.startsWith(translations.en.successMessage)) {
+                const fileName = successEl.textContent.replace(translations.en.successMessage, '');
+                successEl.textContent = t.successMessage + fileName;
+            }
+            
+            // 更新路径选项文本
+            document.getElementById('autoLabel').textContent = t.pathOptions.auto;
+            document.getElementById('toWindowsLabel').textContent = t.pathOptions.toWindows;
+            document.getElementById('toUnixLabel').textContent = t.pathOptions.toUnix;
+        }
+
         // 需要添加命名空间的节点映射
         const nodeMapping = {
             "MaskPreview": "PaintingCoder::MaskPreview",
@@ -112,39 +351,101 @@
             const file = event.target.files[0];
             if (file) {
                 currentFile = file;
-                document.getElementById('fileName').textContent = `Selected file: ${file.name}`;
+                const t = translations[currentLanguage];
+                document.getElementById('fileName').textContent = `${t.selectedFile}${file.name}`;
                 document.getElementById('fixButton').disabled = false;
                 document.getElementById('error').textContent = '';
                 document.getElementById('success').textContent = '';
             }
         }
 
+        function updateDescription() {
+            const fixType = document.getElementById('fixType').value;
+            const t = translations[currentLanguage];
+            document.getElementById('description').textContent = t.description[fixType];
+        }
+
+        function updateUI() {
+            const fixType = document.getElementById('fixType').value;
+            updateDescription();
+            
+            // 显示/隐藏路径选项
+            const pathOptions = document.getElementById('pathOptions');
+            pathOptions.classList.toggle('show', fixType === 'path');
+        }
+
         function fixAndDownload() {
+            const t = translations[currentLanguage];
             if (!currentFile) {
-                document.getElementById('error').textContent = 'Please select a file first.';
+                document.getElementById('error').textContent = t.errorSelectFile;
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    // 解析JSON
                     const workflow = JSON.parse(e.target.result);
+                    const fixType = document.getElementById('fixType').value;
+                    let conversionDirection = '';
                     
-                    // 修复节点类型
-                    Object.keys(workflow.nodes).forEach(nodeId => {
-                        const node = workflow.nodes[nodeId];
-                        if (nodeMapping[node.type]) {
-                            node.type = nodeMapping[node.type];
-                        }
-                    });
+                    if (fixType === 'namespace') {
+                        // 修复命名空间
+                        Object.keys(workflow.nodes).forEach(nodeId => {
+                            const node = workflow.nodes[nodeId];
+                            if (nodeMapping[node.type]) {
+                                node.type = nodeMapping[node.type];
+                            }
+                        });
+                    } else if (fixType === 'path') {
+                        const pathType = document.querySelector('input[name="pathType"]:checked').value;
+                        
+                        const fixPaths = (obj) => {
+                            if (typeof obj === 'string') {
+                                if (pathType === 'auto') {
+                                    const hasForwardSlash = obj.includes('/');
+                                    const hasBackSlash = obj.includes('\\');
+                                    if (hasForwardSlash && !hasBackSlash) {
+                                        conversionDirection = 'unix2win';  // Unix(Linux/Mac) 到 Windows
+                                        return obj.replace(/\//g, '\\');
+                                    } else if (!hasForwardSlash && hasBackSlash) {
+                                        conversionDirection = 'win2unix';  // Windows 到 Unix(Linux/Mac)
+                                        return obj.replace(/\\/g, '/');
+                                    }
+                                } else if (pathType === 'toWindows') {
+                                    return obj.replace(/\//g, '\\');
+                                } else if (pathType === 'toUnix') {
+                                    return obj.replace(/\\/g, '/');
+                                }
+                                return obj;
+                            } else if (typeof obj === 'object' && obj !== null) {
+                                Object.keys(obj).forEach(key => {
+                                    obj[key] = fixPaths(obj[key]);
+                                });
+                            }
+                            return obj;
+                        };
+                        
+                        fixPaths(workflow);
+                    }
                     
-                    // 创建修复后的文件名
                     const originalName = currentFile.name;
-                    const newName = originalName.replace('.json', '_fixed.json');
+                    let suffix = '_fixed';
+                    if (fixType === 'path') {
+                        const pathType = document.querySelector('input[name="pathType"]:checked').value;
+                        if (pathType === 'auto') {
+                            suffix = conversionDirection === 'unix2win' ? '_unix2win' : 
+                                    conversionDirection === 'win2unix' ? '_win2unix' : 
+                                    '_auto';
+                        } else {
+                            suffix = pathType === 'toUnix' ? '_win2unix' : 
+                                    pathType === 'toWindows' ? '_unix2win' : 
+                                    '_auto';
+                        }
+                    }
+                    const newName = originalName.replace('.json', `${suffix}.json`);
                     
-                    // 创建并下载文件
-                    const blob = new Blob([JSON.stringify(workflow, null, 2)], {type: 'application/json'});
+                    const blob = new Blob([JSON.stringify(workflow, null, 2)], 
+                        {type: 'application/json'});
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
@@ -154,7 +455,8 @@
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                     
-                    document.getElementById('success').textContent = `File fixed and saved as ${newName}`;
+                    document.getElementById('success').textContent = 
+                        `${t.successMessage}${newName}`;
                     document.getElementById('error').textContent = '';
                 } catch (e) {
                     document.getElementById('error').textContent = `Error: ${e.message}`;
@@ -163,6 +465,9 @@
             };
             reader.readAsText(currentFile);
         }
+
+        // 初始化UI
+        updateUI();
     </script>
 </body>
 </html> 

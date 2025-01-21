@@ -291,13 +291,11 @@ class WebImageLoader(PreviewImage):
         # 更新参数名为 preview_enabled
         return True
 
-# 添加到 ComfyUI 节点注册
+# 更新节点映射
 NODE_CLASS_MAPPINGS = {
-    "WebImageLoader": WebImageLoader,
-    "PaintingCoder::WebImageLoader": WebImageLoader
+    "PaintingCoder::WebImageLoader": WebImageLoader,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
-    "PaintingCoder::WebImageLoader": "Web Image Loader 🌐（URL Or Base64）"
+    "PaintingCoder::WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
 }

@@ -78,17 +78,17 @@ class TextCombiner:
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
-    "TextCombiner": TextCombiner,
+    "PaintingCoder::TextCombiner": TextCombiner,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "TextCombiner": I18n.get_text('text_combiner.name', "文本合并器 📝", app_language=True),
+    "PaintingCoder::TextCombiner": I18n.get_text('text_combiner.name', "文本合并器 📝", app_language=True),
 }
 
 NODE_CATEGORY_MAPPINGS = {
-    "TextCombiner": "🎨Painting👓Coder/📝Text",
+    "PaintingCoder::TextCombiner": "🎨Painting👓Coder/📝Text",
 }
 
 NODE_COLOR_MAPPINGS = {
-    "TextCombiner": (13, 110, 253),  # Bootstrap 蓝色
+    "PaintingCoder::TextCombiner": (13, 110, 253),  # Bootstrap 蓝色
 }

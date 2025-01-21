@@ -20,7 +20,11 @@ class MultilineTextInput:
     def get_text(self, text):
         return (text,)
 
-# 添加到 ComfyUI 节点注册
+# 更新节点映射
 NODE_CLASS_MAPPINGS = {
-    "MultilineTextInput": MultilineTextInput,
+    "PaintingCoder::MultilineTextInput": MultilineTextInput,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "PaintingCoder::MultilineTextInput": "Multiline Text Input 📝",
 }

@@ -76,12 +76,12 @@ class RemoveEmptyLinesAndLeadingSpaces:
 
 # 节点类映射，用于 ComfyUI 注册
 NODE_CLASS_MAPPINGS = {
-    "RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces
+    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces
 }
 
 # 节点显示名称映射，用于 ComfyUI 显示
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines & Leading Spaces"
+    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝"
 }
 
 # # 测试代码

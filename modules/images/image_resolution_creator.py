@@ -165,11 +165,11 @@ class ImageLatentCreator(ImageSizeCreator):
 
 # 注册节点
 NODE_CLASS_MAPPINGS = {
-    "ImageLatentCreator": ImageLatentCreator,
-    "ImageSizeCreator": ImageSizeCreator
+    "PaintingCoder::ImageSizeCreator": ImageSizeCreator,
+    "PaintingCoder::ImageLatentCreator": ImageLatentCreator,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ImageLatentCreator": "Image Latent Creator 🎨",
-    "ImageSizeCreator": "Image Size Creator 📏"
+    "PaintingCoder::ImageSizeCreator": "Image Size Creator 📏",
+    "PaintingCoder::ImageLatentCreator": "Image Latent Creator 🎨",
 } 

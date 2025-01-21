@@ -56,11 +56,11 @@ class DynamicImageCombiner:
             empty_image = torch.zeros((1, 512, 512, 3))
             return ([empty_image],)
 
-# 添加到 ComfyUI 节点注册
+# 更新节点映射
 NODE_CLASS_MAPPINGS = {
-    "DynamicImageCombiner": DynamicImageCombiner
+    "PaintingCoder::DynamicImageCombiner": DynamicImageCombiner,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "DynamicImageCombiner": "Dynamic Image Input 🖼️"
+    "PaintingCoder::DynamicImageCombiner": "Dynamic Image Input 🖼️",
 }

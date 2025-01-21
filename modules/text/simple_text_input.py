@@ -31,9 +31,9 @@ class SimpleTextInput:
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
-    "SimpleTextInput": SimpleTextInput,
+    "PaintingCoder::SimpleTextInput": SimpleTextInput,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "SimpleTextInput": I18n.get_text("simple_text_input.name", "Simple Text Input 📝"),
+    "PaintingCoder::SimpleTextInput": "Simple Text Input 📝",
 } 

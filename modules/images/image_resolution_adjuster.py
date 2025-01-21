@@ -470,3 +470,12 @@ class ImageResolutionAdjuster:
     @classmethod
     def WIDGETS(s):
         return {"color_widget": {"widget_type": "color_picker", "target": "background_color"}}
+
+# 更新节点映射
+NODE_CLASS_MAPPINGS = {
+    "PaintingCoder::ImageResolutionAdjuster": ImageResolutionAdjuster,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "PaintingCoder::ImageResolutionAdjuster": "Image Resolution Adjuster 📐",
+}

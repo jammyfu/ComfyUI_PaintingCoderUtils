@@ -57,11 +57,11 @@ class DynamicMaskCombiner:
             empty_mask = torch.zeros((1, 512, 512))
             return ([empty_mask],)
 
-# 添加到 ComfyUI 节点注册
+# 更新节点映射
 NODE_CLASS_MAPPINGS = {
-    "DynamicMaskCombiner": DynamicMaskCombiner,
+    "PaintingCoder::DynamicMaskCombiner": DynamicMaskCombiner,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "DynamicMaskCombiner": I18n.get_text("dynamic_mask_input.name", "Dynamic Mask Input 🎭", app_language=True),
+    "PaintingCoder::DynamicMaskCombiner": "Dynamic Mask Input 🎭",
 } 

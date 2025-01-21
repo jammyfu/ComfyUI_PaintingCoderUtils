@@ -64,9 +64,9 @@ class ShowTextPlus:
 
 # 添加到 ComfyUI 节点注册
 NODE_CLASS_MAPPINGS = {
-    "ShowTextPlus": ShowTextPlus,
+    "PaintingCoder::ShowTextPlus": ShowTextPlus,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ShowTextPlus": "Show Text Plus 📝",
+    "PaintingCoder::ShowTextPlus": "Show Text Plus 📝",
 }

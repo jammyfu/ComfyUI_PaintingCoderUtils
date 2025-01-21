@@ -50,6 +50,7 @@ class MaskPreview(PreviewImage):
         # 处理每个mask
         for i in range(masks.shape[0]):
             mask = masks[i]
+            
             mask_tensor = mask.unsqueeze(0)
             mask_tensor = torch.clamp(mask_tensor, 0, 1)
             converted_images.append(mask_tensor)
