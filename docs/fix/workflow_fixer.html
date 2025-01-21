@@ -5,15 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workflow Fixer</title>
     <style>
+        /* 添加深色模式变量 */
+        :root {
+            --bg-color: #f5f5f5;
+            --container-bg: white;
+            --text-color: #333;
+            --border-color: #ccc;
+            --hover-bg: #eeeeee;
+            --success-color: #4CAF50;
+            --success-hover: #45a049;
+            --error-color: #ff4444;
+            --file-item-bg: #f5f5f5;
+            --file-item-hover: #eeeeee;
+            --drop-zone-bg: #f8f8f8;
+            --drop-zone-border: #ccc;
+            --drop-zone-hover: #4CAF50;
+            --drop-zone-hover-bg: #e8f5e9;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a1a1a;
+                --container-bg: #2d2d2d;
+                --text-color: #e0e0e0;
+                --border-color: #404040;
+                --hover-bg: #3d3d3d;
+                --success-color: #5cb85c;
+                --success-hover: #4cae4c;
+                --error-color: #ff6b6b;
+                --file-item-bg: #333333;
+                --file-item-hover: #404040;
+                --drop-zone-bg: #2d2d2d;
+                --drop-zone-border: #404040;
+                --drop-zone-hover: #5cb85c;
+                --drop-zone-hover-bg: #2d3b2d;
+            }
+        }
+
         body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
         }
         .container {
-            background-color: white;
+            background-color: var(--container-bg);
+            color: var(--text-color);
             padding: 20px;
             border-radius: 0 0 8px 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -27,18 +66,15 @@
             display: none;
         }
         .file-input label {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-block;
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-color);
         }
         .file-input label:hover {
-            background-color: #45a049;
+            background-color: var(--hover-bg);
         }
         button {
-            background-color: #4CAF50;
+            background-color: var(--success-color);
             color: white;
             padding: 10px 20px;
             border: none;
@@ -47,23 +83,23 @@
             margin: 5px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: var(--success-hover);
         }
         button:disabled {
-            background-color: #cccccc;
+            background-color: var(--border-color);
             cursor: not-allowed;
         }
         .error {
-            color: red;
+            color: var(--error-color);
             margin: 10px 0;
         }
         .success {
-            color: green;
+            color: var(--success-color);
             margin: 10px 0;
         }
         .file-name {
             margin: 10px 0;
-            color: #666;
+            color: var(--text-color);
         }
         
         /* 添加语言切换按钮样式 */
@@ -96,23 +132,25 @@
             width: 100%;
             padding: 10px;
             border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: white;
+            border: 1px solid var(--border-color);
+            background-color: var(--container-bg);
+            color: var(--text-color);
             font-size: 16px;
         }
         
         select:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: var(--success-color);
         }
         
         /* 添加路径转换选项样式 */
         .path-options {
             margin: 15px 0;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             display: none;  /* 默认隐藏 */
+            background-color: var(--container-bg);
         }
         
         .path-options.show {
@@ -162,11 +200,81 @@
         
         /* 整体包装容器 */
         .wrapper {
-            background-color: white;
+            background-color: var(--container-bg);
             max-width: 800px;
             margin: 20px auto;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 添加拖拽区域样式 */
+        .file-drop-zone {
+            border: 2px dashed var(--drop-zone-border);
+            border-radius: 4px;
+            padding: 30px;  /* 增加内边距使区域更大 */
+            text-align: center;
+            background-color: var(--drop-zone-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+        
+        .file-drop-zone.dragover {
+            border-color: var(--drop-zone-hover);
+            background-color: var(--drop-zone-hover-bg);
+        }
+        
+        .file-drop-zone:hover {
+            border-color: var(--drop-zone-hover);
+        }
+        
+        #dragText {
+            font-size: 16px;  /* 调整文字大小 */
+            color: var(--text-color);      /* 调整文字颜色 */
+            margin: 0;        /* 移除外边距 */
+        }
+        
+        .selected-files {
+            margin: 10px 0;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            margin: 5px 0;
+            background-color: var(--file-item-bg);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+        
+        .file-item:hover {
+            background-color: var(--file-item-hover);
+        }
+        
+        .file-name {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .delete-btn {
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .delete-btn:hover {
+            color: var(--error-color);
+            background-color: rgba(255, 68, 68, 0.1);
+        }
+
+        /* 添加平滑过渡效果 */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
     </style>
 </head>
@@ -211,9 +319,11 @@
             </div>
             
             <div class="file-input">
-                <label for="fileInput" id="fileLabel">Choose Workflow File</label>
-                <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect(event)">
-                <div id="fileName" class="file-name"></div>
+                <div id="dropZone" class="file-drop-zone">
+                    <div id="dragText">Choose Workflow File or drag and drop file here</div>
+                    <input type="file" id="fileInput" accept=".json" multiple onchange="handleFileSelect(event)">
+                </div>
+                <div id="selectedFiles" class="selected-files"></div>
             </div>
             
             <div>
@@ -230,7 +340,7 @@
     </div>
     
     <!-- 页脚 -->
-    <footer style="text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid #eee;">
+    <footer style="text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid var(--border-color);">
         <p>© 2025 jammyfu. All rights reserved.</p>
     </footer>
 
@@ -243,7 +353,7 @@
                     namespace: "This tool helps fix old workflow JSON files by adding the PaintingCoder namespace to node types.",
                     path: "This tool helps convert path separators between Windows (\\) and Unix-style (Linux/Mac) (/) formats."
                 },
-                fileLabel: "Choose Workflow File",
+                dragText: "Choose Workflow File or drag and drop file here",
                 fixButton: "Fix & Download",
                 selectedFile: "Selected file: ",
                 errorSelectFile: "Please select a file first.",
@@ -255,7 +365,11 @@
                     auto: "Auto Detect",
                     toWindows: "To Windows Format (\\)",
                     toUnix: "To Unix Format (Linux/Mac) (/)"
-                }
+                },
+                errorJsonFile: "Please select a JSON file.",
+                selectedFiles: "Selected files:",
+                noFilesSelected: "No files selected",
+                removeFile: "Remove"
             },
             zh: {
                 title: "PaintingCoder 工作流修复工具",
@@ -263,7 +377,7 @@
                     namespace: "此工具可以通过添加 PaintingCoder 命名空间来修复旧的工作流 JSON 文件。",
                     path: "此工具可以在 Windows (\\) 和 Unix (Linux/Mac) (/) 格式之间转换路径分隔符。"
                 },
-                fileLabel: "选择工作流文件",
+                dragText: "选择工作流文件或将文件拖放到此处",
                 fixButton: "修复并下载",
                 selectedFile: "已选择文件：",
                 errorSelectFile: "请先选择一个文件。",
@@ -275,7 +389,11 @@
                     auto: "自动检测",
                     toWindows: "转换为 Windows 格式 (\\)",
                     toUnix: "转换为 Unix 格式 (Linux/Mac) (/)"
-                }
+                },
+                errorJsonFile: "请选择JSON文件。",
+                selectedFiles: "已选择文件：",
+                noFilesSelected: "未选择文件",
+                removeFile: "移除"
             }
         };
 
@@ -291,7 +409,7 @@
             
             document.getElementById('title').textContent = t.title;
             updateDescription();
-            document.getElementById('fileLabel').textContent = t.fileLabel;
+            document.getElementById('dragText').textContent = t.dragText;
             document.getElementById('fixButton').textContent = t.fixButton;
             document.getElementById('langBtn').textContent = t.switchLang;
             
@@ -310,6 +428,8 @@
             const errorEl = document.getElementById('error');
             if (errorEl.textContent === translations.en.errorSelectFile) {
                 errorEl.textContent = t.errorSelectFile;
+            } else if (errorEl.textContent === translations.en.errorJsonFile) {
+                errorEl.textContent = t.errorJsonFile;
             }
             
             const successEl = document.getElementById('success');
@@ -322,6 +442,8 @@
             document.getElementById('autoLabel').textContent = t.pathOptions.auto;
             document.getElementById('toWindowsLabel').textContent = t.pathOptions.toWindows;
             document.getElementById('toUnixLabel').textContent = t.pathOptions.toUnix;
+            
+            updateFileList();  // 更新文件列表的语言
         }
 
         // 需要添加命名空间的节点映射
@@ -346,18 +468,90 @@
         };
 
         let currentFile = null;
+        let selectedFiles = [];  // 存储选中的文件
 
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                currentFile = file;
-                const t = translations[currentLanguage];
-                document.getElementById('fileName').textContent = `${t.selectedFile}${file.name}`;
-                document.getElementById('fixButton').disabled = false;
-                document.getElementById('error').textContent = '';
-                document.getElementById('success').textContent = '';
-            }
+        // 添加拖拽相关函数
+        const dropZone = document.getElementById('dropZone');
+        const dragText = document.getElementById('dragText');
+        
+        // 添加拖拽事件处理
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('dragover');
         }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            for (let file of files) {
+                if (file.name.endsWith('.json')) {
+                    // 检查是否已存在相同文件
+                    if (!selectedFiles.some(f => f.name === file.name)) {
+                        selectedFiles.push(file);
+                    }
+                } else {
+                    const t = translations[currentLanguage];
+                    document.getElementById('error').textContent = t.errorJsonFile;
+                }
+            }
+            updateFileList();
+        }
+        
+        // 统一处理文件的函数
+        function handleFile(file) {
+            currentFile = file;
+            const t = translations[currentLanguage];
+            document.getElementById('fileName').textContent = `${t.selectedFile}${file.name}`;
+            document.getElementById('fixButton').disabled = false;
+            document.getElementById('error').textContent = '';
+            document.getElementById('success').textContent = '';
+        }
+        
+        // 修改文件选择处理函数
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            for (let file of files) {
+                if (file.name.endsWith('.json')) {
+                    // 检查是否已存在相同文件
+                    if (!selectedFiles.some(f => f.name === file.name)) {
+                        selectedFiles.push(file);
+                    }
+                } else {
+                    const t = translations[currentLanguage];
+                    document.getElementById('error').textContent = t.errorJsonFile;
+                }
+            }
+            updateFileList();
+            event.target.value = ''; // 清空input，允许重复选择相同文件
+        }
+        
+        // 修改点击事件处理
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            
+            // 整个虚线框区域点击触发文件选择
+            dropZone.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // 拖拽事件监听
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+            dropZone.addEventListener('drop', handleDrop);
+            
+            updateFileList();
+        });
 
         function updateDescription() {
             const fixType = document.getElementById('fixType').value;
@@ -374,100 +568,144 @@
             pathOptions.classList.toggle('show', fixType === 'path');
         }
 
+        function updateFileList() {
+            const filesContainer = document.getElementById('selectedFiles');
+            const t = translations[currentLanguage];
+            
+            if (selectedFiles.length === 0) {
+                filesContainer.innerHTML = `<div class="file-item"><span class="file-name">${t.noFilesSelected}</span></div>`;
+                document.getElementById('fixButton').disabled = true;
+                return;
+            }
+            
+            filesContainer.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span class="file-name">${file.name}</span>
+                    <span class="delete-btn" onclick="removeFile(${index})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </span>
+                </div>
+            `).join('');
+            
+            document.getElementById('fixButton').disabled = false;
+        }
+        
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
         function fixAndDownload() {
             const t = translations[currentLanguage];
-            if (!currentFile) {
+            if (selectedFiles.length === 0) {
                 document.getElementById('error').textContent = t.errorSelectFile;
                 return;
             }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const workflow = JSON.parse(e.target.result);
-                    const fixType = document.getElementById('fixType').value;
-                    let conversionDirection = '';
-                    
-                    if (fixType === 'namespace') {
-                        // 修复命名空间
-                        Object.keys(workflow.nodes).forEach(nodeId => {
-                            const node = workflow.nodes[nodeId];
-                            if (nodeMapping[node.type]) {
-                                node.type = nodeMapping[node.type];
-                            }
-                        });
-                    } else if (fixType === 'path') {
-                        const pathType = document.querySelector('input[name="pathType"]:checked').value;
+            
+            selectedFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const workflow = JSON.parse(e.target.result);
+                        const fixType = document.getElementById('fixType').value;
+                        let conversionDirection = '';
                         
-                        const fixPaths = (obj) => {
-                            if (typeof obj === 'string') {
-                                if (pathType === 'auto') {
-                                    const hasForwardSlash = obj.includes('/');
-                                    const hasBackSlash = obj.includes('\\');
-                                    if (hasForwardSlash && !hasBackSlash) {
-                                        conversionDirection = 'unix2win';  // Unix(Linux/Mac) 到 Windows
+                        if (fixType === 'namespace') {
+                            // 修复命名空间
+                            Object.keys(workflow.nodes).forEach(nodeId => {
+                                const node = workflow.nodes[nodeId];
+                                if (nodeMapping[node.type]) {
+                                    node.type = nodeMapping[node.type];
+                                }
+                            });
+                        } else if (fixType === 'path') {
+                            const pathType = document.querySelector('input[name="pathType"]:checked').value;
+                            
+                            const fixPaths = (obj) => {
+                                if (typeof obj === 'string') {
+                                    if (pathType === 'auto') {
+                                        const hasForwardSlash = obj.includes('/');
+                                        const hasBackSlash = obj.includes('\\');
+                                        if (hasForwardSlash && !hasBackSlash) {
+                                            conversionDirection = 'unix2win';  // Unix(Linux/Mac) 到 Windows
+                                            return obj.replace(/\//g, '\\');
+                                        } else if (!hasForwardSlash && hasBackSlash) {
+                                            conversionDirection = 'win2unix';  // Windows 到 Unix(Linux/Mac)
+                                            return obj.replace(/\\/g, '/');
+                                        }
+                                    } else if (pathType === 'toWindows') {
                                         return obj.replace(/\//g, '\\');
-                                    } else if (!hasForwardSlash && hasBackSlash) {
-                                        conversionDirection = 'win2unix';  // Windows 到 Unix(Linux/Mac)
+                                    } else if (pathType === 'toUnix') {
                                         return obj.replace(/\\/g, '/');
                                     }
-                                } else if (pathType === 'toWindows') {
-                                    return obj.replace(/\//g, '\\');
-                                } else if (pathType === 'toUnix') {
-                                    return obj.replace(/\\/g, '/');
+                                    return obj;
+                                } else if (typeof obj === 'object' && obj !== null) {
+                                    Object.keys(obj).forEach(key => {
+                                        obj[key] = fixPaths(obj[key]);
+                                    });
                                 }
                                 return obj;
-                            } else if (typeof obj === 'object' && obj !== null) {
-                                Object.keys(obj).forEach(key => {
-                                    obj[key] = fixPaths(obj[key]);
-                                });
-                            }
-                            return obj;
-                        };
-                        
-                        fixPaths(workflow);
-                    }
-                    
-                    const originalName = currentFile.name;
-                    let suffix = '_fixed';
-                    if (fixType === 'path') {
-                        const pathType = document.querySelector('input[name="pathType"]:checked').value;
-                        if (pathType === 'auto') {
-                            suffix = conversionDirection === 'unix2win' ? '_unix2win' : 
-                                    conversionDirection === 'win2unix' ? '_win2unix' : 
-                                    '_auto';
-                        } else {
-                            suffix = pathType === 'toUnix' ? '_win2unix' : 
-                                    pathType === 'toWindows' ? '_unix2win' : 
-                                    '_auto';
+                            };
+                            
+                            fixPaths(workflow);
                         }
+                        
+                        const originalName = file.name;
+                        let suffix = '_fixed';
+                        if (fixType === 'path') {
+                            const pathType = document.querySelector('input[name="pathType"]:checked').value;
+                            if (pathType === 'auto') {
+                                suffix = conversionDirection === 'unix2win' ? '_unix2win' : 
+                                        conversionDirection === 'win2unix' ? '_win2unix' : 
+                                        '_auto';
+                            } else {
+                                suffix = pathType === 'toUnix' ? '_win2unix' : 
+                                        pathType === 'toWindows' ? '_unix2win' : 
+                                        '_auto';
+                            }
+                        }
+                        const newName = originalName.replace('.json', `${suffix}.json`);
+                        
+                        const blob = new Blob([JSON.stringify(workflow, null, 2)], 
+                            {type: 'application/json'});
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = newName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        document.getElementById('success').textContent = 
+                            `${t.successMessage}${newName}`;
+                        document.getElementById('error').textContent = '';
+                    } catch (e) {
+                        document.getElementById('error').textContent = `Error: ${e.message}`;
+                        document.getElementById('success').textContent = '';
                     }
-                    const newName = originalName.replace('.json', `${suffix}.json`);
-                    
-                    const blob = new Blob([JSON.stringify(workflow, null, 2)], 
-                        {type: 'application/json'});
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = newName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    document.getElementById('success').textContent = 
-                        `${t.successMessage}${newName}`;
-                    document.getElementById('error').textContent = '';
-                } catch (e) {
-                    document.getElementById('error').textContent = `Error: ${e.message}`;
-                    document.getElementById('success').textContent = '';
-                }
-            };
-            reader.readAsText(currentFile);
+                };
+                reader.readAsText(file);
+            });
         }
 
-        // 初始化UI
-        updateUI();
+        // 添加深色模式检测和监听
+        function updateTheme() {
+            // 检测系统深色模式
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+
+        // 初始化主题
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTheme();
+            updateUI();
+        });
     </script>
 </body>
 </html> 
