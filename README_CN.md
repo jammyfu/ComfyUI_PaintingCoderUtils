@@ -15,7 +15,8 @@
 
  ![工作流修复工具](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_cn.jpg)
 
-  [工作流修复工具](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/1b46d18b5841540b6cea95eaa22a212add2525ff/docs/fix/workflow_fixer.html)
+  [工作流修复工具](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/1b46d18b5841540b6cea95eaa22a212add2525ff/docs/fix/workflow_fixer.html) 右键另存为或者到目录 **ComfyUI_PaintingCoderUtils/docs/fix/** 寻找 **workflow_fixer.html** 并打开页面
+
 
 - 新增功能：支持Windows与Unix(Linux/Mac)格式之间的路径分隔符转换
 - 修复工具现在同时支持命名空间更新和路径格式转换
