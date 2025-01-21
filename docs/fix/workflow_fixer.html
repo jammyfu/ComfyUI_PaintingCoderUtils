@@ -183,8 +183,9 @@
         .header-image img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px 8px 0 0;  /* 只设置上方圆角 */
-            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);  /* 添加上方阴影 */
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease;  /* 添加过渡效果 */
         }
         
         .header-image a {
@@ -295,7 +296,7 @@
             <!-- 添加功能选择下拉菜单 -->
             <div class="fix-type-select">
                 <select id="fixType" onchange="updateUI()">
-                    <option value="namespace">Fix PaintingCoder Namespace</option>
+                    <option value="namespace">Fix PaintingCoder old version (<0.3.0) workflow</option>
                     <option value="path">Fix Path Separator</option>
                 </select>
             </div>
@@ -358,8 +359,8 @@
                 selectedFile: "Selected file: ",
                 errorSelectFile: "Please select a file first.",
                 successMessage: "File fixed and saved as ",
-                switchLang: "中文",
-                fixTypeNamespace: "Fix PaintingCoder Namespace",
+                switchLang: "中文", 
+                fixTypeNamespace: "Fix PaintingCoder old version (<0.3.0) workflow",
                 fixTypePath: "Fix Path Separator",
                 pathOptions: {
                     auto: "Auto Detect",
@@ -383,7 +384,7 @@
                 errorSelectFile: "请先选择一个文件。",
                 successMessage: "文件已修复并保存为 ",
                 switchLang: "English",
-                fixTypeNamespace: "修复 PaintingCoder 命名空间",
+                fixTypeNamespace: "修复PaintingCoder旧版本（<0.3.0）工作流",
                 fixTypePath: "修复路径分隔符",
                 pathOptions: {
                     auto: "自动检测",
@@ -444,6 +445,14 @@
             document.getElementById('toUnixLabel').textContent = t.pathOptions.toUnix;
             
             updateFileList();  // 更新文件列表的语言
+
+            // 更新头图
+            const headerImage = document.querySelector('.header-image img');
+            if (currentLanguage === 'zh') {
+                headerImage.src = "https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo02.jpg";
+            } else {
+                headerImage.src = "https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo01.jpg";
+            }
         }
 
         // 需要添加命名空间的节点映射

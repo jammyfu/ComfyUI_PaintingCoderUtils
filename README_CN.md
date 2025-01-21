@@ -5,6 +5,25 @@
 
 [English](./README.md) | [简体中文](./README_CN.md)
 
+
+# ⚠️ 重要更新说明
+
+**版本0.3.0重大更新：**
+- 修改了命名空间以提升兼容性
+- 此更新会导致旧的工作流无法使用
+- 请使用我们的工作流修复工具来修复现有工作流：
+
+ ![工作流修复工具](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_cn.jpg)
+
+  [工作流修复工具](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/1b46d18b5841540b6cea95eaa22a212add2525ff/docs/fix/workflow_fixer.html)
+
+- 新增功能：支持Windows与Unix(Linux/Mac)格式之间的路径分隔符转换
+- 修复工具现在同时支持命名空间更新和路径格式转换
+
+
+---
+
+
 ## 🎯 功能节点
 
 ### 📐图像分辨率调整器 (Image Resolution Adjuster)
@@ -388,6 +407,13 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 MIT License
 
 ## 🤝 更新说明
+### v0.3.0 (2025-01-21)
+- **重大变更:**
+  - 修改了命名空间结构以提高兼容性
+  - 添加了工作流修复工具以便迁移
+  - 增加了路径分隔符转换功能
+  - 增强了错误处理和用户反馈
+  - 改善了跨平台兼容性
 
 ### v0.2.2 (2024-01-09)
 - 新增 Mask Switch 节点

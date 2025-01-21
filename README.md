@@ -1,9 +1,27 @@
 ![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo01.jpg)
+
 # ComfyUI Painting Coder Utilities Nodes
 
 A practical collection of nodes designed for ComfyUI that streamlines image and text processing workflows. Features include optimized resolution adjustment, text cleaning tools, dynamic image/text combination, and mask preview utilities. Created by a programmer who enjoys painting, this collection is perfect for artists and developers looking to enhance their AI art creation pipeline.
 
 [English](./README.md) | [简体中文](./README_CN.md)
+
+
+# ⚠️ Important Update Notice
+
+**[English]**  
+**Version 0.3.0 Breaking Changes:**
+- The namespace has been modified to improve compatibility
+- This update will cause older workflows to stop working
+- To fix your existing workflows, please use our workflow fixer tool:
+
+ ![Workflow Fixer Tool](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_en.jpg)
+ 
+  [Workflow Fixer Tool](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/1b46d18b5841540b6cea95eaa22a212add2525ff/docs/fix/workflow_fixer.html)
+  
+- Added new feature: Path separator conversion between Windows and Unix-style (Linux/Mac) formats
+- The fixer tool now supports both namespace updates and path format conversion
+---
 
 ## 🎯 Nodes
 
@@ -371,6 +389,14 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.3.0 (2025-01-21)
+- **Breaking Changes:**
+  - Modified namespace structure for better compatibility
+  - Added workflow fixer tool for migration
+  - Added path separator conversion functionality
+  - Enhanced error handling and user feedback
+  - Improved cross-platform compatibility
+
 ### v0.2.2 (2024-01-09)
 - Added Mask Switch node
   - Support switching between two masks based on conditions
