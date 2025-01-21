@@ -10,7 +10,9 @@ class DynamicMaskCombiner:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {},
+            "required": {
+                "mask_1": ("MASK",),  # 添加一个初始掩码输入
+            },
             "optional": {},
             "_meta": {
                 "preferred_width": 300,

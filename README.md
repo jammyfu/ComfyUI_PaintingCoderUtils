@@ -389,6 +389,14 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.3.1 (2025-01-22)
+- **Bug Fixes:**
+  - Fixed crash issue in Text Combiner when handling special characters
+  - Fixed issue with Dynamic Image Input node not handling inputs correctly in certain cases
+  - Fixed display error in Mask Previewer during batch preview
+  - Fixed compatibility issues with path separator conversion functionality on some systems
+  - Fixed processing errors in Image Resolution Adjuster at specific resolutions
+  
 ### v0.3.0 (2025-01-21)
 - **Breaking Changes:**
   - Modified namespace structure for better compatibility

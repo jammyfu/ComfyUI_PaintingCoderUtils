@@ -1,10 +1,10 @@
 import { app } from "/scripts/app.js";
 
 app.registerExtension({
-    name: "Comfy.PaintingCoder.TextCombiner",
+    name: "PaintingCoder.TextCombiner",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        // 检查是否为 TextCombiner 节点
-        if (nodeData.name === "TextCombiner") {
+        // 更新节点检查条件，只保留原始名称和新命名空间格式
+        if (nodeData.name === "TextCombiner" || nodeData.name === "PaintingCoder::TextCombiner") {
             // 添加自定义样式
             const style = document.createElement('style');
             style.textContent = `

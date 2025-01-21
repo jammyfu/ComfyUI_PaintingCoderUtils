@@ -1,20 +1,28 @@
 import { app } from "/scripts/app.js";
 
 app.registerExtension({
-    name: "Comfy.PaintingCoder.DynamicImageCombiner",
+    name: "PaintingCoder.DynamicImageCombiner",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        // 检查是否为 DynamicImageCombiner 节点
-        if (nodeData.name === "DynamicImageCombiner") {
+        if (nodeData.name === "DynamicImageCombiner" || nodeData.name === "PaintingCoder::DynamicImageCombiner") {
             // 保存原始的 onNodeCreated 方法
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             
             // 重写 onNodeCreated 方法
             nodeType.prototype.onNodeCreated = function() {
                 const result = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
+                
+                // 确保至少有一个输入点
+                if (!this.inputs || this.inputs.length === 0) {
+                    this.addInput("image_1", "IMAGE");
+                }
+                
                 // 初始化连接计数器
                 this.lastConnectedCount = 0;
-                // 添加第一个图像输入
-                this.addInput("image_1", "IMAGE");
+                
+                // 强制刷新节点
+                this.setSize(this.computeSize());
+                app.graph.setDirtyCanvas(true);
+                
                 return result;
             };
 
@@ -29,7 +37,7 @@ app.registerExtension({
                     // 如果连接数量发生变化
                     if (connectedCount !== this.lastConnectedCount) {
                         this.lastConnectedCount = connectedCount;
-                        const targetCount = Math.max(connectedCount + 1, 1); // 确保至少保留一个输入
+                        const targetCount = Math.max(connectedCount + 1, 1);
 
                         // 获取所有image输入
                         const imageInputs = this.inputs
@@ -42,9 +50,8 @@ app.registerExtension({
                             this.addInput(`image_${newIndex}`, "IMAGE");
                         }
 
-                        // 只在确实需要移除时才移除多余的输入槽位
+                        // 移除多余的未连接输入槽位
                         if (imageInputs.length > targetCount) {
-                            // 从后向前检查未连接的输入
                             for (let i = imageInputs.length - 1; i >= targetCount; i--) {
                                 const input = this.inputs[imageInputs[i].index];
                                 if (!input.link) {
@@ -53,7 +60,7 @@ app.registerExtension({
                             }
                         }
 
-                        // 更新节点大小和画布
+                        // 强制刷新节点
                         this.setSize(this.computeSize());
                         app.graph.setDirtyCanvas(true);
                     }

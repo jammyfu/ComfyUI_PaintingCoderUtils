@@ -1,10 +1,9 @@
 import { app } from "/scripts/app.js";
 
 app.registerExtension({
-    name: "Comfy.PaintingCoder.MaskPreview",
+    name: "PaintingCoder.MaskPreview",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        // 检查是否为 MaskPreview 节点
-        if (nodeData.name === "MaskPreview") {
+        if (nodeData.name === "MaskPreview" || nodeData.name === "PaintingCoder::MaskPreview") {
             // 保存原始的 onNodeCreated 方法
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             

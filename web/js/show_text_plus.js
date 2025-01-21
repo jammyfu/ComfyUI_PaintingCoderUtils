@@ -6,7 +6,7 @@ app.registerExtension({
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         // console.log("[ShowTextPlus] Registering node:", nodeData.name);
 
-        if (nodeData.name === "ShowTextPlus") {
+        if (nodeData.name === "ShowTextPlus" || nodeData.name === "PaintingCoder::ShowTextPlus") {
             function populate(text) {
                 // console.log("[ShowTextPlus] Populating with:", text);
 

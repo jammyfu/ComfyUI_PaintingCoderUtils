@@ -9,7 +9,9 @@ class DynamicImageCombiner:
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": {},
+            "required": {
+                "image_1": ("IMAGE",),  # 添加一个初始图像输入
+            },
             "optional": {},
             "_meta": {
                 "preferred_width": 300,
