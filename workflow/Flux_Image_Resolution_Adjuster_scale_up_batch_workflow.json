@@ -234,7 +234,7 @@
     },
     {
       "id": 7,
-      "type": "MultilineTextInput",
+      "type": "PaintingCoder::MultilineTextInput",
       "pos": [
         -5880,
         1880
@@ -275,7 +275,7 @@
     },
     {
       "id": 8,
-      "type": "MultilineTextInput",
+      "type": "PaintingCoder::MultilineTextInput",
       "pos": [
         -5880,
         2538.27685546875
@@ -456,7 +456,7 @@
     },
     {
       "id": 11,
-      "type": "ImageResolutionAdjuster",
+      "type": "PaintingCoder::ImageResolutionAdjuster",
       "pos": [
         -4783.71044921875,
         2030.432861328125
@@ -958,7 +958,7 @@
     },
     {
       "id": 22,
-      "type": "DynamicImageCombiner",
+      "type": "PaintingCoder::DynamicImageCombiner",
       "pos": [
         -5970,
         1220
@@ -1097,7 +1097,7 @@
     },
     {
       "id": 24,
-      "type": "TextCombiner",
+      "type": "PaintingCoder::TextCombiner",
       "pos": [
         -3061.348388671875,
         1165.1534423828125
@@ -1200,7 +1200,7 @@
     },
     {
       "id": 26,
-      "type": "MultilineTextInput",
+      "type": "PaintingCoder::MultilineTextInput",
       "pos": [
         -4067.58349609375,
         1165.1534423828125
@@ -1673,7 +1673,7 @@
     },
     {
       "id": 38,
-      "type": "MaskPreview",
+      "type": "PaintingCoder::MaskPreview",
       "pos": [
         -4752.54296875,
         2523.8916015625

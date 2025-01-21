@@ -9,7 +9,6 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 
 # ⚠️ Important Update Notice
 
-**[English]**  
 **Version 0.3.0 Breaking Changes:**
 - The namespace has been modified to improve compatibility
 - This update will cause older workflows to stop working
