@@ -175,9 +175,10 @@
         /* 修改头图容器样式 */
         .header-image {
             text-align: center;
-            margin: 20px auto 0;  /* 上边距20px，左右自动居中，下边距0 */
-            max-width: 800px;     /* 与container保持相同宽度 */
-            padding: 20px 20px 0; /* 上左右内边距20px，下内边距0 */
+            margin: 20px auto 0;
+            max-width: 800px;
+            padding: 20px 20px 0;
+            position: relative;  /* 添加相对定位 */
         }
         
         .header-image img {
@@ -208,25 +209,27 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* 添加拖拽区域样式 */
+        /* 更新拖拽区域样式 */
         .file-drop-zone {
-            border: 2px dashed var(--drop-zone-border);
+            border: 2px dashed var(--success-color);  /* 使用绿色边框 */
             border-radius: 4px;
-            padding: 30px;  /* 增加内边距使区域更大 */
+            padding: 30px;
             text-align: center;
-            background-color: var(--drop-zone-bg);
+            background-color: rgba(76, 175, 80, 0.05);  /* 浅绿色背景 */
             cursor: pointer;
             transition: all 0.3s ease;
             color: var(--text-color);
         }
         
-        .file-drop-zone.dragover {
-            border-color: var(--drop-zone-hover);
-            background-color: var(--drop-zone-hover-bg);
+        .file-drop-zone:hover {
+            border-color: var(--success-hover);  /* 深绿色边框 */
+            background-color: rgba(76, 175, 80, 0.1);  /* 更深的绿色背景 */
         }
         
-        .file-drop-zone:hover {
-            border-color: var(--drop-zone-hover);
+        .file-drop-zone.dragover {
+            border-color: var(--success-hover);
+            background-color: rgba(76, 175, 80, 0.15);  /* 拖拽时最深的绿色背景 */
+            transform: scale(1.01);  /* 轻微放大效果 */
         }
         
         #dragText {
@@ -277,6 +280,21 @@
         * {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
+
+        /* 更新版本号样式 */
+        .version-tag {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            color: #FFFFFF; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-style: italic;
+            font-weight: bold; /* 加粗字体 */
+            font-size: 1.5em;  /* 增加字体大小 */
+            letter-spacing: 1px;
+            opacity: 0.8;
+            text-shadow: 2px 2px 4px rgba(0,0,0,1); /* 增强阴影效果 */
+        }
     </style>
 </head>
 <body>
@@ -284,8 +302,9 @@
         <!-- 头图容器 -->
         <div class="header-image">
             <a href="https://github.com/jammyfu/ComfyUI_PaintingCoderUtils" target="_blank" title="Visit PaintingCoder on GitHub">
-                <img src="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_top_banner01.jpg" alt="Painting Coder Logo">
+                <img src="../images/workflow_fix_top_banner01.jpg" alt="Painting Coder Logo">
             </a>
+            <span class="version-tag">Version 0.2.1</span>
         </div>
         
         <!-- 主内容容器 -->
@@ -342,7 +361,6 @@
     
     <!-- 页脚 -->
     <footer style="text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid var(--border-color);">
-        <p id="version" style="color: var(--text-color); font-size: 0.9em; margin: 0;">Version 0.2.0</p>
         <p style="margin-bottom: 5px;">© 2025 jammyfu. All rights reserved.</p>
     </footer>
 
@@ -476,9 +494,9 @@
             // 更新头图
             const headerImage = document.querySelector('.header-image img');
             if (currentLanguage === 'zh') {
-                headerImage.src = "https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_top_banner01.jpg";
+                headerImage.src = "../images/workflow_fix_top_banner02.jpg";
             } else {
-                headerImage.src = "https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_top_banner01.jpg";
+                headerImage.src = "../images/workflow_fix_top_banner01.jpg";
             }
         }
 
