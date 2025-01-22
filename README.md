@@ -16,7 +16,7 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 
  ![Workflow Fixer Tool](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_en.jpg)
  
-  [Workflow Fixer Tool](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/1b46d18b5841540b6cea95eaa22a212add2525ff/docs/fix/workflow_fixer.html) Right-click to save or go to the directory **ComfyUI_PaintingCoderUtils/docs/fix/** to find **workflow_fixer.html** and open the page
+  Open the page [Workflow Fixer Tool](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en) Or go to the directory **ComfyUI_PaintingCoderUtils/docs/fix/** to find **workflow_fixer.html** and open the page
 
   
 - Added new feature: Path separator conversion between Windows and Unix-style (Linux/Mac) formats
