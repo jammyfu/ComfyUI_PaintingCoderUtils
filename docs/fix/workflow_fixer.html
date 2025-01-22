@@ -299,11 +299,49 @@
             color: #FFFFFF; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-style: italic;
-            font-weight: bold; /* 加粗字体 */
-            font-size: 1.5em;  /* 增加字体大小 */
+            font-weight: 300;
+            font-size: 1.8em;
             letter-spacing: 1px;
             opacity: 0.8;
-            text-shadow: 2px 2px 4px rgba(0,0,0,1); /* 增强阴影效果 */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 添加媒体查询适配手机端 */
+        @media screen and (max-width: 768px) {
+            .lang-switch {
+                top: 20px;    /* 减小顶部间距 */
+                right: 20px;  /* 减小右侧间距 */
+            }
+
+            .lang-btn {
+                padding: 6px 12px;  /* 减小按钮内边距 */
+                font-size: 0.8em;   /* 减小字体大小 */
+            }
+
+            .version-tag {
+                bottom: 10px;       /* 减小底部间距 */
+                right: 20px;        /* 减小右侧间距 */
+                font-size: 1.2em;   /* 减小版本号字体大小 */
+            }
+        }
+
+        /* 适配更小屏幕的设备 */
+        @media screen and (max-width: 480px) {
+            .lang-switch {
+                top: 15px;
+                right: 15px;
+            }
+
+            .lang-btn {
+                padding: 4px 10px;
+                font-size: 0.75em;
+            }
+
+            .version-tag {
+                bottom: 8px;
+                right: 15px;
+                font-size: 1em;
+            }
         }
     </style>
 </head>
