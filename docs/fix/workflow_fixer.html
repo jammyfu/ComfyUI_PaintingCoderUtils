@@ -715,6 +715,49 @@
             updateTheme();
             updateUI();
         });
+
+        // 定义需要进行路径转换的节点类型和参数
+        const PATH_CONVERSION_NODES = {
+            "CheckpointLoaderSimple": ["ckpt_name"],
+            "LoraLoader": ["lora_name", "model_str"],
+            "ControlNetLoader": ["control_net_name"],
+            "UNETLoader": ["unet_name"],
+            "VAELoader": ["vae_name"],
+            "CLIPLoader": ["clip_name"],
+            "DiffControlNetLoader": ["model"],
+            "ModelLoader": ["model_name"],
+            // 可以继续添加其他需要转换的节点类型和对应参数
+        };
+
+        function fixWorkflow(workflow, fixType, conversionDirection) {
+            try {
+                if (fixType === 'path') {
+                    Object.keys(workflow.nodes).forEach(nodeId => {
+                        const node = workflow.nodes[nodeId];
+                        
+                        // 检查是否是需要转换路径的节点类型
+                        const pathParams = PATH_CONVERSION_NODES[node.class_type];
+                        if (pathParams) {
+                            pathParams.forEach(param => {
+                                if (node.inputs && node.inputs[param]) {
+                                    // 转换路径分隔符
+                                    if (conversionDirection === 'unix') {
+                                        node.inputs[param] = node.inputs[param].replace(/\\/g, '/');
+                                    } else if (conversionDirection === 'windows') {
+                                        node.inputs[param] = node.inputs[param].replace(/\//g, '\\');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else if (fixType === 'namespace') {
+                    // ... 保持原有的命名空间修复逻辑不变 ...
+                }
+                return workflow;
+            } catch (e) {
+                throw new Error(`修复工作流时出错: ${e.message}`);
+            }
+        }
     </script>
 </body>
 </html> 
