@@ -357,6 +357,11 @@
             if (lang && (lang === 'zh' || lang === 'en')) {
                 currentLanguage = lang;
                 updateLanguage();
+            } else {
+                // 如果没有语言参数，根据当前语言设置URL
+                const url = new URL(window.location.href);
+                url.searchParams.set('lang', currentLanguage);
+                window.history.replaceState({}, '', url.toString());
             }
         }
 
@@ -415,7 +420,15 @@
         let currentLanguage = 'en';
 
         function toggleLanguage() {
+            // 切换语言
             currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            
+            // 更新 URL 参数
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', currentLanguage);
+            window.history.replaceState({}, '', url.toString());
+            
+            // 更新页面语言
             updateLanguage();
         }
 
