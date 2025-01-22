@@ -347,6 +347,19 @@
     </footer>
 
     <script>
+        // 在现有代码前添加
+        window.onload = function() {
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+            
+            // 如果有语言参数，设置对应语言
+            if (lang && (lang === 'zh' || lang === 'en')) {
+                currentLanguage = lang;
+                updateLanguage();
+            }
+        }
+
         // 语言配置
         const translations = {
             en: {

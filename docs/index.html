@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaintingCoder Utils - Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .manual-link {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .manual-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        // 检测浏览器语言
+        function detectLanguage() {
+            const lang = navigator.language || navigator.userLanguage;
+            return lang.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+        }
+
+        // 多语言文本
+        const translations = {
+            en: {
+                title: "Redirecting to PaintingCoder Workflow Fixer...",
+                manual: "If not redirected automatically, click",
+                here: "here"
+            },
+            zh: {
+                title: "正在跳转到 PaintingCoder Workflow Fixer...",
+                manual: "如果没有自动跳转，请点击",
+                here: "这里"
+            }
+        };
+
+        window.onload = function() {
+            const lang = detectLanguage();
+            const t = translations[lang];
+            
+            // 更新页面文本
+            document.title = `PaintingCoder Utils - ${t.title}`;
+            document.querySelector('.message h2').textContent = t.title;
+            document.querySelector('.message p').innerHTML = 
+                `${t.manual} <a href="fix/workflow_fixer.html?lang=${lang}" class="manual-link">${t.here}</a>`;
+
+            // 3秒后自动跳转
+            setTimeout(function() {
+                window.location.href = `fix/workflow_fixer.html?lang=${lang}`;
+            }, 3000);
+        }
+    </script>
+</head>
+<body>
+    <div class="loader"></div>
+    <div class="message">
+        <h2>Redirecting...</h2>
+        <p>If not redirected automatically, click <a href="fix/workflow_fixer.html" class="manual-link">here</a></p>
+    </div>
+</body>
+</html>
