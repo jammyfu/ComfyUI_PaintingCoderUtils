@@ -389,6 +389,14 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.3.2 (2025-01-22)
+- **Improvements:**
+  - Enhanced the workflow fixer tool with more error handling and informative messages
+  - Optimized the user interface for more intuitive operation
+  - Added support for more node types
+  - Improved the stability of the path separator conversion functionality
+  - Fixed issues where JSON files could not be loaded correctly in certain cases
+
 ### v0.3.1 (2025-01-22)
 - **Bug Fixes:**
   - Fixed crash issue in Text Combiner when handling special characters
