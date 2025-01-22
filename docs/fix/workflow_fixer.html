@@ -102,24 +102,32 @@
             color: var(--text-color);
         }
         
-        /* 添加语言切换按钮样式 */
+        /* 更新语言切换按钮样式 */
         .lang-switch {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 40px;
+            right: 40px;
+            z-index: 100;
         }
         
         .lang-btn {
-            background-color: #2196F3;
-            color: white;
-            padding: 8px 16px;
-            border: none;
+            background-color: rgba(0, 0, 0, 0.6);  /* 深色半透明背景 */
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 0.9em;
             cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  /* 添加阴影效果 */
         }
         
         .lang-btn:hover {
-            background-color: #1976D2;
+            background-color: rgba(0, 0, 0, 0.8);  /* 悬停时更深的背景色 */
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);  /* 悬停时增强阴影 */
         }
         
         /* 添加下拉菜单样式 */
@@ -172,13 +180,13 @@
             margin-right: 8px;
         }
         
-        /* 修改头图容器样式 */
+        /* 修改头图容器样式确保正确的定位上下文 */
         .header-image {
             text-align: center;
             margin: 20px auto 0;
             max-width: 800px;
             padding: 20px 20px 0;
-            position: relative;  /* 添加相对定位 */
+            position: relative;  /* 确保相对定位 */
         }
         
         .header-image img {
@@ -202,9 +210,11 @@
         
         /* 整体包装容器 */
         .wrapper {
+            position: relative;  /* 添加相对定位 */
             background-color: var(--container-bg);
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -305,6 +315,10 @@
                 <img src="../images/workflow_fix_top_banner01.jpg" alt="Painting Coder Logo">
             </a>
             <span class="version-tag">Version 0.2.1</span>
+            <!-- 将语言切换按钮移到这里 -->
+            <div class="lang-switch">
+                <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
+            </div>
         </div>
         
         <!-- 主内容容器 -->
@@ -353,10 +367,6 @@
             <div id="error" class="error"></div>
             <div id="success" class="success"></div>
         </div>
-    </div>
-    
-    <div class="lang-switch">
-        <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
     </div>
     
     <!-- 页脚 -->
