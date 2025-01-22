@@ -342,7 +342,8 @@
     
     <!-- 页脚 -->
     <footer style="text-align: center; padding: 20px; margin-top: 30px; border-top: 1px solid var(--border-color);">
-        <p>© 2025 jammyfu. All rights reserved.</p>
+        <p id="version" style="color: var(--text-color); font-size: 0.9em; margin: 0;">Version 0.2.0</p>
+        <p style="margin-bottom: 5px;">© 2025 jammyfu. All rights reserved.</p>
     </footer>
 
     <script>
@@ -606,6 +607,102 @@
             updateFileList();
         }
 
+        // 定义需要进行路径转换的节点类型
+        const PATH_CONVERSION_NODES = new Set([
+            "CheckpointLoaderSimple",
+            "LoraLoader",
+            "ControlNetLoader",
+            "UNETLoader",
+            "VAELoader",
+            "CLIPLoader",
+            "DiffControlNetLoader",
+            "ModelLoader",
+            "LoadDiffusionModel",
+            "CheckpointLoader",
+            "DiffusersLoader",
+            "LoraLoaderModelOnly",
+            "VAEDecode",
+            "VAEEncode",
+            "CLIPVisionLoader",
+            "StyleModelLoader",
+            "UpscaleModelLoader",
+            "Load LoRA",
+            "Lora List",
+            "LoRA Stacker",
+            "GridLoras",
+            "CheckpointLoader|pysssss",
+            "LoraLoader|pysssss",
+            "LoraSave",
+            "LoraLoader",
+            "DualCLIPLoader",
+            "DualUNETLoader",
+            "DualVAELoader",
+            "DualCLIPVisionLoader",
+            "DualStyleModelLoader",
+            "DualUpscaleModelLoader",
+            "LoraLoader|pysssss",
+            "LoraSave|pysssss",
+            "LoraSave",
+            "LoraList",
+            "LoRA Stacker",
+            "GridLoras",
+            "LoraSave|pysssss",
+            "LoraList|pysssss",
+            "LoRA Stacker|pysssss",
+            "GridLoras|pysssss"
+        ]);
+
+        function isMarkdownOrBase64File(filename) {
+            return filename.endsWith('.md') || 
+                   filename.endsWith('.markdown') || 
+                   filename.includes('base64') ||
+                   filename.includes('data:image');
+        }
+
+        function detectPathFormat(workflow) {
+            let unixCount = 0;
+            let windowsCount = 0;
+
+            Object.keys(workflow.nodes).forEach(nodeId => {
+                const node = workflow.nodes[nodeId];
+                const nodeType = node.type || node.class_type;
+                
+                if (PATH_CONVERSION_NODES.has(nodeType) && node.widgets_values) {
+                    node.widgets_values.forEach(value => {
+                        if (typeof value === 'string' && !value.includes('base64')) {
+                            const unixSlashes = (value.match(/\//g) || []).length;
+                            const windowsSlashes = (value.match(/\\/g) || []).length;
+                            
+                            if (unixSlashes > windowsSlashes) {
+                                unixCount++;
+                            } else if (windowsSlashes > unixSlashes) {
+                                windowsCount++;
+                            }
+                        } else if (typeof value === 'object' && value?.content) {
+                            if (!value.content.includes('base64')) {
+                                const path = value.content;
+                                const unixSlashes = (path.match(/\//g) || []).length;
+                                const windowsSlashes = (path.match(/\\/g) || []).length;
+                                
+                                if (unixSlashes > windowsSlashes) {
+                                    unixCount++;
+                                } else if (windowsSlashes > unixSlashes) {
+                                    windowsCount++;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+
+            if (unixCount > windowsCount) {
+                return 'unix';
+            } else if (windowsCount > unixCount) {
+                return 'windows';
+            }
+            return null;
+        }
+
         function fixAndDownload() {
             const t = translations[currentLanguage];
             if (selectedFiles.length === 0) {
@@ -614,6 +711,11 @@
             }
             
             selectedFiles.forEach(file => {
+                if (isMarkdownOrBase64File(file.name)) {
+                    console.log(`Skipping file: ${file.name} (markdown or base64)`);
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
@@ -621,75 +723,50 @@
                         const fixType = document.getElementById('fixType').value;
                         let conversionDirection = '';
                         
-                        if (fixType === 'namespace') {
-                            // 修复命名空间
-                            Object.keys(workflow.nodes).forEach(nodeId => {
-                                const node = workflow.nodes[nodeId];
-                                if (nodeMapping[node.type]) {
-                                    node.type = nodeMapping[node.type];
-                                }
-                            });
-                        } else if (fixType === 'path') {
-                            const pathType = document.querySelector('input[name="pathType"]:checked').value;
-                            
-                            const fixPaths = (obj) => {
-                                if (typeof obj === 'string') {
-                                    if (pathType === 'auto') {
-                                        const hasForwardSlash = obj.includes('/');
-                                        const hasBackSlash = obj.includes('\\');
-                                        if (hasForwardSlash && !hasBackSlash) {
-                                            conversionDirection = 'unix2win';  // Unix(Linux/Mac) 到 Windows
-                                            return obj.replace(/\//g, '\\');
-                                        } else if (!hasForwardSlash && hasBackSlash) {
-                                            conversionDirection = 'win2unix';  // Windows 到 Unix(Linux/Mac)
-                                            return obj.replace(/\\/g, '/');
-                                        }
-                                    } else if (pathType === 'toWindows') {
-                                        return obj.replace(/\//g, '\\');
-                                    } else if (pathType === 'toUnix') {
-                                        return obj.replace(/\\/g, '/');
-                                    }
-                                    return obj;
-                                } else if (typeof obj === 'object' && obj !== null) {
-                                    Object.keys(obj).forEach(key => {
-                                        obj[key] = fixPaths(obj[key]);
-                                    });
-                                }
-                                return obj;
-                            };
-                            
-                            fixPaths(workflow);
-                        }
-                        
-                        const originalName = file.name;
-                        let suffix = '_fixed';
                         if (fixType === 'path') {
-                            const pathType = document.querySelector('input[name="pathType"]:checked').value;
-                            if (pathType === 'auto') {
-                                suffix = conversionDirection === 'unix2win' ? '_unix2win' : 
-                                        conversionDirection === 'win2unix' ? '_win2unix' : 
-                                        '_auto';
-                            } else {
-                                suffix = pathType === 'toUnix' ? '_win2unix' : 
-                                        pathType === 'toWindows' ? '_unix2win' : 
-                                        '_auto';
+                            const selectedPathType = document.querySelector('input[name="pathType"]:checked');
+                            conversionDirection = selectedPathType ? selectedPathType.value : 'auto';
+                            
+                            if (conversionDirection === 'auto') {
+                                // 检测当前文件的路径格式
+                                const currentFormat = detectPathFormat(workflow);
+                                // 如果检测到当前格式，就转换为另一种格式
+                                if (currentFormat === 'unix') {
+                                    conversionDirection = 'windows';
+                                } else if (currentFormat === 'windows') {
+                                    conversionDirection = 'unix';
+                                } else {
+                                    // 如果无法检测，则转换为unix格式（标准格式）
+                                    conversionDirection = 'unix';
+                                }
+                                console.log(`Auto detected format: ${currentFormat}, converting to: ${conversionDirection}`);
+                            } else if (conversionDirection === 'toWindows') {
+                                conversionDirection = 'windows';
+                            } else if (conversionDirection === 'toUnix') {
+                                conversionDirection = 'unix';
                             }
                         }
-                        const newName = originalName.replace('.json', `${suffix}.json`);
                         
-                        const blob = new Blob([JSON.stringify(workflow, null, 2)], 
-                            {type: 'application/json'});
+                        const fixedWorkflow = fixWorkflow(workflow, fixType, conversionDirection);
+                        
+                        let newFileName = file.name;
+                        if (fixType === 'namespace') {
+                            newFileName = file.name.replace('.json', '_fixed.json');
+                        } else if (fixType === 'path') {
+                            newFileName = file.name.replace('.json', `_${conversionDirection}.json`);
+                        }
+                        
+                        const blob = new Blob([JSON.stringify(fixedWorkflow, null, 2)], {type: 'application/json'});
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = newName;
+                        a.download = newFileName;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
                         
-                        document.getElementById('success').textContent = 
-                            `${t.successMessage}${newName}`;
+                        document.getElementById('success').textContent = t.successMessage + newFileName;
                         document.getElementById('error').textContent = '';
                     } catch (e) {
                         document.getElementById('error').textContent = `Error: ${e.message}`;
@@ -716,38 +793,37 @@
             updateUI();
         });
 
-        // 定义需要进行路径转换的节点类型和参数
-        const PATH_CONVERSION_NODES = {
-            "CheckpointLoaderSimple": ["ckpt_name"],
-            "LoraLoader": ["lora_name", "model_str"],
-            "ControlNetLoader": ["control_net_name"],
-            "UNETLoader": ["unet_name"],
-            "VAELoader": ["vae_name"],
-            "CLIPLoader": ["clip_name"],
-            "DiffControlNetLoader": ["model"],
-            "ModelLoader": ["model_name"],
-            // 可以继续添加其他需要转换的节点类型和对应参数
-        };
-
         function fixWorkflow(workflow, fixType, conversionDirection) {
             try {
                 if (fixType === 'path') {
                     Object.keys(workflow.nodes).forEach(nodeId => {
                         const node = workflow.nodes[nodeId];
+                        const nodeType = node.type || node.class_type;
                         
-                        // 检查是否是需要转换路径的节点类型
-                        const pathParams = PATH_CONVERSION_NODES[node.class_type];
-                        if (pathParams) {
-                            pathParams.forEach(param => {
-                                if (node.inputs && node.inputs[param]) {
-                                    // 转换路径分隔符
-                                    if (conversionDirection === 'unix') {
-                                        node.inputs[param] = node.inputs[param].replace(/\\/g, '/');
-                                    } else if (conversionDirection === 'windows') {
-                                        node.inputs[param] = node.inputs[param].replace(/\//g, '\\');
+                        // 如果是需要处理的节点类型
+                        if (PATH_CONVERSION_NODES.has(nodeType)) {
+                            // 处理 widgets_values 数组中的所有值
+                            if (node.widgets_values && Array.isArray(node.widgets_values)) {
+                                node.widgets_values = node.widgets_values.map(value => {
+                                    if (typeof value === 'string' && !value.includes('base64')) {
+                                        // 转换路径分隔符
+                                        if (conversionDirection === 'unix') {
+                                            return value.replace(/\\/g, '/');
+                                        } else if (conversionDirection === 'windows') {
+                                            return value.replace(/\//g, '\\');
+                                        }
+                                    } else if (typeof value === 'object' && value?.content) {
+                                        // 处理 pysssss 节点的特殊格式
+                                        if (!value.content.includes('base64')) {
+                                            const newContent = conversionDirection === 'unix' 
+                                                ? value.content.replace(/\\/g, '/') 
+                                                : value.content.replace(/\//g, '\\');
+                                            return { ...value, content: newContent };
+                                        }
                                     }
-                                }
-                            });
+                                    return value;
+                                });
+                            }
                         }
                     });
                 } else if (fixType === 'namespace') {
