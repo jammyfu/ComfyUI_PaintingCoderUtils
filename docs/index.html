@@ -3,42 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PaintingCoder Utils - Redirecting...</title>
+    <meta name="description" content="PaintingCoder Utils - 一个为 ComfyUI 设计的实用节点集合，包含图像处理、文本处理、路径转换等多种功能。支持工作流修复、命名空间更新和跨平台路径转换。">
+    <meta name="keywords" content="ComfyUI, PaintingCoder, Workflow, JSON, Path Converter, AI, Stable Diffusion, Image Processing, Text Processing, SDXL">
+    <meta name="author" content="PaintingCoder">
+    <meta property="og:title" content="PaintingCoder Workflow Fixer">
+    <meta property="og:description" content="强大的 ComfyUI 工具集，提供图像分辨率调整、文本处理、动态组合等功能，支持工作流修复和路径转换。">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PaintingCoder Utils">
+    <title>PaintingCoder Utils - Workflow Fixer</title>
     <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --loader-bg: #f3f3f3;
+            --loader-accent: #3498db;
+            --link-color: #3498db;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a1a1a;
+                --text-color: #e0e0e0;
+                --loader-bg: #333;
+                --loader-accent: #5ab0ee;
+                --link-color: #5ab0ee;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* 使用 min-height 确保内容足够时也能撑开 */
             margin: 0;
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            position: relative; /* 为 fixed 定位提供相对定位的父元素 */
         }
+
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border: 4px solid var(--loader-bg);
+            border-top: 4px solid var(--loader-accent);
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         .message {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .manual-link {
-            color: #3498db;
+            color: var(--link-color);
             text-decoration: none;
         }
+
         .manual-link:hover {
             text-decoration: underline;
+        }
+
+        .description {
+            max-width: 600px;
+            text-align: center;
+            margin: 20px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .features li {
+            margin: 12px 0;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .category {
+            margin: 25px 0;
+            text-align: left;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .category h3 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        
+        .title {
+            font-size: 2em;
+            margin-bottom: 1em;
+            text-align: center;
+            color: var(--text-color);
+        }
+        
+        .section {
+            margin: 2em 0;
+            padding: 1em;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .highlight {
+            color: var(--loader-accent);
+            font-weight: bold;
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 30px;
+            max-width: fit-content;
+            position: fixed; /* 固定定位 */
+            bottom: 20px; /* 距离底部 20px */
+            left: 50%; /* 水平居中 */
+            transform: translateX(-50%); /* 水平居中 */
+            z-index: 1000; /* 确保在最顶层 */
+        }
+        
+        .countdown-text {
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .redirect-btn, .cancel-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-size: 1em;
+        }
+        
+        .redirect-btn {
+            background: var(--loader-accent);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background: #666;
+            color: white;
+        }
+        
+        .redirect-btn:hover, .cancel-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .message-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: none;
+            z-index: 1000;
         }
     </style>
     <script>
@@ -53,15 +205,162 @@
             en: {
                 title: "Redirecting to PaintingCoder Workflow Fixer...",
                 manual: "If not redirected automatically, click",
-                here: "here"
+                here: "here",
+                description: "PaintingCoder Utils is a comprehensive toolkit for ComfyUI, featuring advanced image processing, text handling, and workflow management tools. Perfect for artists and developers working with AI image generation.",
+                countdown: "Redirecting to Workflow Fixer in {0}s",
+                redirectCanceled: "Redirect canceled",
+                mainContent: `
+                    <h1 class="title">🚀 Unleash Your AI Art Potential with ComfyUI Programmer's Toolkit!</h1>
+                    
+                    <div class="section">
+                        <p>Tired of tedious image and text processing? Longing for a more efficient and flexible AI art creation workflow? ComfyUI Programmer's Toolkit is the solution you've been dreaming of!</p>
+                        
+                        <p>This powerful toolkit, crafted by a programmer who loves painting, brings you unprecedented convenience and efficiency. It's not just a set of nodes, but a complete AI art creation ecosystem designed to simplify your workflow and spark your unlimited creativity.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🎨 Image Processing, At Your Command:</h2>
+                        <p>Say goodbye to tedious image adjustments! We provide powerful resolution adjustment tools that let you easily master SDXL's optimal aspect ratios, with multiple extension modes and background color options to breathe new life into your images. Whether batch processing or fine-tuning, everything is at your fingertips.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>✍️ Text Processing, Simplified:</h2>
+                        <p>Bid farewell to messy text formats! Our powerful text cleaning tools remove empty lines and extra spaces with one click, making your prompts clearer and more efficient. With flexible text combiners, you can easily join multiple text segments, making your creative expression more fluid.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>✨ Dynamic Combination, Infinite Possibilities:</h2>
+                        <p>We provide dynamic image and text combination tools that let you easily build complex workflows. Dynamic input ports and automatic empty input handling make your creation process more flexible and free.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>👁️ Preview Tools, Crystal Clear:</h2>
+                        <p>We provide powerful mask preview tools that let you view mask effects in real-time, ensuring your creation is precise and accurate.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🛠️ Continuous Updates, Constant Evolution:</h2>
+                        <p>We continuously update and improve our toolkit, bringing you more powerful features and smoother experiences. We are committed to creating a toolkit truly tailored for AI artists and developers.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🔥 Join Now, Start Your AI Art Creation Journey!</h2>
+                        <p>Whether you're an experienced artist or a beginner developer, ComfyUI Programmer's Toolkit can help you improve creation efficiency and inspire unlimited imagination. Join us now and explore the infinite possibilities of AI art together!</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Core Highlights:</h2>
+                        <ul>
+                            <li><strong>Comprehensive:</strong> Covers image processing, text processing, dynamic combination, preview, and more to meet all your creative needs.</li>
+                            <li><strong>Efficient:</strong> Simplifies workflows, improves creation efficiency, lets you focus on creativity itself.</li>
+                            <li><strong>Flexible:</strong> Dynamic inputs, multiple modes, configurable parameters to meet your personalized creative needs.</li>
+                            <li><strong>User-friendly:</strong> Clean interface, clear documentation for quick start and easy mastery.</li>
+                            <li><strong>Continuous Updates:</strong> Constantly adding new features and optimizing existing ones for a better user experience.</li>
+                        </ul>
+                    </div>
+                `
             },
             zh: {
-                title: "正在跳转到 PaintingCoder Workflow Fixer...",
+                title: "正在跳转到工作流修复工具...",
                 manual: "如果没有自动跳转，请点击",
-                here: "这里"
+                here: "这里",
+                description: "PaintingCoder Utils 是一个综合性的 ComfyUI 工具集，提供先进的图像处理、文本处理和工作流管理工具。专为使用 AI 图像生成的艺术家和开发者设计。",
+                countdown: "将在 {0} 秒后跳转到工作流修复工具",
+                redirectCanceled: "已取消跳转",
+                mainContent: `
+                    <h1 class="title">🚀 释放你的 AI 艺术潜能，尽在 ComfyUI 画画的程序员工具集！</h1>
+                    
+                    <div class="section">
+                        <p>厌倦了繁琐的图像和文本处理？渴望更高效、更灵活的 AI 艺术创作流程？ComfyUI 画画的程序员工具集，正是你梦寐以求的解决方案！</p>
+                        
+                        <p>这个由一位热爱绘画的程序员精心打造的强大工具集，为你带来前所未有的便捷和效率。它不仅仅是一组节点，更是一套完整的 AI 艺术创作生态系统，旨在简化你的工作流程，激发你的无限创意。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🎨 图像处理，随心所欲：</h2>
+                        <p>告别繁琐的图像调整！我们提供强大的分辨率调整工具，让你轻松驾驭 SDXL 的最佳宽高比，更有多种延展模式和背景颜色选择，让你的图像焕发新生。无论是批量处理还是精细调整，都能得心应手。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>✍️ 文本处理，化繁为简：</h2>
+                        <p>告别混乱的文本格式！我们提供强大的文本清理工具，一键去除空行和多余空格，让你的提示词更加清晰高效。更有灵活的文本组合器，轻松拼接多段文本，让你的创意表达更加流畅。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>✨ 动态组合，无限可能：</h2>
+                        <p>我们提供动态图像和文本组合工具，让你轻松构建复杂的工作流程。动态输入端口，自动处理空输入，让你的创作过程更加灵活自由。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>👁️ 预览工具，一目了然：</h2>
+                        <p>我们提供强大的蒙版预览工具，让你实时查看蒙版效果，确保你的创作精准无误。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🛠️ 持续更新，不断进化：</h2>
+                        <p>我们不断更新和完善工具集，为你带来更多强大的功能和更流畅的体验。我们致力于打造一个真正为 AI 艺术家和开发者量身定制的工具集。</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>🔥 立即加入，开启你的 AI 艺术创作之旅！</h2>
+                        <p>无论你是经验丰富的艺术家，还是刚刚入门的开发者，ComfyUI 画画的程序员工具集都能帮助你提升创作效率，激发无限灵感。现在就加入我们，一起探索 AI 艺术的无限可能！</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>核心亮点：</h2>
+                        <ul>
+                            <li><strong>全面性：</strong> 涵盖图像处理、文本处理、动态组合、预览等多个方面，满足你创作的各种需求。</li>
+                            <li><strong>高效性：</strong> 简化工作流程，提高创作效率，让你专注于创意本身。</li>
+                            <li><strong>灵活性：</strong> 动态输入、多种模式、可配置参数，满足你个性化的创作需求。</li>
+                            <li><strong>易用性：</strong> 简洁的界面，清晰的文档，让你快速上手，轻松掌握。</li>
+                            <li><strong>持续更新：</strong> 不断添加新功能，优化现有功能，为你带来更好的使用体验。</li>
+                        </ul>
+                    </div>
+                `
             }
         };
 
+        let countdownTimer;
+        let remainingTime = 10;
+        
+        function startCountdown() {
+            remainingTime = 10;
+            updateCountdown();
+            countdownTimer = setInterval(() => {
+                remainingTime--;
+                updateCountdown();
+                
+                if (remainingTime <= 0) {
+                    clearInterval(countdownTimer);
+                    redirectToFixer();
+                }
+            }, 1000);
+        }
+        
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const t = translations[detectLanguage()];
+            countdownElement.textContent = t.countdown.replace('{0}', remainingTime);
+        }
+        
+        function redirectToFixer() {
+            const lang = detectLanguage();
+            window.location.href = `fix/workflow_fixer.html?lang=${lang}`;
+        }
+        
+        function cancelRedirect() {
+            clearInterval(countdownTimer);
+            const messageBox = document.getElementById('messageBox');
+            const t = translations[detectLanguage()];
+            messageBox.textContent = t.redirectCanceled;
+            messageBox.style.display = 'block';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000);
+            
+            document.getElementById('countdownContainer').style.display = 'none';
+        }
+        
         window.onload = function() {
             const lang = detectLanguage();
             const t = translations[lang];
@@ -71,19 +370,32 @@
             document.querySelector('.message h2').textContent = t.title;
             document.querySelector('.message p').innerHTML = 
                 `${t.manual} <a href="fix/workflow_fixer.html?lang=${lang}" class="manual-link">${t.here}</a>`;
-
-            // 3秒后自动跳转
-            setTimeout(function() {
-                window.location.href = `fix/workflow_fixer.html?lang=${lang}`;
-            }, 3000);
+            document.querySelector('.description').textContent = t.description;
+            
+            // 更新页面内容
+            document.getElementById('mainContent').innerHTML = t.mainContent;
+            startCountdown();
         }
     </script>
 </head>
 <body>
-    <div class="loader"></div>
     <div class="message">
-        <h2>Redirecting...</h2>
-        <p>If not redirected automatically, click <a href="fix/workflow_fixer.html" class="manual-link">here</a></p>
+        <h2></h2>
+        <p></p>
     </div>
+    <div class="loader"></div>
+    <div class="content" id="mainContent"></div>
+    <div class="description"></div>
+    <ul class="features"></ul>
+    
+    <div class="countdown-container" id="countdownContainer">
+        <span class="countdown-text" id="countdown"></span>
+        <div class="button-group">
+            <button class="redirect-btn" onclick="redirectToFixer()">立即跳转</button>
+            <button class="cancel-btn" onclick="cancelRedirect()">取消跳转</button>
+        </div>
+    </div>
+    
+    <div class="message-box" id="messageBox"></div>
 </body>
 </html>
