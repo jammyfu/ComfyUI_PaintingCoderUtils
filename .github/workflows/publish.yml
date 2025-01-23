@@ -1,18 +1,17 @@
-name: Publish to Comfy registry
+name: Publish and Deploy
+
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - "pyproject.toml"
 
 jobs:
   publish-node:
     name: Publish Custom Node to registry
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'jammyfu' }}
+    
+    # 只在 pyproject.toml 文件发生更改时触发
+    if: ${{ github.event_name == 'push' && contains(github.event.commits.*.modified, 'pyproject.toml') }}
+    
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -21,5 +20,20 @@ jobs:
       - name: Publish Custom Node
         uses: Comfy-Org/publish-node-action@main
         with:
-          ## Add your own personal access token to your Github Repository secrets and reference it here.
           personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }}
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    runs-on: ubuntu-latest
+    
+    # 只在 docs 文件夹发生更改时触发
+    if: ${{ github.event_name == 'push' && contains(github.event.commits.*.modified, 'docs') }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
