@@ -5,43 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workflow Fixer</title>
     <style>
-        /* 添加深色模式变量 */
+        /* 添加主题变量 */
         :root {
-            --bg-color: #f5f5f5;
-            --container-bg: white;
-            --text-color: #333;
-            --border-color: #ccc;
-            --hover-bg: #eeeeee;
-            --success-color: #4CAF50;
-            --success-hover: #45a049;
+            /* Light theme */
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+            --container-bg: #f5f5f5;
             --error-color: #ff4444;
-            --file-item-bg: #f5f5f5;
-            --file-item-hover: #eeeeee;
-            --drop-zone-bg: #f8f8f8;
-            --drop-zone-border: #ccc;
-            --drop-zone-hover: #4CAF50;
-            --drop-zone-hover-bg: #e8f5e9;
+            --success-color: #44bb44;
+            --hover-bg: #e8e8e8;
+            --button-bg: #4a90e2;
+            --button-text: #ffffff;
+            --button-hover: #357abd;
+            --dropzone-border: #cccccc;
+            --dropzone-bg: #ffffff;
+            --file-item-bg: #ffffff;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #1a1a1a;
-                --container-bg: #2d2d2d;
-                --text-color: #e0e0e0;
-                --border-color: #404040;
-                --hover-bg: #3d3d3d;
-                --success-color: #5cb85c;
-                --success-hover: #4cae4c;
-                --error-color: #ff6b6b;
-                --file-item-bg: #333333;
-                --file-item-hover: #404040;
-                --drop-zone-bg: #2d2d2d;
-                --drop-zone-border: #404040;
-                --drop-zone-hover: #5cb85c;
-                --drop-zone-hover-bg: #2d3b2d;
-            }
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --border-color: #444444;
+            --container-bg: #2d2d2d;
+            --error-color: #ff6666;
+            --success-color: #66cc66;
+            --hover-bg: #3d3d3d;
+            --button-bg: #4a90e2;
+            --button-text: #ffffff;
+            --button-hover: #357abd;
+            --dropzone-border: #444444;
+            --dropzone-bg: #2d2d2d;
+            --file-item-bg: #363636;
         }
 
+        /* 更新现有样式使用变量 */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -74,16 +73,16 @@
             background-color: var(--hover-bg);
         }
         button {
-            background-color: var(--success-color);
-            color: white;
+            background-color: var(--button-bg);
+            color: var(--button-text);
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin: 5px;
         }
-        button:hover {
-            background-color: var(--success-hover);
+        button:hover:not(:disabled) {
+            background-color: var(--button-hover);
         }
         button:disabled {
             background-color: var(--border-color);
@@ -105,8 +104,8 @@
         /* 更新语言切换按钮样式 */
         .lang-switch {
             position: absolute;
-            top: 40px;
-            right: 40px;
+            top: 20px;
+            right: 20px;
             z-index: 100;
         }
         
@@ -121,7 +120,6 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  /* 添加阴影效果 */
         }
         
         .lang-btn:hover {
@@ -141,14 +139,14 @@
             padding: 10px;
             border-radius: 4px;
             border: 1px solid var(--border-color);
-            background-color: var(--container-bg);
+            background-color: var(--dropzone-bg);
             color: var(--text-color);
             font-size: 16px;
         }
         
         select:focus {
             outline: none;
-            border-color: var(--success-color);
+            border-color: var(--button-bg);
         }
         
         /* 添加路径转换选项样式 */
@@ -180,13 +178,13 @@
             margin-right: 8px;
         }
         
-        /* 修改头图容器样式确保正确的定位上下文 */
+        /* 修改头图容器样式 */
         .header-image {
             text-align: center;
-            margin: 20px auto 0;
+            margin: 0 auto;
             max-width: 800px;
-            padding: 20px 20px 0;
-            position: relative;  /* 确保相对定位 */
+            padding: 8px;    /* 添加6像素的填充 */
+            position: relative;
         }
         
         .header-image img {
@@ -194,23 +192,23 @@
             height: auto;
             border-radius: 8px 8px 0 0;
             box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-            transition: opacity 0.3s ease;  /* 添加过渡效果 */
+            transition: opacity 0.3s ease;
         }
         
         .header-image a {
-            display: block;  /* 使链接块级化，完整覆盖图片区域 */
-            text-decoration: none;  /* 移除链接下划线 */
-            cursor: pointer;  /* 显示手型光标 */
+            display: block;
+            text-decoration: none;
+            cursor: pointer;
         }
         
         .header-image a:hover img {
-            opacity: 0.9;  /* 鼠标悬停时轻微透明效果 */
-            transition: opacity 0.3s ease;  /* 平滑过渡效果 */
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
         }
         
         /* 整体包装容器 */
         .wrapper {
-            position: relative;  /* 添加相对定位 */
+            position: relative;
             background-color: var(--container-bg);
             max-width: 1200px;
             margin: 0 auto;
@@ -221,31 +219,31 @@
         
         /* 更新拖拽区域样式 */
         .file-drop-zone {
-            border: 2px dashed var(--success-color);  /* 使用绿色边框 */
+            border: 2px dashed #4CAF50;  /* 绿色边框 */
             border-radius: 4px;
             padding: 30px;
             text-align: center;
-            background-color: rgba(76, 175, 80, 0.05);  /* 浅绿色背景 */
+            background-color: rgba(76, 175, 80, 0.1);  /* 浅绿色背景 */
             cursor: pointer;
             transition: all 0.3s ease;
             color: var(--text-color);
         }
         
         .file-drop-zone:hover {
-            border-color: var(--success-hover);  /* 深绿色边框 */
-            background-color: rgba(76, 175, 80, 0.1);  /* 更深的绿色背景 */
+            border-color: #45a049;  /* 深一点的绿色 */
+            background-color: rgba(76, 175, 80, 0.2);  /* 更深的浅绿色 */
         }
         
         .file-drop-zone.dragover {
-            border-color: var(--success-hover);
-            background-color: rgba(76, 175, 80, 0.15);  /* 拖拽时最深的绿色背景 */
+            border-color: #45a049;
+            background-color: rgba(76, 175, 80, 0.25);  /* 拖拽时的背景色 */
             transform: scale(1.01);  /* 轻微放大效果 */
         }
         
         #dragText {
-            font-size: 16px;  /* 调整文字大小 */
-            color: var(--text-color);      /* 调整文字颜色 */
-            margin: 0;        /* 移除外边距 */
+            font-size: 16px;
+            color: var(--text-color);
+            margin: 0;
         }
         
         .selected-files {
@@ -262,10 +260,11 @@
             border-radius: 4px;
             transition: all 0.3s ease;
             color: var(--text-color);
+            border: 1px solid var(--border-color);
         }
         
         .file-item:hover {
-            background-color: var(--file-item-hover);
+            background-color: var(--hover-bg);
         }
         
         .file-name {
@@ -291,12 +290,12 @@
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* 更新版本号样式 */
+        /* 版本号基础样式 */
         .version-tag {
             position: absolute;
             bottom: 20px;
             right: 40px;
-            color: #FFFFFF; 
+            color: #FFFFFF;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-style: italic;
             font-weight: 300;
@@ -306,41 +305,21 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* 添加媒体查询适配手机端 */
+        /* 添加移动端适配 */
         @media screen and (max-width: 768px) {
-            .lang-switch {
-                top: 20px;    /* 减小顶部间距 */
-                right: 20px;  /* 减小右侧间距 */
-            }
-
-            .lang-btn {
-                padding: 6px 12px;  /* 减小按钮内边距 */
-                font-size: 0.8em;   /* 减小字体大小 */
-            }
-
             .version-tag {
-                bottom: 10px;       /* 减小底部间距 */
-                right: 20px;        /* 减小右侧间距 */
-                font-size: 1.2em;   /* 减小版本号字体大小 */
+                bottom: 16px;  /* 仅上移10像素 */
+                right: 20px;   /* 减小右侧间距 */
+                font-size: 1.2em;   /* 减小字体大小 */
             }
         }
 
         /* 适配更小屏幕的设备 */
         @media screen and (max-width: 480px) {
-            .lang-switch {
-                top: 15px;
-                right: 15px;
-            }
-
-            .lang-btn {
-                padding: 4px 10px;
-                font-size: 0.75em;
-            }
-
             .version-tag {
-                bottom: 8px;
-                right: 15px;
-                font-size: 1em;
+                bottom: 16px;  /* 保持与平板端相同的上移距离 */
+                right: 15px;   /* 稍微减小右侧间距 */
+                font-size: 1em;    /* 进一步减小字体大小 */
             }
         }
 
@@ -368,6 +347,186 @@
             vertical-align: middle;  /* 垂直居中对齐 */
             margin-left: 4px;  /* 添加文字间距 */
         }
+
+        /* 添加清除按钮样式 */
+        .clear-btn {
+            background-color: var(--error-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background-color: #ff6666;  /* 稍微亮一点的红色 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .clear-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        /* 按钮容器样式 */
+        .button-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        /* 主题切换按钮样式 */
+        .theme-switch {
+            position: absolute;
+            top: 40px;
+            right: 85px;  /* 位于语言按钮左侧 */
+            z-index: 100;
+        }
+
+        .theme-btn {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .theme-btn:hover {
+            background-color: var(--button-hover);
+            border-color: var(--border-color);
+        }
+
+        .theme-btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-btn:hover svg {
+            transform: rotate(15deg);
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            .theme-switch {
+                top: 30px;
+                right: 70px;
+            }
+            
+            .theme-btn {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .theme-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* 统一头部按钮样式 */
+        .header-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .header-btn {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        /* 主题切换按钮特定样式 */
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 语言切换按钮特定样式 */
+        .lang-btn {
+            padding: 8px 16px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 统一悬停效果 */
+        .header-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 图标样式 */
+        .theme-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            display: none;
+        }
+
+        .theme-icon.active {
+            display: block;
+        }
+
+        /* 移动端适配 */
+        @media screen and (max-width: 768px) {
+            .header-controls {
+                top: 12px;    
+                right: 12px;
+                gap: 8px;
+            }
+            
+            .theme-btn {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .lang-btn {
+                height: 32px;
+                padding: 6px 12px;
+            }
+            
+            .theme-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* 更小屏幕的适配 */
+        @media screen and (max-width: 480px) {
+            .header-controls {
+                top: 20px;    /* 保持与平板相同 */
+                right: 20px;  /* 保持与平板相同 */
+                gap: 6px;     /* 进一步减小间距 */
+            }
+        }
     </style>
 </head>
 <body>
@@ -377,10 +536,19 @@
             <a href="https://github.com/jammyfu/ComfyUI_PaintingCoderUtils" target="_blank" title="Visit PaintingCoder on GitHub">
                 <img src="../images/workflow_fix_top_banner01.jpg" alt="Painting Coder Logo">
             </a>
-            <span class="version-tag">Version 0.2.2</span>
-            <!-- 将语言切换按钮移到这里 -->
-            <div class="lang-switch">
-                <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
+            <span class="version-tag">version 0.2.2</span>
+            <div class="header-controls">
+                <button class="header-btn theme-btn" onclick="toggleTheme()" title="Toggle theme">
+                    <!-- 月亮图标 -->
+                    <svg class="theme-icon moon-icon" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                    <!-- 太阳图标 -->
+                    <svg class="theme-icon sun-icon" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                    </svg>
+                </button>
+                <button class="header-btn lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
             </div>
         </div>
         
@@ -423,8 +591,9 @@
                 <div id="selectedFiles" class="selected-files"></div>
             </div>
             
-            <div>
+            <div class="button-container">
                 <button id="fixButton" onclick="fixAndDownload()" disabled>Fix & Download</button>
+                <button id="clearButton" onclick="clearFiles()" class="clear-btn" disabled>Clear All</button>
                 <div class="zip-option">
                     <input type="checkbox" id="zipDownload" class="zip-checkbox">
                     <label for="zipDownload" class="zip-label" id="zipLabel">Download as ZIP</label>
@@ -480,7 +649,7 @@
                 pathOptions: {
                     auto: "Auto Detect",
                     toWindows: "To Windows Format (\\)",
-                    toUnix: "To Unix Format (Linux/Mac) (/)"
+                    toUnix: "To Unix Format (Linux/Mac)"
                 },
                 errorJsonFile: "Please select a JSON file.",
                 selectedFiles: "Selected files:",
@@ -488,7 +657,8 @@
                 removeFile: "Remove",
                 zipOption: "Download as ZIP",
                 processingFiles: "Processing {0}/{1} files...",
-                successMultipleFiles: "Successfully processed {0} files"
+                successMultipleFiles: "Successfully processed {0} files",
+                clearButton: "Clear All"
             },
             zh: {
                 title: "PaintingCoder 工作流修复工具",
@@ -515,7 +685,8 @@
                 removeFile: "移除",
                 zipOption: "以ZIP格式下载",
                 processingFiles: "正在处理 {0}/{1} 个文件...",
-                successMultipleFiles: "成功处理 {0} 个文件"
+                successMultipleFiles: "成功处理 {0} 个文件",
+                clearButton: "清除全部"
             }
         };
 
@@ -584,6 +755,7 @@
             }
 
             document.getElementById('zipLabel').textContent = t.zipOption;
+            document.getElementById('clearButton').textContent = t.clearButton;
         }
 
         // 更新节点映射
@@ -716,9 +888,11 @@
         function updateFileList() {
             const filesContainer = document.getElementById('selectedFiles');
             const t = translations[currentLanguage];
+            const clearButton = document.getElementById('clearButton');
             
             if (selectedFiles.length === 0) {
                 filesContainer.innerHTML = `<div class="file-item"><span class="file-name">${t.noFilesSelected}</span></div>`;
+                clearButton.disabled = true;
                 document.getElementById('fixButton').disabled = true;
                 return;
             }
@@ -734,12 +908,24 @@
                 </div>
             `).join('');
             
+            clearButton.disabled = false;
             document.getElementById('fixButton').disabled = false;
         }
         
         function removeFile(index) {
             selectedFiles.splice(index, 1);
             updateFileList();
+        }
+
+        // 添加清除功能
+        function clearFiles() {
+            selectedFiles = [];
+            updateFileList();
+            document.getElementById('fileInput').value = '';
+            document.getElementById('error').textContent = '';
+            document.getElementById('success').textContent = '';
+            document.getElementById('clearButton').disabled = true;
+            document.getElementById('fixButton').disabled = true;
         }
 
         // 定义需要进行路径转换的节点类型
@@ -968,20 +1154,34 @@
             URL.revokeObjectURL(url);
         }
 
-        // 添加深色模式检测和监听
-        function updateTheme() {
-            // 检测系统深色模式
-            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        // 主题切换功能
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // 更新图标显示
+            const moonIcon = document.querySelector('.moon-icon');
+            const sunIcon = document.querySelector('.sun-icon');
+            
+            if (theme === 'dark') {
+                moonIcon.classList.remove('active');
+                sunIcon.classList.add('active');
+            } else {
+                moonIcon.classList.add('active');
+                sunIcon.classList.remove('active');
+            }
         }
 
-        // 监听系统主题变化
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(currentTheme);
+        }
 
-        // 初始化主题
-        document.addEventListener('DOMContentLoaded', function() {
-            updateTheme();
-            updateUI();
+        // 页面加载时初始化主题
+        document.addEventListener('DOMContentLoaded', () => {
+            setTheme(currentTheme);
         });
 
         function fixWorkflow(workflow, fixType, conversionDirection) {
