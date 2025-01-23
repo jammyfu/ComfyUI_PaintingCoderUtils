@@ -1,0 +1,522 @@
+.container {
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    max-width: 800px;
+}
+.file-input {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+.file-input input[type="file"] {
+    display: none;
+}
+.file-input label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+.file-input label:hover {
+    background-color: var(--hover-bg);
+}
+button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+}
+button:hover:not(:disabled) {
+    background-color: var(--button-hover);
+}
+button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+.error {
+    color: var(--error-color);
+    margin: 10px 0;
+}
+.success {
+    color: var(--success-color);
+    margin: 10px 0;
+}
+.file-name {
+    margin: 10px 0;
+    color: var(--text-color);
+}
+
+/* 更新语言切换按钮样式 */
+.lang-switch {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.lang-btn {
+    background-color: rgba(0, 0, 0, 0.6);  /* 深色半透明背景 */
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.lang-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);  /* 悬停时更深的背景色 */
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);  /* 悬停时增强阴影 */
+}
+
+/* 添加下拉菜单样式 */
+.fix-type-select {
+    margin: 20px 0;
+    width: 100%;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--dropzone-bg);
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--button-bg);
+}
+
+/* 添加路径转换选项样式 */
+.path-options {
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    display: none;  /* 默认隐藏 */
+    background-color: var(--container-bg);
+}
+
+.path-options.show {
+    display: block;
+}
+
+.path-option {
+    margin: 10px 0;
+}
+
+.path-option label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.path-option input[type="radio"] {
+    margin-right: 8px;
+}
+
+/* 修改头图容器样式 */
+.header-image {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 8px;    /* 添加6像素的填充 */
+    position: relative;
+}
+
+.header-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+}
+
+.header-image a {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header-image a:hover img {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+/* 整体包装容器 */
+.wrapper {
+    position: relative;
+    background-color: var(--container-bg);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 更新拖拽区域样式 */
+.file-drop-zone {
+    order: 1;  /* 设置顺序为1 */
+    border: 2px dashed #4CAF50;
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    background-color: rgba(76, 175, 80, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-color);
+}
+
+.file-drop-zone:hover {
+    border-color: #45a049;  /* 深一点的绿色 */
+    background-color: rgba(76, 175, 80, 0.2);  /* 更深的浅绿色 */
+}
+
+.file-drop-zone.dragover {
+    border-color: #45a049;
+    background-color: rgba(76, 175, 80, 0.25);  /* 拖拽时的背景色 */
+    transform: scale(1.01);  /* 轻微放大效果 */
+}
+
+#dragText {
+    font-size: 16px;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* 按钮容器样式 */
+.button-container {
+    order: 2;  /* 设置顺序为2 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* 文件列表容器样式 */
+.selected-files {
+    order: 3;
+    margin-top: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--dropzone-bg);
+    overflow-y: auto;
+}
+
+/* 文件项样式 */
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--file-item-bg);
+    height: 44px; /* 设置固定高度 */
+    box-sizing: border-box; /* 确保padding包含在高度内 */
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.delete-btn {
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    color: var(--error-color);
+    background-color: rgba(255, 68, 68, 0.1);
+}
+
+/* 添加平滑过渡效果 */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 版本号基础样式 */
+.version-tag {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.8em;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 添加移动端适配 */
+@media screen and (max-width: 768px) {
+    .version-tag {
+        bottom: 16px;  /* 仅上移10像素 */
+        right: 20px;   /* 减小右侧间距 */
+        font-size: 1.2em;   /* 减小字体大小 */
+    }
+}
+
+/* 适配更小屏幕的设备 */
+@media screen and (max-width: 480px) {
+    .version-tag {
+        bottom: 16px;  /* 保持与平板端相同的上移距离 */
+        right: 15px;   /* 稍微减小右侧间距 */
+        font-size: 1em;    /* 进一步减小字体大小 */
+    }
+}
+
+/* 更新勾选框容器样式 */
+.zip-option {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;  /* 垂直居中对齐 */
+}
+
+.zip-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    vertical-align: middle;  /* 垂直居中对齐 */
+    margin: 0;  /* 移除默认边距 */
+    position: relative;
+    top: -1px;  /* 微调位置 */
+}
+
+.zip-label {
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;  /* 垂直居中对齐 */
+    margin-left: 4px;  /* 添加文字间距 */
+}
+
+/* 添加清除按钮样式 */
+.clear-btn {
+    background-color: var(--error-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+    background-color: #ff6666;  /* 稍微亮一点的红色 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.clear-btn:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* 主题切换按钮样式 */
+.theme-switch {
+    position: absolute;
+    top: 40px;
+    right: 85px;  /* 位于语言按钮左侧 */
+    z-index: 100;
+}
+
+.theme-btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.theme-btn:hover {
+    background-color: var(--button-hover);
+    border-color: var(--border-color);
+}
+
+.theme-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.theme-btn:hover svg {
+    transform: rotate(15deg);
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .theme-switch {
+        top: 30px;
+        right: 70px;
+    }
+    
+    .theme-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .theme-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* 统一头部按钮样式 */
+.header-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 100;
+}
+
+.header-btn {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* 主题切换按钮特定样式 */
+.theme-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 语言切换按钮特定样式 */
+.lang-btn {
+    padding: 8px 16px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+/* 统一悬停效果 */
+.header-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 图标样式 */
+.theme-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    display: none;
+}
+
+.theme-icon.active {
+    display: block;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .header-controls {
+        top: 12px;    
+        right: 12px;
+        gap: 8px;
+    }
+    
+    .theme-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .lang-btn {
+        height: 32px;
+        padding: 6px 12px;
+    }
+    
+    .theme-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* 更小屏幕的适配 */
+@media screen and (max-width: 480px) {
+    .header-controls {
+        top: 20px;    /* 保持与平板相同 */
+        right: 20px;  /* 保持与平板相同 */
+        gap: 6px;     /* 进一步减小间距 */
+    }
+}
+
+/* 当文件列表超过10项时显示滚动条 */
+.selected-files {
+    max-height: 440px;  /* 44px * 10项 = 440px */
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--button-bg) var(--container-bg);
+}
+
+/* 当文件数量少于等于10项时，取消最大高度限制 */
+.selected-files.no-scroll {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* Webkit浏览器的滚动条样式 */
+.selected-files::-webkit-scrollbar {
+    width: 8px;
+}
+
+.selected-files::-webkit-scrollbar-track {
+    background: var(--container-bg);
+    border-radius: 4px;
+}
+
+.selected-files::-webkit-scrollbar-thumb {
+    background-color: var(--button-bg);
+    border-radius: 4px;
+    border: 2px solid var(--container-bg);
+}
+
+.selected-files::-webkit-scrollbar-thumb:hover {
+    background-color: var(--button-hover);
+}
