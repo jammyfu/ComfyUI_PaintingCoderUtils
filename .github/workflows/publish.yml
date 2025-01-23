@@ -10,7 +10,7 @@ jobs:
     if: ${{ github.repository_owner == 'jammyfu' }}
     
     # 只在 pyproject.toml 文件发生更改时触发
-    if: ${{ github.event_name == 'push' && contains(github.event.commits.*.modified, 'pyproject.toml') }}
+    # if: ${{ github.event_name == 'push' && contains(github.event.commits.*.modified, 'pyproject.toml') }}
     
     steps:
       - name: Check out code
