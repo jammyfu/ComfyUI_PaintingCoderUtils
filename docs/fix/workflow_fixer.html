@@ -343,6 +343,31 @@
                 font-size: 1em;
             }
         }
+
+        /* 更新勾选框容器样式 */
+        .zip-option {
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;  /* 垂直居中对齐 */
+        }
+
+        .zip-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            vertical-align: middle;  /* 垂直居中对齐 */
+            margin: 0;  /* 移除默认边距 */
+            position: relative;
+            top: -1px;  /* 微调位置 */
+        }
+
+        .zip-label {
+            color: var(--text-color);
+            cursor: pointer;
+            user-select: none;
+            vertical-align: middle;  /* 垂直居中对齐 */
+            margin-left: 4px;  /* 添加文字间距 */
+        }
     </style>
 </head>
 <body>
@@ -352,7 +377,7 @@
             <a href="https://github.com/jammyfu/ComfyUI_PaintingCoderUtils" target="_blank" title="Visit PaintingCoder on GitHub">
                 <img src="../images/workflow_fix_top_banner01.jpg" alt="Painting Coder Logo">
             </a>
-            <span class="version-tag">Version 0.2.1</span>
+            <span class="version-tag">Version 0.2.2</span>
             <!-- 将语言切换按钮移到这里 -->
             <div class="lang-switch">
                 <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">中文</button>
@@ -400,6 +425,10 @@
             
             <div>
                 <button id="fixButton" onclick="fixAndDownload()" disabled>Fix & Download</button>
+                <div class="zip-option">
+                    <input type="checkbox" id="zipDownload" class="zip-checkbox">
+                    <label for="zipDownload" class="zip-label" id="zipLabel">Download as ZIP</label>
+                </div>
             </div>
             
             <div id="error" class="error"></div>
@@ -412,6 +441,7 @@
         <p style="margin-bottom: 5px;">© 2025 jammyfu. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         // 在现有代码前添加
         window.onload = function() {
@@ -455,7 +485,10 @@
                 errorJsonFile: "Please select a JSON file.",
                 selectedFiles: "Selected files:",
                 noFilesSelected: "No files selected",
-                removeFile: "Remove"
+                removeFile: "Remove",
+                zipOption: "Download as ZIP",
+                processingFiles: "Processing {0}/{1} files...",
+                successMultipleFiles: "Successfully processed {0} files"
             },
             zh: {
                 title: "PaintingCoder 工作流修复工具",
@@ -479,7 +512,10 @@
                 errorJsonFile: "请选择JSON文件。",
                 selectedFiles: "已选择文件：",
                 noFilesSelected: "未选择文件",
-                removeFile: "移除"
+                removeFile: "移除",
+                zipOption: "以ZIP格式下载",
+                processingFiles: "正在处理 {0}/{1} 个文件...",
+                successMultipleFiles: "成功处理 {0} 个文件"
             }
         };
 
@@ -546,10 +582,13 @@
             } else {
                 headerImage.src = "../images/workflow_fix_top_banner01.jpg";
             }
+
+            document.getElementById('zipLabel').textContent = t.zipOption;
         }
 
-        // 需要添加命名空间的节点映射
+        // 更新节点映射
         const nodeMapping = {
+            // 原有的映射
             "MaskPreview": "PaintingCoder::MaskPreview",
             "ImageSizeCreator": "PaintingCoder::ImageSizeCreator",
             "ImageToBase64": "PaintingCoder::ImageToBase64",
@@ -566,7 +605,11 @@
             "TextSwitch": "PaintingCoder::TextSwitch",
             "MaskSwitch": "PaintingCoder::MaskSwitch",
             "LatentSwitch": "PaintingCoder::LatentSwitch",
-            "WebImageLoader": "PaintingCoder::WebImageLoader"
+            "WebImageLoader": "PaintingCoder::WebImageLoader",
+            
+            // 添加新的映射
+            "MaskPreview+": "PaintingCoder::MaskPreview",
+
         };
 
         let currentFile = null;
@@ -801,10 +844,23 @@
                 document.getElementById('error').textContent = t.errorSelectFile;
                 return;
             }
-            
-            selectedFiles.forEach(file => {
+
+            const useZip = document.getElementById('zipDownload').checked;
+            const fixedFiles = [];
+            let processedCount = 0;
+            const totalFiles = selectedFiles.length;
+
+            // 处理进度提示
+            const successEl = document.getElementById('success');
+            const errorEl = document.getElementById('error');
+            successEl.textContent = `Processing 0/${totalFiles} files...`;
+            errorEl.textContent = '';
+
+            selectedFiles.forEach((file, index) => {
                 if (isMarkdownOrBase64File(file.name)) {
                     console.log(`Skipping file: ${file.name} (markdown or base64)`);
+                    processedCount++;
+                    successEl.textContent = `Processing ${processedCount}/${totalFiles} files...`;
                     return;
                 }
 
@@ -820,18 +876,14 @@
                             conversionDirection = selectedPathType ? selectedPathType.value : 'auto';
                             
                             if (conversionDirection === 'auto') {
-                                // 检测当前文件的路径格式
                                 const currentFormat = detectPathFormat(workflow);
-                                // 如果检测到当前格式，就转换为另一种格式
                                 if (currentFormat === 'unix') {
                                     conversionDirection = 'windows';
                                 } else if (currentFormat === 'windows') {
                                     conversionDirection = 'unix';
                                 } else {
-                                    // 如果无法检测，则转换为unix格式（标准格式）
                                     conversionDirection = 'unix';
                                 }
-                                console.log(`Auto detected format: ${currentFormat}, converting to: ${conversionDirection}`);
                             } else if (conversionDirection === 'toWindows') {
                                 conversionDirection = 'windows';
                             } else if (conversionDirection === 'toUnix') {
@@ -847,26 +899,73 @@
                         } else if (fixType === 'path') {
                             newFileName = file.name.replace('.json', `_${conversionDirection}.json`);
                         }
+
+                        if (useZip) {
+                            // 收集文件用于ZIP打包
+                            fixedFiles.push({
+                                name: newFileName,
+                                content: JSON.stringify(fixedWorkflow, null, 2)
+                            });
+                        } else {
+                            // 直接下载单个文件
+                            const blob = new Blob([JSON.stringify(fixedWorkflow, null, 2)], {type: 'application/json'});
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = newFileName;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        }
+
+                        processedCount++;
+                        successEl.textContent = `Processing ${processedCount}/${totalFiles} files...`;
                         
-                        const blob = new Blob([JSON.stringify(fixedWorkflow, null, 2)], {type: 'application/json'});
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = newFileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        
-                        document.getElementById('success').textContent = t.successMessage + newFileName;
-                        document.getElementById('error').textContent = '';
+                        // 当所有文件处理完成后
+                        if (processedCount === totalFiles) {
+                            if (useZip && fixedFiles.length > 0) {
+                                createAndDownloadZip(fixedFiles);
+                                successEl.textContent = t.successMessage + 'workflows.zip';
+                            } else if (!useZip) {
+                                successEl.textContent = t.successMessage + 
+                                    (totalFiles > 1 ? `${totalFiles} files` : newFileName);
+                            }
+                        }
                     } catch (e) {
-                        document.getElementById('error').textContent = `Error: ${e.message}`;
-                        document.getElementById('success').textContent = '';
+                        errorEl.textContent = `Error processing ${file.name}: ${e.message}`;
+                        console.error(e);
+                        processedCount++;
                     }
                 };
                 reader.readAsText(file);
             });
+        }
+
+        // 添加ZIP创建和下载函数
+        async function createAndDownloadZip(files) {
+            // 动态加载 JSZip 库
+            if (typeof JSZip === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+                document.head.appendChild(script);
+                await new Promise(resolve => script.onload = resolve);
+            }
+
+            const zip = new JSZip();
+            files.forEach(file => {
+                zip.file(file.name, file.content);
+            });
+
+            const blob = await zip.generateAsync({type: 'blob'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'workflows.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // 添加深色模式检测和监听
@@ -886,45 +985,56 @@
         });
 
         function fixWorkflow(workflow, fixType, conversionDirection) {
-            try {
-                if (fixType === 'path') {
-                    Object.keys(workflow.nodes).forEach(nodeId => {
-                        const node = workflow.nodes[nodeId];
-                        const nodeType = node.type || node.class_type;
-                        
-                        // 如果是需要处理的节点类型
-                        if (PATH_CONVERSION_NODES.has(nodeType)) {
-                            // 处理 widgets_values 数组中的所有值
-                            if (node.widgets_values && Array.isArray(node.widgets_values)) {
-                                node.widgets_values = node.widgets_values.map(value => {
-                                    if (typeof value === 'string' && !value.includes('base64')) {
-                                        // 转换路径分隔符
-                                        if (conversionDirection === 'unix') {
-                                            return value.replace(/\\/g, '/');
-                                        } else if (conversionDirection === 'windows') {
-                                            return value.replace(/\//g, '\\');
-                                        }
-                                    } else if (typeof value === 'object' && value?.content) {
-                                        // 处理 pysssss 节点的特殊格式
-                                        if (!value.content.includes('base64')) {
-                                            const newContent = conversionDirection === 'unix' 
-                                                ? value.content.replace(/\\/g, '/') 
-                                                : value.content.replace(/\//g, '\\');
-                                            return { ...value, content: newContent };
-                                        }
-                                    }
-                                    return value;
-                                });
+            if (fixType === 'namespace') {
+                // 深拷贝工作流
+                const fixedWorkflow = JSON.parse(JSON.stringify(workflow));
+                
+                // 遍历所有节点
+                if (fixedWorkflow.nodes) {
+                    fixedWorkflow.nodes.forEach(node => {
+                        // 检查节点类型是否需要添加命名空间
+                        if (node.type && nodeMapping[node.type]) {
+                            // 检查是否已经有命名空间前缀
+                            if (!node.type.startsWith('PaintingCoder::')) {
+                                node.type = nodeMapping[node.type];
                             }
                         }
                     });
-                } else if (fixType === 'namespace') {
-                    // ... 保持原有的命名空间修复逻辑不变 ...
                 }
-                return workflow;
-            } catch (e) {
-                throw new Error(`修复工作流时出错: ${e.message}`);
+                return fixedWorkflow;
+            } else if (fixType === 'path') {
+                Object.keys(workflow.nodes).forEach(nodeId => {
+                    const node = workflow.nodes[nodeId];
+                    const nodeType = node.type || node.class_type;
+                    
+                    // 如果是需要处理的节点类型
+                    if (PATH_CONVERSION_NODES.has(nodeType)) {
+                        // 处理 widgets_values 数组中的所有值
+                        if (node.widgets_values && Array.isArray(node.widgets_values)) {
+                            node.widgets_values = node.widgets_values.map(value => {
+                                if (typeof value === 'string' && !value.includes('base64')) {
+                                    // 转换路径分隔符
+                                    if (conversionDirection === 'unix') {
+                                        return value.replace(/\\/g, '/');
+                                    } else if (conversionDirection === 'windows') {
+                                        return value.replace(/\//g, '\\');
+                                    }
+                                } else if (typeof value === 'object' && value?.content) {
+                                    // 处理 pysssss 节点的特殊格式
+                                    if (!value.content.includes('base64')) {
+                                        const newContent = conversionDirection === 'unix' 
+                                            ? value.content.replace(/\\/g, '/') 
+                                            : value.content.replace(/\//g, '\\');
+                                        return { ...value, content: newContent };
+                                    }
+                                }
+                                return value;
+                            });
+                        }
+                    }
+                });
             }
+            return workflow;
         }
     </script>
 </body>
