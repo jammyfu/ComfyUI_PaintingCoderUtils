@@ -389,6 +389,14 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+
+### v0.3.3 (2025-01-23)
+- **Improvements:**
+  - Bug fixes, added workflow fixer tool to repair old version workflow JSON files
+  - Added path separator conversion functionality to switch between Windows and Unix formats
+  - Added file upload functionality to upload JSON files for repair
+  - Added file download functionality to download repaired JSON files or ZIP files
+
 ### v0.3.2 (2025-01-22)
 - **Improvements:**
   - Enhanced the workflow fixer tool with more error handling and informative messages
