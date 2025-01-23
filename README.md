@@ -198,6 +198,7 @@ Use Cases:
 
 ### ✂️Remove Empty Lines And Leading Spaces
 A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
+
 ![Remove Empty Lines And Leading Spaces](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
 
 Features:
