@@ -1,4 +1,4 @@
-![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo02.jpg)
+![Painting Coder Utilities Logo](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/paiting_coder_logo02.jpg)
 # ComfyUI画画的程序员工具集节点
 
 一个为 ComfyUI 设计的实用节点集合，旨在简化图像和文本处理工作流程。功能包括优化的分辨率调整、文本清理工具、动态图像/文本组合和蒙版预览工具。这个集合由一位喜欢绘画的程序员创建，非常适合希望提升 AI 艺术创作流程的艺术家和开发者。
@@ -13,7 +13,7 @@
 - 此更新会导致旧的工作流无法使用
 - 请使用我们的工作流修复工具来修复现有工作流：
 
- ![工作流修复工具](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_cn.jpg)
+ ![工作流修复工具](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/workflow_fix_tools_cn.jpg)
 
   打开 [工作流修复工具](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=zh) 或者到目录 **ComfyUI_PaintingCoderUtils/docs/fix/** 寻找 **workflow_fixer.html** 并打开页面
 
@@ -30,13 +30,13 @@
 ### 📐图像分辨率调整器 (Image Resolution Adjuster)
 一个用于按照 SDXL 最佳宽高比调整图像分辨率的实用节点。
 
-![图像分辨率调整器设置](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster00.png)
+![图像分辨率调整器设置](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_resolution_adjuster00.png)
 
 图像分辨率调整，可自由设置填充背景颜色
-![图像分辨率调整器设置](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster01.png)
+![图像分辨率调整器设置](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_resolution_adjuster01.png)
 
 图像按比例批量重绘
-![图像按比例批量重绘](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
+![图像按比例批量重绘](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/flux_batch_inpainting01.jpg)
 
 ### Flux图像按比例批量重绘工作流下载
 <a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ 下载工作流JSON（右键另存为）</a> 
@@ -85,8 +85,8 @@
 ### 🌐Web图像加载器 (Web Image Loader)
 一个用于从网络加载图像的节点。
 
-![Web图像加载器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader01.png)
-![Web图像加载器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader02.png)
+![Web图像加载器示例](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/web_image_loader01.png)
+![Web图像加载器示例](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/web_image_loader02.png)
 
 特点：
 - 支持从URL加载图像,支持Base64格式
@@ -110,7 +110,7 @@
 ### 🖼️图像转Base64编码器 (Image to Base64 Encoder)
 一个用于将图像转换为Base64编码的节点。
 
-![图像转Base64编码器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_to_base64.png)
+![图像转Base64编码器示例](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_to_base64.png)
 
 特点：
 - 支持多种图像格式（JPEG, PNG, BMP等）
@@ -135,7 +135,7 @@
 ### 🔀 Switch节点（Image Switch,Text Switch）
 Switch节点用于在工作流中动态切换不同的输入或输出路径。
 
-![Switch节点](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/switch_nodes_01.png)
+![Switch节点](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/switch_nodes_01.png)
 
 特点：
 - 支持多种输入和输出类型
@@ -157,7 +157,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 ### 🖼️图像尺寸创建器 (Image Size Creator)
 一个用于创建图像尺寸的节点。
 
-![图像尺寸创建器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_size_creator01.png)
+![图像尺寸创建器](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_size_creator01.png)
 
 特点：
 - 支持所有SDXL最优分辨率：
@@ -188,7 +188,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 ### 🖼️图像潜空间创建器 (Image Latent Creator)
 一个用于创建空的图像潜空间的节点。
 
-![图像潜空间创建器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_latent_creator01.png)
+![图像潜空间创建器](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_latent_creator01.png)
 特点：
 - 继承图像尺寸创建器的所有功能
 - 支持批量大小设置
@@ -212,7 +212,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 ### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
 一个用于清理文本中的空行和前导/尾随空格的文本处理节点。
 
-![空行和前导空格清理器](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
+![空行和前导空格清理器](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn00.png)
 
 特点：
 - 移除文本中的空行
@@ -249,22 +249,22 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 - 标准化文本输入格式
 
 清除多余的空行及空格生成文本：
-![清除多余的空行及空格生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn01.png)
+![清除多余的空行及空格生成文本](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn01.png)
 
 清除空行保留空格生成文本：
-![清除空行保留空格生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn02.png)
+![清除空行保留空格生成文本](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn02.png)
 
 清除空格保留空号生成文本：
-![清除空格保留空号生成文本](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn03.png)
+![清除空格保留空号生成文本](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn03.png)
 
 清除空行、空格生成列表：
-![清除空行、空格生成列表](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn04.png)
+![清除空行、空格生成列表](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn04.png)
 
 
 
 ### 🔗文本组合器（TextCombiner）✨
 新增文本组合器节点，可以将多个文本输入组合成一个文本输出。
-![新增文本组合器节点，可以将多个文本输入组合成一个文本输出。](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/text_combiner01.png)
+![新增文本组合器节点，可以将多个文本输入组合成一个文本输出。](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/text_combiner01.png)
 
 功能特点：
 - 支持动态输入：连接输入时自动增加新的输入点
@@ -300,7 +300,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 
 ### 🖼️动态图像输入组合器 (Dynamic Image Input)
 一个用于动态组合多个图像输入的节点。
-![一个用于动态组合多个图像输入的节点](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/dynamic_image_combiner01.png)
+![一个用于动态组合多个图像输入的节点](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/dynamic_image_combiner01.png)
 
 特点：
 - 动态输入端口：连接时自动增加新的图像输入点
@@ -330,7 +330,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 ### 📝文本显示增强器 (Show Text Plus)
 一个增强型的文本显示节点，提供更多文本格式化和显示选项。
 
-![文本显示增强器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/muti_text_and_show_text_plus01.jpg)
+![文本显示增强器示例](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/muti_text_and_show_text_plus01.jpg)
 
 特点：
 - 关闭显示模式：
@@ -376,7 +376,7 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 ### 🎭蒙版预览器 (Mask Preview)
 一个用于预览和检查图像蒙版的实用节点。
 
-![蒙版预览器示例](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/mask_preview01.png)
+![蒙版预览器示例](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/mask_preview01.png)
 
 特点：
 - 直观显示蒙版区域

@@ -1,4 +1,4 @@
-![Painting Coder Utilities Logo](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/paiting_coder_logo01.jpg)
+![Painting Coder Utilities Logo](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/paiting_coder_logo01.jpg)
 
 # ComfyUI Painting Coder Utilities Nodes
 
@@ -14,7 +14,7 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 - This update will cause older workflows to stop working
 - To fix your existing workflows, please use our workflow fixer tool:
 
- ![Workflow Fixer Tool](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/workflow_fix_tools_en.jpg)
+ ![Workflow Fixer Tool](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/workflow_fix_tools_en.jpg)
  
   Open the page [Workflow Fixer Tool](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en) Or go to the directory **ComfyUI_PaintingCoderUtils/docs/fix/** to find **workflow_fixer.html** and open the page
 
@@ -28,13 +28,13 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 ### 📐Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
 
-![Image Resolution Adjuster Settings](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster00.png)
+![Image Resolution Adjuster Settings](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_resolution_adjuster00.png)
 
 Image resolution adjustment with customizable background color fill
-![Image Resolution Adjuster Settings](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_resolution_adjuster01.png)
+![Image Resolution Adjuster Settings](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_resolution_adjuster01.png)
 
 Batch image redrawing with aspect ratio preservation
-![Batch Image Redrawing](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/flux_batch_inpainting01.jpg)
+![Batch Image Redrawing](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/flux_batch_inpainting01.jpg)
 
 #### Flux Image Resolution Adjuster Batch Workflow Download
 <a href="https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/refs/heads/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json" download="Flux_Image_Resolution_Adjuster_batch_workflow.json">⬇️ Download Workflow JSON (Right Click Save As)</a> 
@@ -72,8 +72,8 @@ Usage:
 ### 🌐Web Image Loader
 A node for loading images from the web.
 
-![Web Image Loader Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader01.png)
-![Web Image Loader Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/web_image_loader02.png)
+![Web Image Loader Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/web_image_loader01.png)
+![Web Image Loader Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/web_image_loader02.png)
 
 Features:
 - Supports loading images from URLs and Base64 format
@@ -97,7 +97,7 @@ Use Cases:
 ### 🖼️Image to Base64 Encoder
 A node for converting images to Base64 encoding.
 
-![Image to Base64 Encoder Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_to_base64.png)
+![Image to Base64 Encoder Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_to_base64.png)
 
 Features:
 - Supports various image formats (JPEG, PNG, BMP, etc.)
@@ -122,7 +122,7 @@ Use Cases:
 ### 🔀 Switch Node (Image Switch, Text Switch)
 Switch nodes are used to dynamically switch between different input or output paths in a workflow.
 
-![Switch Node](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/switch_nodes_01.png)
+![Switch Node](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/switch_nodes_01.png)
 
 Features:
 - Supports multiple input and output types
@@ -144,7 +144,7 @@ Use Cases:
 ### 🖼️Image Size Creator
 A node for creating image dimensions.
 
-![Image Size Creator](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_size_creator01.png)
+![Image Size Creator](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_size_creator01.png)
 
 Features:
 - Supports all SDXL optimal resolutions:
@@ -175,7 +175,7 @@ Use Cases:
 ### 🖼️Image Latent Creator
 A node for creating empty image latent spaces.
 
-![Image Latent Creator](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/image_latent_creator01.png)
+![Image Latent Creator](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_latent_creator01.png)
 Features:
 - Inherits all functionality from Image Size Creator
 - Supports batch size settings
@@ -199,7 +199,7 @@ Use Cases:
 ### ✂️Remove Empty Lines And Leading Spaces
 A text processing node that cleans up text by removing empty lines and leading/trailing spaces.
 
-![Remove Empty Lines And Leading Spaces](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn00.png)
+![Remove Empty Lines And Leading Spaces](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn00.png)
 
 Features:
 - Removes empty lines from text
@@ -236,21 +236,21 @@ Use Cases:
 - Standardizing text input format
 
 Remove extra empty lines and spaces to generate text:
-![Remove extra empty lines and spaces to generate text](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn01.png)
+![Remove extra empty lines and spaces to generate text](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn01.png)
 
 Remove empty lines while keeping spaces to generate text:
-![Remove empty lines while keeping spaces to generate text](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn02.png)
+![Remove empty lines while keeping spaces to generate text](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn02.png)
 
 Remove spaces while keeping empty lines to generate text:
-![Remove spaces while keeping empty lines to generate text](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn03.png)
+![Remove spaces while keeping empty lines to generate text](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn03.png)
 
 Remove empty lines and spaces to generate list:
-![Remove empty lines and spaces to generate list](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/rm_line_and_space_cn04.png)
+![Remove empty lines and spaces to generate list](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/rm_line_and_space_cn04.png)
 
 
 ### 🔗Text Combiner✨
 Added Text Combiner node for combining multiple text inputs into a single output.
-![Added Text Combiner node for combining multiple text inputs into a single output.](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/text_combiner01.png)
+![Added Text Combiner node for combining multiple text inputs into a single output.](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/text_combiner01.png)
 
 Features:
 - Dynamic inputs: automatically adds new input points when connected
@@ -286,7 +286,7 @@ Usage Examples:
 
 ### 🖼️Dynamic Image Input
 A node for dynamically combining multiple image inputs. 
-![A node for dynamically combining multiple image inputs.](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/dynamic_image_combiner01.png)
+![A node for dynamically combining multiple image inputs.](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/dynamic_image_combiner01.png)
 Features:
 - Dynamic input ports: automatically adds new image input points when connected 
 - Smart image processing:
@@ -313,7 +313,7 @@ Use Cases:
 ### 📝 Text Display Enhancer (Show Text Plus)
 An enhanced text display node that provides more text formatting and display options.
 
-![Text Display Enhancer Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/muti_text_and_show_text_plus01.jpg)
+![Text Display Enhancer Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/muti_text_and_show_text_plus01.jpg)
 
 Features:
 - Display Mode Options:
@@ -333,7 +333,7 @@ Usage Instructions:
 ### 📝 Multiline Text Input (Multiline Text)
 A node that supports multiline text input, making it easy to input and edit long text content.
 
-![Multiline Text Input Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/muti_text_and_show_text_plus01.jpg)
+![Multiline Text Input Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/muti_text_and_show_text_plus01.jpg)
 
 Features:
 - Supports multiline text input and editing
@@ -357,7 +357,7 @@ Usage Scenarios:
 ### 🎭Mask Preview
 A utility node for previewing and inspecting image masks.
 
-![Mask Preview Example](https://raw.githubusercontent.com/jammyfu/ComfyUI_PaintingCoderUtils/main/docs/images/mask_preview01.png)
+![Mask Preview Example](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/mask_preview01.png)
 
 Features:
 - Intuitive mask area visualization
