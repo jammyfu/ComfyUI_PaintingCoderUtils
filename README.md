@@ -390,7 +390,7 @@ Usage:
 MIT License
 
 ## 🤝 Updates
-### v0.3.4 Update
+### v0.3.4 Update  (2025-01-24)
 - **Updates:**
   - Modified the ComfyUI workflow fixer tool page to enhance user experience
   - Added more error messages to help users locate issues faster
