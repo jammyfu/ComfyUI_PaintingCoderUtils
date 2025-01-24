@@ -390,6 +390,13 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.3.4 Update
+- **Updates:**
+  - Modified the ComfyUI workflow fixer tool page to enhance user experience
+  - Added more error messages to help users locate issues faster
+  - Optimized file upload and download functionality to support more file processing
+  - Improved path separator conversion functionality to enhance cross-platform compatibility
+  - Enhanced interface response speed to reduce loading time
 
 ### v0.3.3 (2025-01-23)
 - **Improvements:**
