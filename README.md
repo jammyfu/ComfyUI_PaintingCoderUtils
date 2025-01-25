@@ -172,6 +172,17 @@ Use Cases:
 - SDXL image generation optimization
 - Batch image processing workflows
 
+### ✨Image Size Creator Plus
+
+![Image Size Creator Plus](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_size_creator_plus.jpg)
+
+An enhanced version of the image size creator that supports both SDXL and Midjourney standard resolutions. Key features:
+- Supports switching between SDXL and Midjourney styles
+- Includes all SDXL standard resolutions
+- Includes all Midjourney standard resolutions
+- Three modes: landscape, portrait, and square
+- Adjustable scale factor
+
 ### 🖼️Image Latent Creator
 A node for creating empty image latent spaces.
 
@@ -193,6 +204,12 @@ Use Cases:
 - SDXL workflow initialization
 - Batch image generation
 - Custom latent space processing
+
+
+### ✨Image Latent Creator Plus
+An enhanced version of the latent creator that inherits all functionality from Image Size Creator Plus and supports batch latent space creation.
+
+![Image Latent Creator Plus](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_latent_creator_plus.jpg)
 
 
 
@@ -390,6 +407,14 @@ Usage:
 MIT License
 
 ## 🤝 Updates
+### v0.3.5 Update (2025-01-25)
+- **New Features:**
+  - Added Image Size Creator Plus node, supporting SDXL and Midjourney dimensions
+  - Added Image Latent Creator Plus node, inheriting all Plus node functionalities
+  - Optimized Plus node user interface and interaction experience
+  - Added more resolution preset options
+  - Improved node performance and stability
+
 ### v0.3.4 Update  (2025-01-24)
 - **Updates:**
   - Modified the ComfyUI workflow fixer tool page to enhance user experience

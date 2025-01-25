@@ -185,10 +185,23 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 - SDXL图像生成优化
 - 批量图像处理工作流
 
+### ✨图像尺寸创建器Plus (Image Size Creator Plus)
+
+![图像尺寸创建器Plus](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_size_creator_plus.jpg)
+
+增强版图像尺寸创建器，支持SDXL和Midjourney的标准分辨率。主要特点：
+- 支持SDXL和Midjourney两种风格切换
+- 包含所有SDXL标准分辨率
+- 包含所有Midjourney标准分辨率
+- 横向、纵向、方形三种模式
+- 可调节的缩放系数
+
+
 ### 🖼️图像潜空间创建器 (Image Latent Creator)
 一个用于创建空的图像潜空间的节点。
 
 ![图像潜空间创建器](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_latent_creator01.png)
+
 特点：
 - 继承图像尺寸创建器的所有功能
 - 支持批量大小设置
@@ -207,6 +220,10 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 - 批量图像生成
 - 自定义潜空间处理
 
+### ✨图像潜空间创建器Plus (Image Latent Creator Plus) 
+增强版潜空间创建器，继承了图像尺寸创建器Plus的所有功能，并支持批量创建潜空间。
+
+![图像潜空间创建器Plus](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/image_latent_creator_plus.jpg)
 
 
 ### ✂️空行和前导空格清理器 (Remove Empty Lines And Leading Spaces)
@@ -409,6 +426,14 @@ MIT License
 
 ## 🤝 更新说明
 ### 页面更新说明
+### v0.3.5 更新 (2025-01-25)
+- **新增:**
+  - 新增了 Image Size Creator Plus 节点，支持 SDXL 和 Midjourney 尺寸
+  - 新增了 Image Latent Creator Plus 节点，继承 Plus 节点的所有功能
+  - 优化了 Plus 节点的用户界面和交互体验
+  - 增加了更多的分辨率预设选项
+  - 提升了节点的性能和稳定性
+
 
 ### v0.3.4 更新 (2025-01-24)
 - **更新:**
