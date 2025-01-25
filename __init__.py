@@ -13,6 +13,8 @@ EXTENSION_FOLDER = os.path.dirname(os.path.realpath(__file__))
 from .modules.images.mask_preview import MaskPreview
 from .modules.images.image_resolution_creator import ImageSizeCreator
 from .modules.images.image_resolution_creator import ImageLatentCreator
+from .modules.images.image_resolution_creator_plus import ImageSizeCreatorPlus
+from .modules.images.image_resolution_creator_plus import ImageLatentCreatorPlus
 from .modules.images.dynamic_image_input import DynamicImageCombiner
 from .modules.images.dynamic_mask_input import DynamicMaskCombiner
 from .modules.images.image_resolution_adjuster import ImageResolutionAdjuster
@@ -31,14 +33,14 @@ from .modules.images.image_base64_converter import ImageToBase64
 
 
 
-
-
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
     "PaintingCoder::MaskPreview": MaskPreview,
     "PaintingCoder::ImageSizeCreator": ImageSizeCreator,
+    "PaintingCoder::ImageSizeCreatorPlus": ImageSizeCreatorPlus,
     "PaintingCoder::ImageToBase64": ImageToBase64,
     "PaintingCoder::ImageLatentCreator": ImageLatentCreator,
+    "PaintingCoder::ImageLatentCreatorPlus": ImageLatentCreatorPlus,
     "PaintingCoder::DynamicImageCombiner": DynamicImageCombiner,
     "PaintingCoder::DynamicMaskCombiner": DynamicMaskCombiner,
     "PaintingCoder::ImageResolutionAdjuster": ImageResolutionAdjuster,
@@ -58,6 +60,8 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "PaintingCoder::MaskPreview": "Mask Preview 🎭",
     "PaintingCoder::ImageSizeCreator": "Image Size Creator 📏",
+    "PaintingCoder::ImageSizeCreatorPlus": "Image Size Creator Plus ✨",
+    "PaintingCoder::ImageLatentCreatorPlus": "Image Latent Creator Plus ✨",
     "PaintingCoder::ImageToBase64": "Image To Base64 🎨",
     "PaintingCoder::ImageLatentCreator": "Image Latent Creator 🎨",
     "PaintingCoder::DynamicImageCombiner": "Dynamic Image Input 🖼️",

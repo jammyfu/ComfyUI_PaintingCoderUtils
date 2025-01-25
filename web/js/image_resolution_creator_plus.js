@@ -1,7 +1,8 @@
 import { app } from "../../../scripts/app.js";
+import { setupSizeNode } from "./image_size_base.js";
 
-// 共享的分辨率选项
-export const resolutionOptions = {
+// SDXL分辨率选项
+const sdxlResolutionOptions = {
     "Landscape": [
         "9:7 (1152x896)",   // 比例约 1.29
         "3:2 (1216x832)",   // 比例 1.50
@@ -19,8 +20,8 @@ export const resolutionOptions = {
     ]
 };
 
-// Midjourney的分辨率选项
-export const midjourneyResolutionOptions = {
+// Midjourney分辨率选项
+const midjourneyResolutionOptions = {
     "Landscape": [
         "6:5 (1200x992)",   // 比例 1.21
         "4:3 (1232x928)",   // 比例 1.33
@@ -40,20 +41,18 @@ export const midjourneyResolutionOptions = {
     ]
 };
 
-// 共享的更新分辨率选项函数
-export function updateResolutionOptions(node, mode, triggerUpdate = true) {
-    console.log("[ImageSizeBase] Updating resolution options for mode:", mode);
+// 更新分辨率选项的函数
+function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
+    console.log("[ImageSizeCreatorPlus] Updating resolution options for mode:", mode, "style:", style);
     
-    // 找到分辨率widget
     const resolutionWidget = node.widgets?.find(w => w.name === "resolution");
     if (!resolutionWidget) {
-        console.warn("[ImageSizeBase] Resolution widget not found");
+        console.warn("[ImageSizeCreatorPlus] Resolution widget not found");
         return;
     }
 
-    // 根据节点类型选择不同的分辨率选项
-    const isMidjourney = node.type.includes("Midjourney");
-    const options = (isMidjourney ? midjourneyResolutionOptions : resolutionOptions)[mode] || [];
+    // 根据风格选择对应的分辨率选项
+    const options = (style === "Midjourney" ? midjourneyResolutionOptions : sdxlResolutionOptions)[mode] || [];
     
     // 如果选项没有变化，不进行更新
     if (JSON.stringify(resolutionWidget.options?.values) === JSON.stringify(options)) {
@@ -81,8 +80,8 @@ export function updateResolutionOptions(node, mode, triggerUpdate = true) {
     }
 }
 
-// 共享的节点初始化函数
-export function setupSizeNode(nodeType, nodeData, app) {
+// 设置Plus节点的函数
+function setupPlusSizeNode(nodeType, nodeData, app) {
     // 创建节点时的处理
     const onNodeCreated = nodeType.prototype.onNodeCreated;
     nodeType.prototype.onNodeCreated = function() {
@@ -90,18 +89,22 @@ export function setupSizeNode(nodeType, nodeData, app) {
 
         // 初始化时更新分辨率选项
         const modeWidget = this.widgets?.find(w => w.name === "mode");
-        if (modeWidget) {
+        const styleWidget = this.widgets?.find(w => w.name === "style");
+        
+        if (modeWidget && styleWidget) {
             // 初始更新，但不触发画布更新
-            updateResolutionOptions(this, modeWidget.value, false);
+            updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value, false);
 
             // 监听模式变化
             modeWidget.callback = (value) => {
-                console.log("[ImageSizeBase] Mode changed to:", value);
-                const node = this;
-                // 延迟更新以确保连接稳定
-                setTimeout(() => {
-                    updateResolutionOptions(node, value);
-                }, 0);
+                console.log("[ImageSizeCreatorPlus] Mode changed to:", value);
+                updatePlusResolutionOptions(this, value, styleWidget.value);
+            };
+
+            // 监听风格变化
+            styleWidget.callback = (value) => {
+                console.log("[ImageSizeCreatorPlus] Style changed to:", value);
+                updatePlusResolutionOptions(this, modeWidget.value, value);
             };
         }
 
@@ -113,17 +116,29 @@ export function setupSizeNode(nodeType, nodeData, app) {
     nodeType.prototype.onConfigure = function(config) {
         const result = onConfigure?.apply(this, arguments);
         
-        // 恢复时更新分辨率选项，但不触发画布更新
+        // 恢复时更新分辨率选项
         const modeWidget = this.widgets?.find(w => w.name === "mode");
-        if (modeWidget) {
-            console.log("[ImageSizeBase] Restoring configuration with mode:", modeWidget.value);
-            const node = this;
+        const styleWidget = this.widgets?.find(w => w.name === "style");
+        
+        if (modeWidget && styleWidget) {
+            console.log("[ImageSizeCreatorPlus] Restoring configuration with mode:", modeWidget.value, "style:", styleWidget.value);
             // 延迟更新以确保连接稳定
             setTimeout(() => {
-                updateResolutionOptions(node, modeWidget.value, false);
+                updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value, false);
             }, 0);
         }
 
         return result;
     };
-} 
+}
+
+// 注册扩展
+app.registerExtension({
+    name: "PaintingCoder.ImageSizeCreatorPlus",
+    async beforeRegisterNodeDef(nodeType, nodeData, app) {
+        if (nodeData.name === "PaintingCoder::ImageSizeCreatorPlus" || 
+            nodeData.name === "PaintingCoder::ImageLatentCreatorPlus") {
+            setupPlusSizeNode(nodeType, nodeData, app);
+        }
+    }
+}); 
