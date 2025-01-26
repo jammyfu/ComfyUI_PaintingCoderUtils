@@ -58,7 +58,7 @@ class ImageSizeCreator:
         return {
             "required": {
                 "mode": (["Landscape", "Portrait", "Square"],),
-                "resolution": (s.get_resolution_options(),),  # combo 格式
+                "resolution": (s.get_resolution_options(),), 
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
         }

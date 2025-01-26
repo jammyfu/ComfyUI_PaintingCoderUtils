@@ -21,7 +21,7 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
             },
         }
 
-    RETURN_TYPES = ("STRING", "INT", "INT")
+    RETURN_TYPES = (any, "INT", "INT")
     RETURN_NAMES = ("resolution", "width", "height")
     FUNCTION = "create_size"
     CATEGORY = "🎨Painting👓Coder/🖼️Image"
@@ -174,7 +174,7 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
             width = (width // 8) * 8
             height = (height // 8) * 8
             
-            return (str(resolution), width, height)
+            return (resolution, width, height)
             
         except Exception as e:
             print(f"Error in ImageSizeCreatorPlus: {str(e)}")
@@ -200,14 +200,14 @@ class ImageLatentCreatorPlus(ImageLatentCreator, ImageSizeCreatorPlus):
         return {
             "required": {
                 "mode": (["Landscape", "Portrait", "Square"],),
-                "style": (["SDXL", "Midjourney"],),  # 移到第二位
+                "style": (["SDXL", "Midjourney"],), 
                 "resolution": (s.get_resolution_options(),),
                 "batch_size": ("INT", {"default": 1, "min": 1, "max": 64}),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
         }
 
-    RETURN_TYPES = ("LATENT", "STRING", "INT", "INT", "INT")
+    RETURN_TYPES = ("LATENT", any, "INT", "INT", "INT")
     RETURN_NAMES = ("latent", "resolution", "width", "height", "batch_size")
     
     def validate_inputs(self, **kwargs):

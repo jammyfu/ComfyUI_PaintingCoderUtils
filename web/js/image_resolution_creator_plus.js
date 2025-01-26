@@ -53,7 +53,8 @@ function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
     }
 
     // 根据风格选择对应的分辨率选项
-    const options = (style === "Midjourney" ? midjourneyResolutionOptions : sdxlResolutionOptions)[mode] || [];
+    const resolutionOptions = style === "Midjourney" ? midjourneyResolutionOptions : sdxlResolutionOptions;
+    const options = resolutionOptions[mode] || [];
     
     // 如果选项没有变化，不进行更新
     if (JSON.stringify(resolutionWidget.options?.values) === JSON.stringify(options)) {
@@ -73,6 +74,9 @@ function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
         resolutionWidget.value = options[0] || "";
     }
 
+    // 触发widget的change事件
+    resolutionWidget.callback?.(resolutionWidget.value);
+
     // 只在需要时触发更新
     if (triggerUpdate) {
         requestAnimationFrame(() => {
@@ -81,7 +85,6 @@ function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
     }
 }
 
-// 设置Plus节点
 function setupPlusSizeNode(nodeType, nodeData, app) {
     // 创建节点时的处理
     const onNodeCreated = nodeType.prototype.onNodeCreated;
@@ -97,15 +100,19 @@ function setupPlusSizeNode(nodeType, nodeData, app) {
             updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value, false);
 
             // 监听模式变化
+            const originalModeCallback = modeWidget.callback;
             modeWidget.callback = (value) => {
                 console.log("[ImageSizeCreatorPlus] Mode changed to:", value);
                 updatePlusResolutionOptions(this, value, styleWidget.value);
+                originalModeCallback?.call(this, value);
             };
 
             // 监听风格变化
+            const originalStyleCallback = styleWidget.callback;
             styleWidget.callback = (value) => {
                 console.log("[ImageSizeCreatorPlus] Style changed to:", value);
                 updatePlusResolutionOptions(this, modeWidget.value, value);
+                originalStyleCallback?.call(this, value);
             };
         }
 
@@ -130,6 +137,19 @@ function setupPlusSizeNode(nodeType, nodeData, app) {
         }
 
         return result;
+    };
+
+    // 添加widget更改处理
+    const onPropertyChanged = nodeType.prototype.onPropertyChanged;
+    nodeType.prototype.onPropertyChanged = function(property, value) {
+        if (property === "mode" || property === "style") {
+            const modeWidget = this.widgets?.find(w => w.name === "mode");
+            const styleWidget = this.widgets?.find(w => w.name === "style");
+            if (modeWidget && styleWidget) {
+                updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value);
+            }
+        }
+        return onPropertyChanged?.apply(this, arguments);
     };
 }
 
