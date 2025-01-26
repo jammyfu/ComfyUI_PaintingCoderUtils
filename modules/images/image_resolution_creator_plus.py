@@ -196,9 +196,16 @@ class ImageLatentCreatorPlus(ImageLatentCreator, ImageSizeCreatorPlus):
     @classmethod
     def INPUT_TYPES(s):
         base_inputs = ImageLatentCreator.INPUT_TYPES()
-        base_inputs["required"]["style"] = (["SDXL", "Midjourney"],)
-        base_inputs["required"]["resolution"] = (s.get_resolution_options(),)  # 使用动态方法
-        return base_inputs
+        # 重新排序输入参数
+        return {
+            "required": {
+                "mode": (["Landscape", "Portrait", "Square"],),
+                "style": (["SDXL", "Midjourney"],),  # 移到第二位
+                "resolution": (s.get_resolution_options(),),
+                "batch_size": ("INT", {"default": 1, "min": 1, "max": 64}),
+                "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
+            },
+        }
 
     RETURN_TYPES = ("LATENT", "STRING", "INT", "INT", "INT")
     RETURN_NAMES = ("latent", "resolution", "width", "height", "batch_size")
