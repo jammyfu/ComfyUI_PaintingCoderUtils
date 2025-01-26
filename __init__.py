@@ -29,6 +29,7 @@ from .modules.switch.switch_node import MaskSwitch
 from .modules.switch.switch_node import LatentSwitch
 from .modules.web.web_image_loader import WebImageLoader
 from .modules.images.image_base64_converter import ImageToBase64
+from .modules.utils.output_converter import OutputToTextConverter
 
 
 
@@ -54,6 +55,7 @@ NODE_CLASS_MAPPINGS = {
     "PaintingCoder::MaskSwitch": MaskSwitch,
     "PaintingCoder::LatentSwitch": LatentSwitch,
     "PaintingCoder::WebImageLoader": WebImageLoader,
+    "PaintingCoder::OutputToTextConverter": OutputToTextConverter,
 }
 
 # 节点显示名称映射
@@ -77,6 +79,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
     "PaintingCoder::LatentSwitch": "Latent Switch 🔄",
     "PaintingCoder::WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
+    "PaintingCoder::OutputToTextConverter": "Output To Text Converter 📝",
 }
 
 # Web 目录配置

@@ -41,10 +41,11 @@ const midjourneyResolutionOptions = {
     ]
 };
 
-// 更新分辨率选项的函数
+// 更新分辨率选项
 function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
     console.log("[ImageSizeCreatorPlus] Updating resolution options for mode:", mode, "style:", style);
     
+    // 找到分辨率widget
     const resolutionWidget = node.widgets?.find(w => w.name === "resolution");
     if (!resolutionWidget) {
         console.warn("[ImageSizeCreatorPlus] Resolution widget not found");
@@ -80,7 +81,7 @@ function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
     }
 }
 
-// 设置Plus节点的函数
+// 设置Plus节点
 function setupPlusSizeNode(nodeType, nodeData, app) {
     // 创建节点时的处理
     const onNodeCreated = nodeType.prototype.onNodeCreated;
