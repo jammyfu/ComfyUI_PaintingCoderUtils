@@ -207,7 +207,7 @@ def calculate_resolution(aspect_ratio, scale_factor, max_width, max_height, min_
     return target_width, target_height, base_width, base_height
 
 def get_aspect_ratio_string(width, height):
-    """Get the aspect ratio string from width and height, maintaining SDXL standard ratios"""
+    """Get the aspect ratio string from width and height, maintaining standard ratios"""
     # SDXL 标准比例映射
     sdxl_ratios = {
         (1024, 1024): "1:1",
@@ -221,9 +221,27 @@ def get_aspect_ratio_string(width, height):
         (640, 1536): "5:12"
     }
     
-    # 如果是标准 SDXL 分辨率，直接返回对应的比例
-    if (width, height) in sdxl_ratios:
-        return sdxl_ratios[(width, height)]
+    # Midjourney 标准比例映射
+    midjourney_ratios = {
+        (1024, 1024): "1:1",
+        (1200, 992): "6:5",
+        (1232, 928): "4:3",
+        (1344, 896): "3:2",
+        (1456, 816): "16:9",
+        (1536, 768): "2:1",
+        (768, 1536): "1:2",
+        (816, 1456): "9:16",
+        (896, 1344): "2:3",
+        (928, 1232): "3:4",
+        (992, 1200): "5:6"
+    }
+    
+    # 合并所有标准比例
+    standard_ratios = {**sdxl_ratios, **midjourney_ratios}
+    
+    # 如果是标准分辨率，直接返回对应的比例
+    if (width, height) in standard_ratios:
+        return standard_ratios[(width, height)]
     
     # 如果不是标准分辨率，则使用最大公约数计算
     common_divisor = gcd(width, height)
@@ -360,8 +378,9 @@ class ImageResolutionAdjuster:
     
     @classmethod
     def get_resolution_options(cls):
-        """Generate resolution options for SDXL optimal resolutions"""
-        base_resolutions = [
+        """Generate resolution options for SDXL and Midjourney optimal resolutions"""
+        # SDXL基础分辨率
+        sdxl_resolutions = [
             (1024, 1024),  # 1:1
             (1152, 896),   # 9:7
             (896, 1152),   # 7:9
@@ -373,12 +392,36 @@ class ImageResolutionAdjuster:
             (640, 1536),   # 5:12
         ]
         
-        options = []
-        for width, height in base_resolutions:
-            ratio = get_aspect_ratio_string(width, height)
-            options.append(f"{ratio} ({width}x{height})")
+        # Midjourney基础分辨率
+        midjourney_resolutions = [
+            (1024, 1024),  # 1:1
+            (1200, 992),   # 6:5
+            (1232, 928),   # 4:3
+            (1344, 896),   # 3:2
+            (1456, 816),   # 16:9
+            (1536, 768),   # 2:1
+            (768, 1536),   # 1:2
+            (816, 1456),   # 9:16
+            (896, 1344),   # 2:3
+            (928, 1232),   # 3:4
+            (992, 1200),   # 5:6
+        ]
         
-        return options
+        # 合并所有分辨率并去重
+        all_resolutions = list(set(sdxl_resolutions + midjourney_resolutions))
+        
+        # 创建带有比例值的元组列表
+        resolution_ratios = []
+        for width, height in all_resolutions:
+            ratio = width / height  # 计算实际比例值
+            ratio_str = get_aspect_ratio_string(width, height)
+            resolution_ratios.append((ratio, f"{ratio_str} ({width}x{height})"))
+        
+        # 按比例值排序（从小到大）
+        resolution_ratios.sort(key=lambda x: x[0])
+        
+        # 只返回分辨率字符串
+        return [item[1] for item in resolution_ratios]
 
     @classmethod
     def INPUT_TYPES(s):
@@ -409,32 +452,52 @@ class ImageResolutionAdjuster:
         output_images = []
         output_masks = []
         
-        # 从目标分辨率字符串中提取宽高比
-        aspect_ratio = target_resolution.split(" ")[0]
+        # 从目标分辨率字符串中提取宽高比和尺寸
+        import re
+        match = re.search(r'(\d+:\d+)\s*\((\d+)x(\d+)\)', target_resolution)
+        if not match:
+            raise ValueError(f"Invalid resolution format: {target_resolution}")
+        
+        aspect_ratio = match.group(1)
+        base_width = int(match.group(2))
+        base_height = int(match.group(3))
         
         # 计算目标分辨率
-        target_width, target_height, base_width, base_height = calculate_resolution(
-            aspect_ratio, scale_factor, max_width, max_height, min_width, min_height
-        )
+        target_width = int(base_width * scale_factor)
+        target_height = int(base_height * scale_factor)
+        
+        # 应用最大分辨率约束
+        current_max = max(target_width, target_height)
+        if current_max > max_width or current_max > max_height:
+            scale = min(max_width / current_max, max_height / current_max)
+            target_width = int(target_width * scale)
+            target_height = int(target_height * scale)
+        
+        # 应用最小分辨率约束
+        current_min = min(target_width, target_height)
+        if current_min < min_width or current_min < min_height:
+            scale = max(min_width / current_min, min_height / current_min)
+            target_width = int(target_width * scale)
+            target_height = int(target_height * scale)
+        
+        # 确保尺寸为8的倍数
+        target_width = (target_width // 8) * 8
+        target_height = (target_height // 8) * 8
         
         for image in images:
             if extend_mode in ["contain", "cover", "fill", "inside", "outside"]:
                 scaled_image, mask, width, height = resize_image(image, target_width, target_height, method=extend_mode, background_color=background_color)
-                # 更新mask以使用feathering参数
                 mask = calculate_mask((image.shape[1], image.shape[0]), (width, height), extend_mode, feather=feathering, scale_factor=scale_factor)
             elif extend_mode in ["top", "bottom", "left", "right", "center"]:
                 scaled_image, mask, width, height = pad_image(image, target_width, target_height, 
                                                       position=extend_mode, 
                                                       background_color=background_color)
-                # 更新mask以使用feathering参数
                 mask = calculate_mask((image.shape[1], image.shape[0]), (width, height), extend_mode, feather=feathering, scale_factor=scale_factor)
             else:
                 raise ValueError(f"Invalid extend_mode: {extend_mode}")
             
-            # 如果需要添加描边，使用新的函数名
             if add_outline:
                 scaled_image = create_outline(scaled_image, background_color)
-                # 更新mask尺寸以匹配新的图像尺寸
                 mask = F.pad(mask, (1, 1, 1, 1), mode='constant', value=0)
                 width += 2
                 height += 2
@@ -442,11 +505,9 @@ class ImageResolutionAdjuster:
             output_images.append(torch.from_numpy(scaled_image).unsqueeze(0))
             output_masks.append(mask.unsqueeze(0))
         
-        # 合并所有图像和mask
         output_images = torch.cat(output_images, dim=0)
         output_masks = torch.cat(output_masks, dim=0)
         
-        # 如果需要反向mask
         if invert_mask:
             output_masks = 1.0 - output_masks
         
