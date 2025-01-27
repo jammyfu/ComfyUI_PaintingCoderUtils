@@ -65,17 +65,23 @@ function updateCustomResolution(node, width, height) {
     const divisor = gcd(width, height);
     const ratio = `${width/divisor}:${height/divisor}`;
     
-    // 更新分辨率选项
+    // 更新分辨率选项和值
     const resolutionWidget = node.widgets.find(w => w.name === "resolution");
     const customOption = `${ratio} (${width}x${height})`;
     
-    // 直接设置值，不更新选项列表
+    // 更新选项列表，确保只有这一个选项
+    resolutionWidget.options = { values: [customOption] };
     resolutionWidget.value = customOption;
     
     // 触发更新
     if (resolutionWidget.callback) {
         resolutionWidget.callback(customOption);
     }
+    
+    // 强制刷新画布
+    requestAnimationFrame(() => {
+        app.graph.setDirtyCanvas(true);
+    });
 }
 
 // 更新分辨率选项
@@ -90,8 +96,10 @@ function updatePlusResolutionOptions(node, mode, style, triggerUpdate = true) {
     }
 
     if (style === "Custom") {
-        // Custom模式下保持当前值不变
-        return;
+        // Custom模式下，只保留一个选项
+        const defaultRes = getDefaultResolution(mode);
+        resolutionWidget.options = { values: [defaultRes] };
+        resolutionWidget.value = defaultRes;
     } else {
         // 根据风格选择对应的分辨率选项
         const resolutionOptions = style === "Midjourney" ? midjourneyResolutionOptions : sdxlResolutionOptions;
@@ -346,20 +354,14 @@ function showCustomResolutionDialog(node, onConfirm) {
             if (modeWidget && modeWidget.value !== mode) {
                 console.log("[CustomDialog] Updating mode to:", mode);
                 modeWidget.value = mode;
-                await new Promise(resolve => {
-                    if (modeWidget.callback) {
-                        modeWidget.callback(mode);
-                    }
-                    resolve();
-                });
+                if (modeWidget.callback) {
+                    modeWidget.callback(mode);
+                }
             }
             
-            // 调用回调并等待完成
-            console.log("[CustomDialog] Calling onConfirm callback");
-            await new Promise(resolve => {
-                onConfirm(width, height);
-                resolve();
-            });
+            // 更新分辨率
+            console.log("[CustomDialog] Updating resolution with dimensions:", { width, height });
+            updateCustomResolution(node, width, height);
             
             // 等待一帧以确保所有更新完成
             await new Promise(resolve => requestAnimationFrame(resolve));
@@ -369,7 +371,7 @@ function showCustomResolutionDialog(node, onConfirm) {
             closeDialog();
         } catch (error) {
             console.error("[CustomDialog] Error in confirm button handler:", error);
-            isDialogOpen = false;  // 确保错误时也重置状态
+            isDialogOpen = false;
         }
         
         return false;
@@ -382,13 +384,7 @@ function showCustomResolutionDialog(node, onConfirm) {
         e.stopPropagation();
         
         try {
-            // 更新为当前mode的默认分辨率
-            const modeWidget = node.widgets.find(w => w.name === "mode");
-            const defaultRes = getDefaultResolution(modeWidget.value);
-            const resolutionWidget = node.widgets.find(w => w.name === "resolution");
-            resolutionWidget.options = { values: [defaultRes] };
-            resolutionWidget.value = defaultRes;
-            
+            // 直接关闭对话框，不修改resolution的值
             closeDialog();
             console.log("[CustomDialog] Dialog cancelled successfully");
         } catch (error) {
@@ -429,6 +425,36 @@ function setupPlusSizeNode(nodeType, nodeData, app) {
         const styleWidget = this.widgets.find(w => w.name === "style");
         const resolutionWidget = this.widgets.find(w => w.name === "resolution");
         
+        // 初始化resolution选项
+        if (styleWidget && resolutionWidget) {
+            const currentStyle = styleWidget.value;
+            const currentMode = modeWidget.value;
+            
+            // 根据当前style和mode初始化resolution选项
+            if (currentStyle === "Custom") {
+                const defaultRes = getDefaultResolution(currentMode);
+                resolutionWidget.options = { values: [defaultRes] };
+                resolutionWidget.value = defaultRes;
+            } else {
+                const resolutionOptions = currentStyle === "Midjourney" ? 
+                    midjourneyResolutionOptions[currentMode] : 
+                    sdxlResolutionOptions[currentMode];
+                resolutionWidget.options = { values: resolutionOptions || [] };
+                resolutionWidget.value = resolutionOptions?.[0] || "";
+            }
+
+            // 为resolution widget添加点击事件
+            const originalResolutionCallback = resolutionWidget.callback;
+            resolutionWidget.callback = (value) => {
+                // 如果当前是Custom模式，点击时显示对话框
+                if (styleWidget.value === "Custom" && !isDialogOpen) {
+                    showCustomResolutionDialog(this);
+                }
+                originalResolutionCallback?.call(this, value);
+            };
+        }
+        
+        // 设置mode的回调
         if (modeWidget) {
             const originalModeCallback = modeWidget.callback;
             modeWidget.callback = (value) => {
@@ -446,36 +472,36 @@ function setupPlusSizeNode(nodeType, nodeData, app) {
             };
         }
         
+        // 修改style的回调
         if (styleWidget) {
-            // 记录初始值，但不触发对话框
             styleWidget._last_value = styleWidget.value;
             
             const originalCallback = styleWidget.callback;
             styleWidget.callback = (value) => {
                 if (value === "Custom") {
-                    // 只在没有对话框打开时显示对话框
-                    if (!isDialogOpen) {
-                        showCustomResolutionDialog(this, (width, height) => {
-                            updateCustomResolution(this, width, height);
-                        });
+                    if (styleWidget._last_value === "Custom") {
+                        // 如果已经是Custom模式，保留当前resolution值但仍然显示对话框
+                        console.log("[StyleWidget] Already in Custom mode, showing dialog");
+                        if (!isDialogOpen) {
+                            showCustomResolutionDialog(this);
+                        }
+                    } else {
+                        // 首次切换到Custom模式时，设置为当前mode的默认值
+                        const modeWidget = this.widgets.find(w => w.name === "mode");
+                        const defaultRes = getDefaultResolution(modeWidget.value);
+                        const resolutionWidget = this.widgets.find(w => w.name === "resolution");
+                        resolutionWidget.options = { values: [defaultRes] };
+                        resolutionWidget.value = defaultRes;
+                        
+                        // 显示对话框
+                        if (!isDialogOpen) {
+                            showCustomResolutionDialog(this);
+                        }
                     }
                 } else {
                     updatePlusResolutionOptions(this, this.widgets.find(w => w.name === "mode").value, value);
                 }
                 styleWidget._last_value = value;
-                originalCallback?.call(this, value);
-            };
-        }
-        
-        if (resolutionWidget) {
-            const originalCallback = resolutionWidget.callback;
-            resolutionWidget.callback = (value) => {
-                const styleWidget = this.widgets.find(w => w.name === "style");
-                if (styleWidget.value === "Custom" && !isDialogOpen) {
-                    showCustomResolutionDialog(this, (width, height) => {
-                        updateCustomResolution(this, width, height);
-                    });
-                }
                 originalCallback?.call(this, value);
             };
         }
@@ -490,19 +516,33 @@ function setupPlusSizeNode(nodeType, nodeData, app) {
         
         const modeWidget = this.widgets?.find(w => w.name === "mode");
         const styleWidget = this.widgets?.find(w => w.name === "style");
+        const resolutionWidget = this.widgets?.find(w => w.name === "resolution");
         
-        if (modeWidget && styleWidget) {
-            // 记录初始值，但不触发对话框
+        if (modeWidget && styleWidget && resolutionWidget) {
+            // 记录初始值
             if (styleWidget) {
                 styleWidget._last_value = styleWidget.value;
             }
             
-            // 只更新分辨率选项，不显示对话框
-            setTimeout(() => {
-                if (styleWidget.value !== "Custom") {
-                    updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value, false);
+            // 初始化resolution选项
+            if (styleWidget.value === "Custom") {
+                // Custom模式保持当前值
+                const currentValue = resolutionWidget.value;
+                resolutionWidget.options = { values: [currentValue] };
+            } else {
+                // 更新分辨率选项
+                updatePlusResolutionOptions(this, modeWidget.value, styleWidget.value, false);
+            }
+
+            // 为resolution widget添加点击事件
+            const originalResolutionCallback = resolutionWidget.callback;
+            resolutionWidget.callback = (value) => {
+                // 如果当前是Custom模式，点击时显示对话框
+                if (styleWidget.value === "Custom" && !isDialogOpen) {
+                    showCustomResolutionDialog(this);
                 }
-            }, 0);
+                originalResolutionCallback?.call(this, value);
+            };
         }
 
         return result;
