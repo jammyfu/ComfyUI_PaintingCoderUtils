@@ -15,10 +15,14 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
         return {
             "required": {
                 "mode": (["Landscape", "Portrait", "Square"],),
-                "style": (["SDXL", "Midjourney"],),
-                "resolution": (s.get_resolution_options(),),  # 使用动态方法获取选项
+                "style": (["SDXL", "Midjourney", "Custom"],),  # 添加 Custom 选项
+                "resolution": (s.get_resolution_options(),),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
+            "hidden": {
+                "custom_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
+                "custom_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
+            }
         }
 
     RETURN_TYPES = (any, "INT", "INT")
@@ -54,7 +58,7 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
             (1024, 1024),  # 1:1
             (1200, 992),   # 6:5
             (1232, 928),   # 4:3
-            (1344, 896),   # 3:2
+            (1344, 896),   # 3:2 
             (1456, 816),   # 16:9
             (1536, 768),   # 2:1
         ]
@@ -143,10 +147,23 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
             return self.get_midjourney_resolution_options()
         return self.get_sdxl_resolution_options()
 
-    def create_size(self, mode, style, resolution, scale_factor=1.0):
+    def create_size(self, mode, style, resolution, scale_factor=1.0, custom_width=1024, custom_height=1024):
         """创建图像尺寸，支持不同风格"""
         try:
             print(f"[ImageSizeCreatorPlus] Creating size with style: {style}")
+            
+            if style == "Custom":
+                # 使用自定义尺寸
+                width = int(custom_width * scale_factor)
+                height = int(custom_height * scale_factor)
+                # 确保是8的倍数
+                width = (width // 8) * 8
+                height = (height // 8) * 8
+                # 创建分辨率字符串
+                gcd_val = gcd(width, height)
+                ratio = f"{width//gcd_val}:{height//gcd_val}"
+                resolution = f"{ratio} ({width}x{height})"
+                return (resolution, width, height)
             
             # 获取当前风格的有效分辨率选项
             valid_resolutions = self.get_valid_resolutions(style)
@@ -184,8 +201,11 @@ class ImageSizeCreatorPlus(ImageSizeCreator):
         """验证输入参数"""
         style = kwargs.get("style", "SDXL")
         resolution = kwargs.get("resolution", "")
-        valid_resolutions = self.get_valid_resolutions(style)
         
+        if style == "Custom":
+            return {}  # 自定义模式不需要验证分辨率
+            
+        valid_resolutions = self.get_valid_resolutions(style)
         if resolution not in valid_resolutions:
             return {"resolution": valid_resolutions[0]}
         return {}
@@ -198,11 +218,15 @@ class ImageLatentCreatorPlus(ImageLatentCreator, ImageSizeCreatorPlus):
         return {
             "required": {
                 "mode": (["Landscape", "Portrait", "Square"],),
-                "style": (["SDXL", "Midjourney"],),
+                "style": (["SDXL", "Midjourney", "Custom"],),  # 添加 Custom 选项
                 "resolution": (s.get_resolution_options(),),
                 "batch_size": ("INT", {"default": 1, "min": 1, "max": 64}),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
+            "hidden": {
+                "custom_width": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
+                "custom_height": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
+            }
         }
 
     RETURN_TYPES = ("LATENT", any, "INT", "INT", "INT")
