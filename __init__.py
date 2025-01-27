@@ -36,25 +36,29 @@ from .modules.utils.output_converter import OutputToTextConverter
 
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
-    "PaintingCoder::MaskPreview": MaskPreview,
+    "PaintingCoder::DynamicImageCombiner": DynamicImageCombiner,
+    "PaintingCoder::ImageLatentCreator": ImageLatentCreator,
+    "PaintingCoder::ImageLatentCreatorPlus": ImageLatentCreatorPlus,
+    "PaintingCoder::ImageResolutionAdjuster": ImageResolutionAdjuster,
     "PaintingCoder::ImageSizeCreator": ImageSizeCreator,
     "PaintingCoder::ImageSizeCreatorPlus": ImageSizeCreatorPlus,
     "PaintingCoder::ImageToBase64": ImageToBase64,
-    "PaintingCoder::ImageLatentCreator": ImageLatentCreator,
-    "PaintingCoder::ImageLatentCreatorPlus": ImageLatentCreatorPlus,
-    "PaintingCoder::DynamicImageCombiner": DynamicImageCombiner,
+
     "PaintingCoder::DynamicMaskCombiner": DynamicMaskCombiner,
-    "PaintingCoder::ImageResolutionAdjuster": ImageResolutionAdjuster,
-    "PaintingCoder::TextCombiner": TextCombiner,
+    "PaintingCoder::MaskPreview": MaskPreview,
+    "PaintingCoder::ImageSwitch": ImageSwitch,
+    "PaintingCoder::LatentSwitch": LatentSwitch,
+    "PaintingCoder::MaskSwitch": MaskSwitch,
+    "PaintingCoder::TextSwitch": TextSwitch,
+    
+    "PaintingCoder::MultilineTextInput": MultilineTextInput,
+    "PaintingCoder::OutputToTextConverter": OutputToTextConverter,
+    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
     "PaintingCoder::ShowTextPlus": ShowTextPlus,
     "PaintingCoder::SimpleTextInput": SimpleTextInput,
-    "PaintingCoder::MultilineTextInput": MultilineTextInput,
-    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": RemoveEmptyLinesAndLeadingSpaces,
-    "PaintingCoder::TextSwitch": TextSwitch, 
-    "PaintingCoder::MaskSwitch": MaskSwitch,
-    "PaintingCoder::LatentSwitch": LatentSwitch,
+    "PaintingCoder::TextCombiner": TextCombiner,
+    
     "PaintingCoder::WebImageLoader": WebImageLoader,
-    "PaintingCoder::OutputToTextConverter": OutputToTextConverter,
 }
 
 # 节点显示名称映射
