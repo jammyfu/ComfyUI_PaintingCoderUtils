@@ -59,26 +59,35 @@ NODE_CLASS_MAPPINGS = {
 
 # 节点显示名称映射
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "PaintingCoder::MaskPreview": "Mask Preview 🎭",
-    "PaintingCoder::ImageSizeCreator": "Image Size Creator 📏",
-    "PaintingCoder::ImageSizeCreatorPlus": "Image Size Creator Plus ✨",
+    # Image Nodes
+    "PaintingCoder::DynamicImageCombiner": "Dynamic Image Input 🖼️",
     "PaintingCoder::ImageLatentCreator": "Image Latent Creator 🎨",
     "PaintingCoder::ImageLatentCreatorPlus": "Image Latent Creator Plus ✨",
-    "PaintingCoder::ImageToBase64": "Image To Base64 🎨", 
-    "PaintingCoder::DynamicImageCombiner": "Dynamic Image Input 🖼️",
-    "PaintingCoder::DynamicMaskCombiner": "Dynamic Mask Input 🎭",
     "PaintingCoder::ImageResolutionAdjuster": "Image Resolution Adjuster 📐",
-    "PaintingCoder::TextCombiner": "Text Combiner ✍️",
+    "PaintingCoder::ImageSizeCreator": "Image Size Creator 📏",
+    "PaintingCoder::ImageSizeCreatorPlus": "Image Size Creator Plus ✨",
+    "PaintingCoder::ImageToBase64": "Image To Base64 🎨",
+    
+    # Mask Nodes
+    "PaintingCoder::DynamicMaskCombiner": "Dynamic Mask Input 🎭",
+    "PaintingCoder::MaskPreview": "Mask Preview 🎭",
+    
+    # Switch Nodes
+    "PaintingCoder::ImageSwitch": "Image Switch 🔄",
+    "PaintingCoder::LatentSwitch": "Latent Switch 🔄",
+    "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
+    "PaintingCoder::TextSwitch": "Text Switch 🔄",
+    
+    # Text Nodes
+    "PaintingCoder::MultilineTextInput": "Multiline Text Input 📝",
+    "PaintingCoder::OutputToTextConverter": "Output To Text Converter 📝",
+    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
     "PaintingCoder::ShowTextPlus": "Show Text Plus 📝",
     "PaintingCoder::SimpleTextInput": "Simple Text Input 📝",
-    "PaintingCoder::MultilineTextInput": "Multiline Text Input 📝",
-    "PaintingCoder::RemoveEmptyLinesAndLeadingSpaces": "Remove Empty Lines And Leading Spaces 📝",
-    "PaintingCoder::TextSwitch": "Text Switch 🔄",
-    "PaintingCoder::ImageSwitch": "Image Switch 🔄",
-    "PaintingCoder::MaskSwitch": "Mask Switch 🔄",
-    "PaintingCoder::LatentSwitch": "Latent Switch 🔄",
+    "PaintingCoder::TextCombiner": "Text Combiner ✍️",
+    
+    # Web Nodes
     "PaintingCoder::WebImageLoader": "Web Image Loader 🌐（URL Or Base64）",
-    "PaintingCoder::OutputToTextConverter": "Output To Text Converter 📝",
 }
 
 # Web 目录配置
