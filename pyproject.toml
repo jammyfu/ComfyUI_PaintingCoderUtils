@@ -1,7 +1,7 @@
 [project]
 name = "painting_coder_utils"
 description = "Powerful tools for image and text processing, including cross-platform workflow fixes, optimized resolution, dynamic text/image combos, and batch processing.  Unlock seamless AI art creation and boost your productivity!"
-version = "0.3.4"
+version = "0.3.5"
 license = {file = "LICENSE"}
 dependencies = ["numpy>=1.21.0", "Pillow>=9.0.0", "torch>=1.7.0", "gradio>=4.0.0"]
 
