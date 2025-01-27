@@ -195,12 +195,10 @@ class ImageLatentCreatorPlus(ImageLatentCreator, ImageSizeCreatorPlus):
     
     @classmethod
     def INPUT_TYPES(s):
-        base_inputs = ImageLatentCreator.INPUT_TYPES()
-        # 重新排序输入参数
         return {
             "required": {
                 "mode": (["Landscape", "Portrait", "Square"],),
-                "style": (["SDXL", "Midjourney"],), 
+                "style": (["SDXL", "Midjourney"],),
                 "resolution": (s.get_resolution_options(),),
                 "batch_size": ("INT", {"default": 1, "min": 1, "max": 64}),
                 "scale_factor": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
@@ -210,9 +208,19 @@ class ImageLatentCreatorPlus(ImageLatentCreator, ImageSizeCreatorPlus):
     RETURN_TYPES = ("LATENT", any, "INT", "INT", "INT")
     RETURN_NAMES = ("latent", "resolution", "width", "height", "batch_size")
     
-    def validate_inputs(self, **kwargs):
-        """验证输入参数"""
-        return super().validate_inputs(**kwargs)
+    def create_latent(self, mode, style, resolution, batch_size=1, scale_factor=1.0):
+        """创建潜空间，忽略style参数"""
+        # 调用父类的create_size方法获取尺寸
+        resolution, width, height = self.create_size(mode, style, resolution, scale_factor)
+        
+        # 创建标准格式的latent字典
+        latent = {
+            "samples": torch.zeros([batch_size, 4, height // 8, width // 8]),
+            "batch_size": batch_size,
+            "batch_index": list(range(batch_size))
+        }
+        
+        return (latent, resolution, width, height, batch_size)
 
 # 注册节点
 NODE_CLASS_MAPPINGS = {
