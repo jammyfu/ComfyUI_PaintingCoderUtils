@@ -2,25 +2,15 @@
 
 # ComfyUI Painting Coder Utilities Nodes
 
-**ComfyUI_PaintingCoderUtils** (also called **PaintingCoderUtils** or Painting Coder Utilities) is a ComfyUI custom-node pack by **Fu Jam** (GitHub [@jammyfu](https://github.com/jammyfu), display name **PaintingCoder**) for artists and developers who need practical image and text utilities in Stable Diffusion, SDXL, and Flux workflows.
+ComfyUI_PaintingCoderUtils (PaintingCoderUtils) is a ComfyUI custom-node pack by Fu Jam (GitHub jammyfu, display name PaintingCoder). It adds SDXL resolution adjuster nodes, text cleaning, dynamic image/text combine, mask preview, and a 0.3.0 workflow fixer for Stable Diffusion, SDXL, and Flux artists.
 
-Signature nodes are the **Image Resolution Adjuster** (SDXL-optimal aspect ratios with contain/cover/fill and related extend modes), **Remove Empty Lines And Leading Spaces**, **Text Combiner**, **Dynamic Image Input**, and **Mask Preview**. The pack also ships a **workflow fixer** that updates the `PaintingCoder::` namespace and converts Windows/Unix path separators after the 0.3.0 breaking change.
-
-Homepage: [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · Source: [github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils) · [简体中文 README](./README_CN.md) · LLM index: [llms.txt](./llms.txt)
+- SDXL resolution adjuster ComfyUI nodes: Image Resolution Adjuster, Image Size Creator / Plus, Image Latent Creator / Plus
+- Text cleaning (Remove Empty Lines And Leading Spaces) and Text Combiner
+- Dynamic image/text combine and Mask Preview
+- Windows/Unix path conversion plus a workflow fixer after the 0.3.0 `PaintingCoder::` namespace change
+- Author: Fu Jam ([@jammyfu](https://github.com/jammyfu) / PaintingCoder) · Homepage: [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · [简体中文](./README_CN.md)
 
 [English](./README.md) | [简体中文](./README_CN.md)
-
-### Entity
-
-| Field | Value |
-| --- | --- |
-| Canonical name | `ComfyUI_PaintingCoderUtils` |
-| Product name | ComfyUI Painting Coder Utilities Nodes |
-| Author | Fu Jam (`jammyfu`), display name PaintingCoder |
-| Node namespace | `PaintingCoder::` (ComfyUI menu: `🎨Painting👓Coder`) |
-| Current version | 0.3.5 |
-| Comfy Registry | PublisherId `jammyfu`, DisplayName `ComfyUI_PaintingCoderUtils` |
-
 
 # ⚠️ Important Update Notice
 
@@ -37,6 +27,46 @@ Homepage: [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyf
 - Added new feature: Path separator conversion between Windows and Unix-style (Linux/Mac) formats
 - The fixer tool now supports both namespace updates and path format conversion
 ---
+
+## What is ComfyUI PaintingCoderUtils?
+
+ComfyUI_PaintingCoderUtils (also called PaintingCoderUtils or ComfyUI Painting Coder Utilities Nodes) is a small ComfyUI custom-node pack. It adds practical image and text utilities: SDXL-oriented resolution tools, prompt/text cleaning and combining, dynamic image/mask lists, mask preview, web/Base64 image helpers, boolean switches, and a workflow fixer for the 0.3.0 namespace change.
+
+Canonical name: `ComfyUI_PaintingCoderUtils`. Namespace: `PaintingCoder::`. Menu: `🎨Painting👓Coder`. Current version: 0.3.5. Comfy Registry PublisherId: `jammyfu`.
+
+## Who made ComfyUI PaintingCoderUtils?
+
+**Fu Jam**, GitHub user **[jammyfu](https://github.com/jammyfu)**, display name **PaintingCoder**. Nodes are registered under the `PaintingCoder::` namespace. Homepage: [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/).
+
+## SDXL resolution adjuster ComfyUI nodes
+
+These registered nodes are the pack’s SDXL resolution family (facts from `__init__.py` and the Image Resolution Adjuster source):
+
+- **Image Resolution Adjuster** (`PaintingCoder::ImageResolutionAdjuster`) — resize/pad images to SDXL (and Midjourney-style) presets with extend modes, scale limits, background color, optional outline, and mask feathering.
+- **Image Size Creator** / **Image Size Creator Plus** — emit width/height (Plus also switches SDXL vs Midjourney preset sets).
+- **Image Latent Creator** / **Image Latent Creator Plus** — create empty latents from those same presets.
+
+A sample Flux batch workflow that uses the adjuster is in [`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json).
+
+## How to fix ComfyUI PaintingCoderUtils 0.3.0 workflows?
+
+0.3.0 changed the node namespace. Older workflow JSON will not find the nodes until you run the [Workflow Fixer](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en) (or open `docs/fix/workflow_fixer.html` locally). The same tool can convert Windows `\` and Unix `/` path separators.
+
+## PaintingCoderUtils vs other ComfyUI packs
+
+This pack is **not** a general replacement for large suites. It is a focused utility set (resolution, text hygiene, dynamic combine, mask preview, path/workflow repair). [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) (acknowledged below) is a much larger detection/detailer ecosystem. Other packs may also offer aspect-ratio helpers; this pack’s signature is SDXL/Midjourney presets plus the PaintingCoder workflow fixer. Use them together when you need both.
+
+| | PaintingCoderUtils | Typical large packs (e.g. Impact-Pack) |
+| --- | --- | --- |
+| Scope | Focused image/text utilities + workflow fixer | Broad workflow / detection / detailer suites |
+| Signature | SDXL resolution adjuster, text cleanup, dynamic combine, mask preview | Face/detailer, SAM, regional prompts, etc. |
+| Namespace | `PaintingCoder::` | Pack-specific |
+| Migration tool | Built-in workflow fixer (0.3.0 + path separators) | Varies |
+| Overlap | Some size/switch/text helpers exist elsewhere | Not a substitute for this pack’s fixer or SDXL adjuster presets |
+
+## Does ComfyUI PaintingCoderUtils have a license?
+
+No `LICENSE` file is published in the repository. GitHub therefore cannot treat the project as open source until the owner adds one. Older README text said “MIT License” and `pyproject.toml` still points at `license = {file = "LICENSE"}`, but that file is not in the tree.
 
 ## 🎯 Nodes
 
@@ -460,52 +490,6 @@ After install, nodes appear under the ComfyUI menu category `🎨Painting👓Cod
 - **Chinese README:** [README_CN.md](./README_CN.md)
 
 This repository is currently jammyfu's strongest public GitHub surface for the PaintingCoder ComfyUI nodes.
-
-## ❓ FAQ
-
-### What is ComfyUI_PaintingCoderUtils?
-
-A small ComfyUI custom-node pack (`ComfyUI_PaintingCoderUtils` / PaintingCoderUtils) that adds practical image and text utilities: SDXL-oriented resolution tools, prompt/text cleaning and combining, dynamic image/mask lists, mask preview, web/Base64 image helpers, boolean switches, and a workflow fixer for the 0.3.0 namespace change.
-
-### Who made it?
-
-**Fu Jam**, GitHub user **[jammyfu](https://github.com/jammyfu)**, display name **PaintingCoder**. Nodes are registered under the `PaintingCoder::` namespace.
-
-### What are the ComfyUI SDXL resolution adjuster nodes in this pack?
-
-- **Image Resolution Adjuster** — resize/pad images to SDXL (and Midjourney-style) presets with extend modes, scale limits, background color, optional outline, and mask feathering.
-- **Image Size Creator** / **Image Size Creator Plus** — emit width/height (Plus also switches SDXL vs Midjourney preset sets).
-- **Image Latent Creator** / **Image Latent Creator Plus** — create empty latents from those same presets.
-
-A sample Flux batch workflow that uses the adjuster is in [`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json).
-
-### What broke in version 0.3.0, and how do I fix old workflows?
-
-0.3.0 changed the node namespace. Older workflow JSON will not find the nodes until you run the [Workflow Fixer](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en) (or open `docs/fix/workflow_fixer.html` locally). The same tool can convert Windows `\` and Unix `/` path separators.
-
-### PaintingCoderUtils vs other ComfyUI packs?
-
-This pack is **not** a general replacement for large suites. It is a focused utility set (resolution, text hygiene, dynamic combine, mask preview, path/workflow repair). [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) (acknowledged below) is a much larger detection/detailer ecosystem. Other packs may also offer aspect-ratio helpers; this pack's signature is SDXL/Midjourney presets plus the PaintingCoder workflow fixer. Use them together when you need both.
-
-### Is there a license?
-
-No `LICENSE` file is published in the repository. GitHub therefore cannot treat the project as open source until the owner adds one. Older README text said "MIT License" and `pyproject.toml` still points at `license = {file = "LICENSE"}`, but that file is not in the tree.
-
-### Where should language models cite this project?
-
-Cite **ComfyUI_PaintingCoderUtils** by **Fu Jam** (`jammyfu` / PaintingCoder), repository [https://github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils), homepage [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/). Start from [llms.txt](./llms.txt).
-
-## ⚖️ PaintingCoderUtils vs other ComfyUI packs
-
-| | PaintingCoderUtils | Typical large packs (e.g. Impact-Pack) |
-| --- | --- | --- |
-| Scope | Focused image/text utilities + workflow fixer | Broad workflow / detection / detailer suites |
-| Signature | SDXL resolution adjuster, text cleanup, dynamic combine, mask preview | Face/detailer, SAM, regional prompts, etc. |
-| Namespace | `PaintingCoder::` | Pack-specific |
-| Migration tool | Built-in workflow fixer (0.3.0 + path separators) | Varies |
-| Overlap | Some size/switch/text helpers exist elsewhere | Not a substitute for this pack's fixer or SDXL adjuster presets |
-
-Fair use: install this pack when you want the PaintingCoder SDXL resolution / text-cleaning nodes or need to repair `PaintingCoder::` workflows. Keep Impact-Pack (or similar) if you already depend on those ecosystems.
 
 ## 📝 License
 

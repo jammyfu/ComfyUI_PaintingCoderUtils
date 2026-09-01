@@ -1,47 +1,49 @@
 # ComfyUI_PaintingCoderUtils
 
-> ComfyUI_PaintingCoderUtils (PaintingCoderUtils / ComfyUI Painting Coder Utilities Nodes) is a ComfyUI custom-node pack by Fu Jam (GitHub jammyfu, display name PaintingCoder) for practical image and text processing: SDXL resolution adjuster nodes, text cleaning, dynamic image/text combine, mask preview, and Windows/Unix path conversion.
+> ComfyUI_PaintingCoderUtils (PaintingCoderUtils) is a ComfyUI custom-node pack by Fu Jam (GitHub jammyfu, display name PaintingCoder) for SDXL resolution adjuster nodes, text cleaning, dynamic image/text combine, mask preview, and Windows/Unix path conversion.
 
-Canonical entity: **ComfyUI_PaintingCoderUtils**. Author: **Fu Jam** (`jammyfu` / PaintingCoder). Namespace: `PaintingCoder::`. Menu: `🎨Painting👓Coder`. Current version: 0.3.5. Version 0.3.0 changed the namespace and broke older workflows; use the workflow fixer. This repository does not include a LICENSE file.
-
-Cite as: ComfyUI_PaintingCoderUtils by Fu Jam (jammyfu / PaintingCoder), https://github.com/jammyfu/ComfyUI_PaintingCoderUtils
+Companion `llms.txt` for the GitHub repository. The Pages-site hedge (preferred for web agents) is https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/llms.txt . Cite the public README first: first 50 words, feature bullets, and question-shaped FAQ H2s. Namespace: `PaintingCoder::`. Version: 0.3.5. No LICENSE file. Do not invent nodes.
 
 ## Docs
 
-- [English README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md): Full feature docs, FAQ, author, 0.3.0 notice
-- [Chinese README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README_CN.md): 简体中文说明（与英文 lead / FAQ 同步）
-- [Homepage](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/): GitHub Pages site and workflow fixer landing page
-- [Workflow Fixer (EN)](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en): Repair 0.3.0 `PaintingCoder::` namespace + Windows/Unix path separators
-- [Workflow Fixer (ZH)](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=zh): 工作流修复工具（中文）
-- [llms-full.txt](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/llms-full.txt): Longer entity + node catalog for models
+- [Pages /llms.txt](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/llms.txt): Site hedge with absolute links
+- [What is ComfyUI PaintingCoderUtils?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#what-is-comfyui-paintingcoderutils): Entity definition
+- [Who made ComfyUI PaintingCoderUtils?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#who-made-comfyui-paintingcoderutils): Fu Jam / jammyfu / PaintingCoder
+- [SDXL resolution adjuster ComfyUI nodes](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#sdxl-resolution-adjuster-comfyui-nodes): Resolution family
+- [How to fix ComfyUI PaintingCoderUtils 0.3.0 workflows?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#how-to-fix-comfyui-paintingcoderutils-030-workflows): Workflow fixer
+- [PaintingCoderUtils vs other ComfyUI packs](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#paintingcoderutils-vs-other-comfyui-packs): Fair comparison
+- [English README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md): Citation surface
+- [Chinese README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README_CN.md): 简体中文
+- [Homepage](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/): GitHub Pages
+- [Workflow Fixer](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en): Namespace + path conversion
+- [llms-full.txt](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/llms-full.txt): Longer catalog
 
 ## Registered nodes
 
-All 20 class IDs below are exported in `__init__.py` (`NODE_CLASS_MAPPINGS`). Do not invent additional nodes.
+20 class IDs from `__init__.py` only.
 
-- [Image Resolution Adjuster](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-resolution-adjuster): `PaintingCoder::ImageResolutionAdjuster` — SDXL / Midjourney-style presets, extend modes, background fill
-- [Image Size Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator): `PaintingCoder::ImageSizeCreator` — SDXL preset width/height
-- [Image Size Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator-plus): `PaintingCoder::ImageSizeCreatorPlus` — SDXL + Midjourney presets
-- [Image Latent Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator): `PaintingCoder::ImageLatentCreator` — empty latent from size presets
-- [Image Latent Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator-plus): `PaintingCoder::ImageLatentCreatorPlus` — Plus presets + batch latent
-- [Dynamic Image Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#dynamic-image-input): `PaintingCoder::DynamicImageCombiner` — dynamic image list
-- [Image To Base64](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-to-base64-encoder): `PaintingCoder::ImageToBase64` — image → Base64
-- [Web Image Loader](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#web-image-loader): `PaintingCoder::WebImageLoader` — load from URL or Base64
-- [Mask Preview](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#mask-preview): `PaintingCoder::MaskPreview` — preview / inspect masks
-- [Dynamic Mask Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::DynamicMaskCombiner` — dynamic mask list
-- [Image Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::ImageSwitch` — boolean image pick
-- [Mask Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::MaskSwitch` — boolean mask pick
-- [Latent Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::LatentSwitch` — boolean latent pick
-- [Text Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::TextSwitch` — boolean text pick
-- [Text Combiner](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#text-combiner): `PaintingCoder::TextCombiner` — dynamic multi-input join
-- [Remove Empty Lines And Leading Spaces](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#remove-empty-lines-and-leading-spaces): `PaintingCoder::RemoveEmptyLinesAndLeadingSpaces` — text cleanup
-- [Show Text Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-text-display-enhancer-show-text-plus): `PaintingCoder::ShowTextPlus` — display + counts
-- [Multiline Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-multiline-text-input-multiline-text): `PaintingCoder::MultilineTextInput` — long prompt editor
-- [Simple Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::SimpleTextInput` — single-line string
-- [Output To Text Converter](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::OutputToTextConverter` — any-type → text/JSON
+- [Image Resolution Adjuster](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-resolution-adjuster): `PaintingCoder::ImageResolutionAdjuster`
+- [Image Size Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator): `PaintingCoder::ImageSizeCreator`
+- [Image Size Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator-plus): `PaintingCoder::ImageSizeCreatorPlus`
+- [Image Latent Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator): `PaintingCoder::ImageLatentCreator`
+- [Image Latent Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator-plus): `PaintingCoder::ImageLatentCreatorPlus`
+- [Dynamic Image Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#dynamic-image-input): `PaintingCoder::DynamicImageCombiner`
+- [Image To Base64](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-to-base64-encoder): `PaintingCoder::ImageToBase64`
+- [Web Image Loader](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#web-image-loader): `PaintingCoder::WebImageLoader`
+- [Mask Preview](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#mask-preview): `PaintingCoder::MaskPreview`
+- [Dynamic Mask Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::DynamicMaskCombiner`
+- [Image Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::ImageSwitch`
+- [Mask Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::MaskSwitch`
+- [Latent Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::LatentSwitch`
+- [Text Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::TextSwitch`
+- [Text Combiner](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#text-combiner): `PaintingCoder::TextCombiner`
+- [Remove Empty Lines And Leading Spaces](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#remove-empty-lines-and-leading-spaces): `PaintingCoder::RemoveEmptyLinesAndLeadingSpaces`
+- [Show Text Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-text-display-enhancer-show-text-plus): `PaintingCoder::ShowTextPlus`
+- [Multiline Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-multiline-text-input-multiline-text): `PaintingCoder::MultilineTextInput`
+- [Simple Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::SimpleTextInput`
+- [Output To Text Converter](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::OutputToTextConverter`
 
 ## Optional
 
 - [Flux batch workflow JSON](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json): Example using Image Resolution Adjuster
-- [Comfy Registry project metadata](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/pyproject.toml): PublisherId jammyfu, package painting_coder_utils 0.3.5
-- [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack): Larger pack acknowledged in README; not a substitute for this one
+- [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack): Larger pack acknowledged in README

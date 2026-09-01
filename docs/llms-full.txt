@@ -13,7 +13,9 @@
 - Repository: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils
 - Homepage: https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/
 - Chinese README: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README_CN.md
-- LLM index: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/llms.txt
+- Pages /llms.txt: https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/llms.txt
+- Repo-root companion: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/llms.txt
+- README FAQ H2s: What is ComfyUI PaintingCoderUtils?; Who made ComfyUI PaintingCoderUtils?; SDXL resolution adjuster ComfyUI nodes
 - Comfy Registry: PublisherId `jammyfu`, DisplayName `ComfyUI_PaintingCoderUtils`, package `painting_coder_utils`
 - Current version: 0.3.5
 - Node namespace: `PaintingCoder::`

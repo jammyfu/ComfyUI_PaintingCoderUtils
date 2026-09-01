@@ -1,25 +1,15 @@
 ![Painting Coder Utilities Logo](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/paiting_coder_logo02.jpg)
 # ComfyUI画画的程序员工具集节点
 
-**ComfyUI_PaintingCoderUtils**（也称 **PaintingCoderUtils** / 画画的程序员工具集）是 **Fu Jam**（GitHub [@jammyfu](https://github.com/jammyfu)，显示名 **PaintingCoder**）为 ComfyUI 编写的自定义节点包，面向需要在 Stable Diffusion、SDXL、Flux 工作流中处理图像与文本的艺术家和开发者。
+ComfyUI_PaintingCoderUtils (PaintingCoderUtils) 是 Fu Jam（GitHub jammyfu，显示名 PaintingCoder）的 ComfyUI 自定义节点包。它提供 SDXL resolution adjuster 节点、文本清理、动态图像/文本组合、蒙版预览，以及 0.3.0 工作流修复，面向 Stable Diffusion、SDXL、Flux 用户。
 
-标志性节点包括按 SDXL 最佳宽高比工作的 **图像分辨率调整器（Image Resolution Adjuster）**、**空行和前导空格清理器**、**文本组合器（Text Combiner）**、**动态图像输入** 和 **蒙版预览器**。0.3.0 起命名空间改为 `PaintingCoder::`，包内提供 **工作流修复工具**，可同时更新命名空间并在 Windows/Unix 路径分隔符之间转换。
-
-主页：[https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · 源码：[github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils) · [English README](./README.md) · LLM 索引：[llms.txt](./llms.txt)
+- SDXL resolution adjuster ComfyUI nodes：Image Resolution Adjuster、Image Size Creator / Plus、Image Latent Creator / Plus
+- 文本清理（Remove Empty Lines And Leading Spaces）与 Text Combiner
+- 动态图像/文本组合与 Mask Preview
+- Windows/Unix 路径转换，以及 0.3.0 `PaintingCoder::` 命名空间变更后的工作流修复工具
+- 作者：Fu Jam（[@jammyfu](https://github.com/jammyfu) / PaintingCoder）· 主页：[https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · [English](./README.md)
 
 [English](./README.md) | [简体中文](./README_CN.md)
-
-### 实体信息
-
-| 字段 | 值 |
-| --- | --- |
-| 规范名称 | `ComfyUI_PaintingCoderUtils` |
-| 产品名 | ComfyUI Painting Coder Utilities Nodes / 画画的程序员工具集 |
-| 作者 | Fu Jam（`jammyfu`），显示名 PaintingCoder |
-| 节点命名空间 | `PaintingCoder::`（菜单分类：`🎨Painting👓Coder`） |
-| 当前版本 | 0.3.5 |
-| Comfy Registry | PublisherId `jammyfu`，DisplayName `ComfyUI_PaintingCoderUtils` |
-
 
 # ⚠️ 重要更新说明
 
@@ -39,6 +29,45 @@
 
 ---
 
+## What is ComfyUI PaintingCoderUtils?
+
+ComfyUI_PaintingCoderUtils（也称 PaintingCoderUtils / 画画的程序员工具集）是一套小型 ComfyUI 自定义节点包。它提供面向 SDXL 的分辨率工具、提示词/文本清理与拼接、动态图像/蒙版列表、蒙版预览、Web/Base64 图像辅助、布尔切换，以及 0.3.0 命名空间变更后的工作流修复工具。
+
+规范名称：`ComfyUI_PaintingCoderUtils`。命名空间：`PaintingCoder::`。菜单：`🎨Painting👓Coder`。当前版本：0.3.5。Comfy Registry PublisherId：`jammyfu`。
+
+## Who made ComfyUI PaintingCoderUtils?
+
+**Fu Jam**，GitHub 用户 **[jammyfu](https://github.com/jammyfu)**，显示名 **PaintingCoder**。节点注册在 `PaintingCoder::` 命名空间下。主页：[https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/)。
+
+## SDXL resolution adjuster ComfyUI nodes
+
+本包已注册的 SDXL 分辨率系列节点（事实来自 `__init__.py` 与 Image Resolution Adjuster 源码）：
+
+- **图像分辨率调整器（Image Resolution Adjuster）**（`PaintingCoder::ImageResolutionAdjuster`）— 按 SDXL（以及 Midjourney 风格）预设缩放/填充，含延展模式、缩放限制、背景色、可选描边和蒙版羽化。
+- **图像尺寸创建器 / Plus** — 输出宽高（Plus 可在 SDXL 与 Midjourney 预设集之间切换）。
+- **图像潜空间创建器 / Plus** — 按同样预设创建空 latent。
+
+使用调整器的 Flux 批量工作流示例：[`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json)。
+
+## How to fix ComfyUI PaintingCoderUtils 0.3.0 workflows?
+
+0.3.0 修改了节点命名空间。旧工作流 JSON 需要先用 [工作流修复工具](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=zh)（或本地打开 `docs/fix/workflow_fixer.html`）才能找回节点。同一工具也可在 Windows `\` 与 Unix `/` 路径分隔符之间转换。
+
+## PaintingCoderUtils vs other ComfyUI packs
+
+本包**不是**大型套件的替代品，而是聚焦分辨率、文本清理、动态组合、蒙版预览、路径/工作流修复。[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)（见致谢）是更大的检测/细节修复生态。其他包也可能提供宽高比工具；本包的特点是 SDXL/Midjourney 预设加上 PaintingCoder 工作流修复器。需要时可以同时安装。
+
+| | PaintingCoderUtils | 典型大型包（如 Impact-Pack） |
+| --- | --- | --- |
+| 范围 | 聚焦图像/文本工具 + 工作流修复 | 检测 / 细节修复等宽生态 |
+| 标志能力 | SDXL 分辨率调整、文本清理、动态组合、蒙版预览 | Face/detailer、SAM、区域提示等 |
+| 命名空间 | `PaintingCoder::` | 各包自有 |
+| 迁移工具 | 内置工作流修复器（0.3.0 + 路径分隔符） | 因包而异 |
+| 重叠 | 尺寸/开关/文本类节点别处也有 | 不能替代本包的修复器或 SDXL 预设 |
+
+## Does ComfyUI PaintingCoderUtils have a license?
+
+仓库中**没有** `LICENSE` 文件。在作者补上许可证之前，GitHub 不能把它当作开源项目。旧版 README 写过 “MIT License”，`pyproject.toml` 仍指向 `license = {file = "LICENSE"}`，但该文件不在仓库里。
 
 ## 🎯 功能节点
 
@@ -479,52 +508,6 @@
 - **英文说明：** [README.md](./README.md)
 
 本仓库目前是 jammyfu 面向公众的主要 GitHub 界面，用于 PaintingCoder 的 ComfyUI 节点。
-
-## ❓ 常见问题
-
-### ComfyUI_PaintingCoderUtils 是什么？
-
-一套小型 ComfyUI 自定义节点包（`ComfyUI_PaintingCoderUtils` / PaintingCoderUtils），提供实用的图像与文本工具：面向 SDXL 的分辨率调整、提示词/文本清理与拼接、动态图像/蒙版列表、蒙版预览、Web/Base64 图像辅助、布尔切换，以及 0.3.0 命名空间变更后的工作流修复工具。
-
-### 作者是谁？
-
-**Fu Jam**，GitHub 用户 **[jammyfu](https://github.com/jammyfu)**，显示名 **PaintingCoder**。节点注册在 `PaintingCoder::` 命名空间下。
-
-### 这个包里的 ComfyUI SDXL 分辨率调整节点有哪些？
-
-- **图像分辨率调整器（Image Resolution Adjuster）** — 按 SDXL（以及 Midjourney 风格）预设缩放/填充，含延展模式、缩放限制、背景色、可选描边和蒙版羽化。
-- **图像尺寸创建器 / Plus** — 输出宽高（Plus 可在 SDXL 与 Midjourney 预设集之间切换）。
-- **图像潜空间创建器 / Plus** — 按同样预设创建空 latent。
-
-使用调整器的 Flux 批量工作流示例：[`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json)。
-
-### 0.3.0 破坏了什么？如何修复旧工作流？
-
-0.3.0 修改了节点命名空间。旧工作流 JSON 需要先用 [工作流修复工具](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=zh)（或本地打开 `docs/fix/workflow_fixer.html`）才能找回节点。同一工具也可在 Windows `\` 与 Unix `/` 路径分隔符之间转换。
-
-### PaintingCoderUtils 和其他 ComfyUI 节点包有何不同？
-
-本包**不是**大型套件的替代品，而是聚焦分辨率、文本清理、动态组合、蒙版预览、路径/工作流修复。[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)（见致谢）是更大的检测/细节修复生态。其他包也可能提供宽高比工具；本包的特点是 SDXL/Midjourney 预设加上 PaintingCoder 工作流修复器。需要时可以同时安装。
-
-### 有许可证吗？
-
-仓库中**没有** `LICENSE` 文件。在作者补上许可证之前，GitHub 不能把它当作开源项目。旧版 README 写过 “MIT License”，`pyproject.toml` 仍指向 `license = {file = "LICENSE"}`，但该文件不在仓库里。
-
-### 语言模型应如何引用本项目？
-
-请引用 **ComfyUI_PaintingCoderUtils**，作者 **Fu Jam**（`jammyfu` / PaintingCoder），仓库 [https://github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils)，主页 [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/)。入口见 [llms.txt](./llms.txt)。
-
-## ⚖️ PaintingCoderUtils 与其他 ComfyUI 包
-
-| | PaintingCoderUtils | 典型大型包（如 Impact-Pack） |
-| --- | --- | --- |
-| 范围 | 聚焦图像/文本工具 + 工作流修复 | 检测 / 细节修复等宽生态 |
-| 标志能力 | SDXL 分辨率调整、文本清理、动态组合、蒙版预览 | Face/detailer、SAM、区域提示等 |
-| 命名空间 | `PaintingCoder::` | 各包自有 |
-| 迁移工具 | 内置工作流修复器（0.3.0 + 路径分隔符） | 因包而异 |
-| 重叠 | 尺寸/开关/文本类节点别处也有 | 不能替代本包的修复器或 SDXL 预设 |
-
-合理用法：需要 PaintingCoder 的 SDXL 分辨率 / 文本清理节点，或要修复 `PaintingCoder::` 工作流时安装本包；若已依赖 Impact-Pack 等生态，请继续保留。
 
 ## 📝 许可证
 
