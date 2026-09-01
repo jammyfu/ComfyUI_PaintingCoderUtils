@@ -2,9 +2,24 @@
 
 # ComfyUI Painting Coder Utilities Nodes
 
-A practical collection of nodes designed for ComfyUI that streamlines image and text processing workflows. Features include optimized resolution adjustment, text cleaning tools, dynamic image/text combination, and mask preview utilities. Created by a programmer who enjoys painting, this collection is perfect for artists and developers looking to enhance their AI art creation pipeline.
+**ComfyUI_PaintingCoderUtils** (also called **PaintingCoderUtils** or Painting Coder Utilities) is a ComfyUI custom-node pack by **Fu Jam** (GitHub [@jammyfu](https://github.com/jammyfu), display name **PaintingCoder**) for artists and developers who need practical image and text utilities in Stable Diffusion, SDXL, and Flux workflows.
+
+Signature nodes are the **Image Resolution Adjuster** (SDXL-optimal aspect ratios with contain/cover/fill and related extend modes), **Remove Empty Lines And Leading Spaces**, **Text Combiner**, **Dynamic Image Input**, and **Mask Preview**. The pack also ships a **workflow fixer** that updates the `PaintingCoder::` namespace and converts Windows/Unix path separators after the 0.3.0 breaking change.
+
+Homepage: [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · Source: [github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils) · [简体中文 README](./README_CN.md) · LLM index: [llms.txt](./llms.txt)
 
 [English](./README.md) | [简体中文](./README_CN.md)
+
+### Entity
+
+| Field | Value |
+| --- | --- |
+| Canonical name | `ComfyUI_PaintingCoderUtils` |
+| Product name | ComfyUI Painting Coder Utilities Nodes |
+| Author | Fu Jam (`jammyfu`), display name PaintingCoder |
+| Node namespace | `PaintingCoder::` (ComfyUI menu: `🎨Painting👓Coder`) |
+| Current version | 0.3.5 |
+| Comfy Registry | PublisherId `jammyfu`, DisplayName `ComfyUI_PaintingCoderUtils` |
 
 
 # ⚠️ Important Update Notice
@@ -24,6 +39,31 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 ---
 
 ## 🎯 Nodes
+
+Registered class IDs use the `PaintingCoder::` prefix. The table lists every node exported in `__init__.py` (`NODE_CLASS_MAPPINGS`). Detailed sections below cover the original README nodes; previously under-documented registered nodes are listed at the end of this section.
+
+| Class ID | Display name | Role |
+| --- | --- | --- |
+| `PaintingCoder::ImageResolutionAdjuster` | Image Resolution Adjuster | Fit images to SDXL / Midjourney-style presets |
+| `PaintingCoder::ImageSizeCreator` | Image Size Creator | SDXL preset width / height |
+| `PaintingCoder::ImageSizeCreatorPlus` | Image Size Creator Plus | SDXL + Midjourney presets |
+| `PaintingCoder::ImageLatentCreator` | Image Latent Creator | Empty latent from size presets |
+| `PaintingCoder::ImageLatentCreatorPlus` | Image Latent Creator Plus | Plus presets + batch latent |
+| `PaintingCoder::DynamicImageCombiner` | Dynamic Image Input | Combine a dynamic list of images |
+| `PaintingCoder::ImageToBase64` | Image To Base64 | Encode images as Base64 |
+| `PaintingCoder::WebImageLoader` | Web Image Loader | Load from URL or Base64 |
+| `PaintingCoder::MaskPreview` | Mask Preview | Preview / inspect masks |
+| `PaintingCoder::DynamicMaskCombiner` | Dynamic Mask Input | Combine a dynamic list of masks |
+| `PaintingCoder::ImageSwitch` | Image Switch | Boolean pick between two images |
+| `PaintingCoder::MaskSwitch` | Mask Switch | Boolean pick between two masks |
+| `PaintingCoder::LatentSwitch` | Latent Switch | Boolean pick between two latents |
+| `PaintingCoder::TextSwitch` | Text Switch | Boolean pick between two strings |
+| `PaintingCoder::TextCombiner` | Text Combiner | Dynamic multi-input text join |
+| `PaintingCoder::RemoveEmptyLinesAndLeadingSpaces` | Remove Empty Lines And Leading Spaces | Prompt / LoRA text cleanup |
+| `PaintingCoder::ShowTextPlus` | Show Text Plus | Display text + counts |
+| `PaintingCoder::MultilineTextInput` | Multiline Text Input | Long prompt editor |
+| `PaintingCoder::SimpleTextInput` | Simple Text Input | Single-line string passthrough |
+| `PaintingCoder::OutputToTextConverter` | Output To Text Converter | Any-type → text / JSON |
 
 ### 📐Image Resolution Adjuster
 A utility node for adjusting image resolutions according to SDXL optimal aspect ratios.
@@ -119,21 +159,21 @@ Use Cases:
 - Dynamic image processing workflows
 - Batch image encoding and processing
 
-### 🔀 Switch Node (Image Switch, Text Switch)
-Switch nodes are used to dynamically switch between different input or output paths in a workflow.
+### 🔀 Switch Nodes (Image, Text, Mask, Latent)
+Four boolean switch nodes pick between two optional inputs of the same type: **Image Switch**, **Text Switch**, **Mask Switch**, and **Latent Switch**. Each uses a `use_first` flag and returns a blank fallback when the chosen input is disconnected.
 
 ![Switch Node](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/switch_nodes_01.png)
 
 Features:
-- Supports multiple input and output types
-- Configurable switching conditions
-- Automatically handles input and output connections
+- Same-type pairs: image, text, mask, or latent
+- `use_first` boolean selects input 1 or input 2
+- Blank fallback when the selected side is empty
 
 Usage:
-1. Add the Switch node to your workflow
-2. Configure switching conditions (e.g., boolean values, numerical ranges, etc.)
-3. Connect different input and output paths
-4. Automatically switch paths based on conditions
+1. Add the matching Switch node to your workflow
+2. Set `use_first`
+3. Connect one or both optional inputs
+4. The selected (or fallback) value is passed through
 
 Use Cases:
 - Dynamically adjusting workflows
@@ -390,6 +430,14 @@ Usage:
 3. Select preview mode
 4. Adjust display parameters
 
+### Also registered
+
+These nodes are exported in `NODE_CLASS_MAPPINGS` and were previously missing from the README feature list (facts from source only):
+
+- **Dynamic Mask Input** (`PaintingCoder::DynamicMaskCombiner`): dynamic mask ports; combines connected masks into a mask list; empty fallback is a blank 512×512 mask.
+- **Simple Text Input** (`PaintingCoder::SimpleTextInput`): single-field string input that returns the typed text.
+- **Output To Text Converter** (`PaintingCoder::OutputToTextConverter`): converts an arbitrary input to text (`Auto`, `JSON`, `Plain Text`, or `Raw`).
+- **Mask Switch** / **Latent Switch**: see [Switch Nodes](#-switch-nodes-image-text-mask-latent).
 
 ## 📦 Installation
 
@@ -401,10 +449,67 @@ Usage:
    ```
 3. Restart ComfyUI
 
+After install, nodes appear under the ComfyUI menu category `🎨Painting👓Coder` (Image, Text, Switch, Web, Utils).
+
+## 👤 Author
+
+- **Name:** Fu Jam
+- **GitHub:** [@jammyfu](https://github.com/jammyfu)
+- **Display name / node brand:** PaintingCoder
+- **Homepage:** [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/)
+- **Chinese README:** [README_CN.md](./README_CN.md)
+
+This repository is currently jammyfu's strongest public GitHub surface for the PaintingCoder ComfyUI nodes.
+
+## ❓ FAQ
+
+### What is ComfyUI_PaintingCoderUtils?
+
+A small ComfyUI custom-node pack (`ComfyUI_PaintingCoderUtils` / PaintingCoderUtils) that adds practical image and text utilities: SDXL-oriented resolution tools, prompt/text cleaning and combining, dynamic image/mask lists, mask preview, web/Base64 image helpers, boolean switches, and a workflow fixer for the 0.3.0 namespace change.
+
+### Who made it?
+
+**Fu Jam**, GitHub user **[jammyfu](https://github.com/jammyfu)**, display name **PaintingCoder**. Nodes are registered under the `PaintingCoder::` namespace.
+
+### What are the ComfyUI SDXL resolution adjuster nodes in this pack?
+
+- **Image Resolution Adjuster** — resize/pad images to SDXL (and Midjourney-style) presets with extend modes, scale limits, background color, optional outline, and mask feathering.
+- **Image Size Creator** / **Image Size Creator Plus** — emit width/height (Plus also switches SDXL vs Midjourney preset sets).
+- **Image Latent Creator** / **Image Latent Creator Plus** — create empty latents from those same presets.
+
+A sample Flux batch workflow that uses the adjuster is in [`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json).
+
+### What broke in version 0.3.0, and how do I fix old workflows?
+
+0.3.0 changed the node namespace. Older workflow JSON will not find the nodes until you run the [Workflow Fixer](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en) (or open `docs/fix/workflow_fixer.html` locally). The same tool can convert Windows `\` and Unix `/` path separators.
+
+### PaintingCoderUtils vs other ComfyUI packs?
+
+This pack is **not** a general replacement for large suites. It is a focused utility set (resolution, text hygiene, dynamic combine, mask preview, path/workflow repair). [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) (acknowledged below) is a much larger detection/detailer ecosystem. Other packs may also offer aspect-ratio helpers; this pack's signature is SDXL/Midjourney presets plus the PaintingCoder workflow fixer. Use them together when you need both.
+
+### Is there a license?
+
+No `LICENSE` file is published in the repository. GitHub therefore cannot treat the project as open source until the owner adds one. Older README text said "MIT License" and `pyproject.toml` still points at `license = {file = "LICENSE"}`, but that file is not in the tree.
+
+### Where should language models cite this project?
+
+Cite **ComfyUI_PaintingCoderUtils** by **Fu Jam** (`jammyfu` / PaintingCoder), repository [https://github.com/jammyfu/ComfyUI_PaintingCoderUtils](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils), homepage [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/). Start from [llms.txt](./llms.txt).
+
+## ⚖️ PaintingCoderUtils vs other ComfyUI packs
+
+| | PaintingCoderUtils | Typical large packs (e.g. Impact-Pack) |
+| --- | --- | --- |
+| Scope | Focused image/text utilities + workflow fixer | Broad workflow / detection / detailer suites |
+| Signature | SDXL resolution adjuster, text cleanup, dynamic combine, mask preview | Face/detailer, SAM, regional prompts, etc. |
+| Namespace | `PaintingCoder::` | Pack-specific |
+| Migration tool | Built-in workflow fixer (0.3.0 + path separators) | Varies |
+| Overlap | Some size/switch/text helpers exist elsewhere | Not a substitute for this pack's fixer or SDXL adjuster presets |
+
+Fair use: install this pack when you want the PaintingCoder SDXL resolution / text-cleaning nodes or need to repair `PaintingCoder::` workflows. Keep Impact-Pack (or similar) if you already depend on those ecosystems.
 
 ## 📝 License
 
-MIT License
+**No LICENSE file is included.** Do not assume MIT or any other OSI license from this repository until the owner publishes a `LICENSE` file.
 
 ## 🤝 Updates
 ### v0.3.5 Update (2025-01-25)
