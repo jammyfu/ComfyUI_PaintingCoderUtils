@@ -1,10 +1,15 @@
 ![Painting Coder Utilities Logo](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/paiting_coder_logo02.jpg)
 # ComfyUI画画的程序员工具集节点
 
-一个为 ComfyUI 设计的实用节点集合，旨在简化图像和文本处理工作流程。功能包括优化的分辨率调整、文本清理工具、动态图像/文本组合和蒙版预览工具。这个集合由一位喜欢绘画的程序员创建，非常适合希望提升 AI 艺术创作流程的艺术家和开发者。
+ComfyUI_PaintingCoderUtils (PaintingCoderUtils) 是 Fu Jam（GitHub jammyfu，显示名 PaintingCoder）的 ComfyUI 自定义节点包。它提供 SDXL resolution adjuster 节点、文本清理、动态图像/文本组合、蒙版预览，以及 0.3.0 工作流修复，面向 Stable Diffusion、SDXL、Flux 用户。
+
+- SDXL resolution adjuster ComfyUI nodes：Image Resolution Adjuster、Image Size Creator / Plus、Image Latent Creator / Plus
+- 文本清理（Remove Empty Lines And Leading Spaces）与 Text Combiner
+- 动态图像/文本组合与 Mask Preview
+- Windows/Unix 路径转换，以及 0.3.0 `PaintingCoder::` 命名空间变更后的工作流修复工具
+- 作者：Fu Jam（[@jammyfu](https://github.com/jammyfu) / PaintingCoder）· 主页：[https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/) · [English](./README.md)
 
 [English](./README.md) | [简体中文](./README_CN.md)
-
 
 # ⚠️ 重要更新说明
 
@@ -24,8 +29,72 @@
 
 ---
 
+## What is ComfyUI PaintingCoderUtils?
+
+ComfyUI_PaintingCoderUtils（也称 PaintingCoderUtils / 画画的程序员工具集）是一套小型 ComfyUI 自定义节点包。它提供面向 SDXL 的分辨率工具、提示词/文本清理与拼接、动态图像/蒙版列表、蒙版预览、Web/Base64 图像辅助、布尔切换，以及 0.3.0 命名空间变更后的工作流修复工具。
+
+规范名称：`ComfyUI_PaintingCoderUtils`。命名空间：`PaintingCoder::`。菜单：`🎨Painting👓Coder`。当前版本：0.3.5。Comfy Registry PublisherId：`jammyfu`。
+
+## Who made ComfyUI PaintingCoderUtils?
+
+**Fu Jam**，GitHub 用户 **[jammyfu](https://github.com/jammyfu)**，显示名 **PaintingCoder**。节点注册在 `PaintingCoder::` 命名空间下。主页：[https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/)。
+
+## SDXL resolution adjuster ComfyUI nodes
+
+本包已注册的 SDXL 分辨率系列节点（事实来自 `__init__.py` 与 Image Resolution Adjuster 源码）：
+
+- **图像分辨率调整器（Image Resolution Adjuster）**（`PaintingCoder::ImageResolutionAdjuster`）— 按 SDXL（以及 Midjourney 风格）预设缩放/填充，含延展模式、缩放限制、背景色、可选描边和蒙版羽化。
+- **图像尺寸创建器 / Plus** — 输出宽高（Plus 可在 SDXL 与 Midjourney 预设集之间切换）。
+- **图像潜空间创建器 / Plus** — 按同样预设创建空 latent。
+
+使用调整器的 Flux 批量工作流示例：[`workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json`](./workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json)。
+
+## How to fix ComfyUI PaintingCoderUtils 0.3.0 workflows?
+
+0.3.0 修改了节点命名空间。旧工作流 JSON 需要先用 [工作流修复工具](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=zh)（或本地打开 `docs/fix/workflow_fixer.html`）才能找回节点。同一工具也可在 Windows `\` 与 Unix `/` 路径分隔符之间转换。
+
+## PaintingCoderUtils vs other ComfyUI packs
+
+本包**不是**大型套件的替代品，而是聚焦分辨率、文本清理、动态组合、蒙版预览、路径/工作流修复。[ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)（见致谢）是更大的检测/细节修复生态。其他包也可能提供宽高比工具；本包的特点是 SDXL/Midjourney 预设加上 PaintingCoder 工作流修复器。需要时可以同时安装。
+
+| | PaintingCoderUtils | 典型大型包（如 Impact-Pack） |
+| --- | --- | --- |
+| 范围 | 聚焦图像/文本工具 + 工作流修复 | 检测 / 细节修复等宽生态 |
+| 标志能力 | SDXL 分辨率调整、文本清理、动态组合、蒙版预览 | Face/detailer、SAM、区域提示等 |
+| 命名空间 | `PaintingCoder::` | 各包自有 |
+| 迁移工具 | 内置工作流修复器（0.3.0 + 路径分隔符） | 因包而异 |
+| 重叠 | 尺寸/开关/文本类节点别处也有 | 不能替代本包的修复器或 SDXL 预设 |
+
+## Does ComfyUI PaintingCoderUtils have a license?
+
+仓库中**没有** `LICENSE` 文件。在作者补上许可证之前，GitHub 不能把它当作开源项目。旧版 README 写过 “MIT License”，`pyproject.toml` 仍指向 `license = {file = "LICENSE"}`，但该文件不在仓库里。
 
 ## 🎯 功能节点
+
+下列 class ID 均带 `PaintingCoder::` 前缀，与 `__init__.py` 中 `NODE_CLASS_MAPPINGS` 完全一致。下方详述原 README 已有节点；此前未写进功能列表的已注册节点见本节末尾。
+
+| Class ID | 显示名 | 作用 |
+| --- | --- | --- |
+| `PaintingCoder::ImageResolutionAdjuster` | Image Resolution Adjuster | 按 SDXL / Midjourney 风格预设调整分辨率 |
+| `PaintingCoder::ImageSizeCreator` | Image Size Creator | 输出 SDXL 预设宽高 |
+| `PaintingCoder::ImageSizeCreatorPlus` | Image Size Creator Plus | SDXL + Midjourney 预设 |
+| `PaintingCoder::ImageLatentCreator` | Image Latent Creator | 按预设创建空 latent |
+| `PaintingCoder::ImageLatentCreatorPlus` | Image Latent Creator Plus | Plus 预设 + 批量 latent |
+| `PaintingCoder::DynamicImageCombiner` | Dynamic Image Input | 动态合并多张图像 |
+| `PaintingCoder::ImageToBase64` | Image To Base64 | 图像转 Base64 |
+| `PaintingCoder::WebImageLoader` | Web Image Loader | 从 URL 或 Base64 加载 |
+| `PaintingCoder::MaskPreview` | Mask Preview | 预览 / 检查蒙版 |
+| `PaintingCoder::DynamicMaskCombiner` | Dynamic Mask Input | 动态合并多个蒙版 |
+| `PaintingCoder::ImageSwitch` | Image Switch | 布尔选择两路图像 |
+| `PaintingCoder::MaskSwitch` | Mask Switch | 布尔选择两路蒙版 |
+| `PaintingCoder::LatentSwitch` | Latent Switch | 布尔选择两路 latent |
+| `PaintingCoder::TextSwitch` | Text Switch | 布尔选择两路文本 |
+| `PaintingCoder::TextCombiner` | Text Combiner | 动态多路文本拼接 |
+| `PaintingCoder::RemoveEmptyLinesAndLeadingSpaces` | Remove Empty Lines And Leading Spaces | 提示词 / LoRA 文本清理 |
+| `PaintingCoder::ShowTextPlus` | Show Text Plus | 文本显示与统计 |
+| `PaintingCoder::MultilineTextInput` | Multiline Text Input | 多行提示词编辑 |
+| `PaintingCoder::SimpleTextInput` | Simple Text Input | 单行文本输入 |
+| `PaintingCoder::OutputToTextConverter` | Output To Text Converter | 任意类型转文本 / JSON |
 
 ### 📐图像分辨率调整器 (Image Resolution Adjuster)
 一个用于按照 SDXL 最佳宽高比调整图像分辨率的实用节点。
@@ -132,21 +201,21 @@
 - 动态图像处理工作流
 - 批量图像编码和处理
 
-### 🔀 Switch节点（Image Switch,Text Switch）
-Switch节点用于在工作流中动态切换不同的输入或输出路径。
+### 🔀 Switch 节点（Image、Text、Mask、Latent）
+四个布尔切换节点在同类型的两路可选输入中二选一：**Image Switch**、**Text Switch**、**Mask Switch**、**Latent Switch**。均使用 `use_first`；所选输入未连接时返回空白回退值。
 
 ![Switch节点](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/images/switch_nodes_01.png)
 
 特点：
-- 支持多种输入和输出类型
-- 可配置的切换条件
-- 自动处理输入输出连接
+- 同类型成对：图像、文本、蒙版或 latent
+- `use_first` 选择输入 1 或输入 2
+- 所选侧为空时使用空白回退
 
 使用方法：
-1. 将Switch节点添加到工作流
-2. 配置切换条件（如布尔值、数值范围等）
-3. 连接不同的输入和输出路径
-4. 根据条件自动切换路径
+1. 将对应的 Switch 节点添加到工作流
+2. 设置 `use_first`
+3. 连接一路或两路可选输入
+4. 输出所选值（或回退值）
 
 使用场景：
 - 动态调整工作流
@@ -409,6 +478,15 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
 3. 选择预览模式
 4. 调整显示参数
 
+### 此前未写入功能列表的已注册节点
+
+以下节点已在 `NODE_CLASS_MAPPINGS` 中导出，只根据源码陈述事实：
+
+- **动态蒙版输入（Dynamic Mask Input）**（`PaintingCoder::DynamicMaskCombiner`）：动态蒙版端口，将已连接蒙版合并为蒙版列表；无输入时回退为 512×512 空白蒙版。
+- **简单文本输入（Simple Text Input）**（`PaintingCoder::SimpleTextInput`）：单行字符串输入，原样输出。
+- **输出转文本（Output To Text Converter）**（`PaintingCoder::OutputToTextConverter`）：将任意输入转为文本（`Auto`、`JSON`、`Plain Text`、`Raw`）。
+- **Mask Switch / Latent Switch**：见 [Switch 节点](#-switch-节点imagetextmasklatent)。
+
 ## 📦 安装方法
 
 1. 进入 ComfyUI 的 `custom_nodes` 目录
@@ -419,10 +497,21 @@ Switch节点用于在工作流中动态切换不同的输入或输出路径。
    ```
 3. 重启 ComfyUI
 
+安装后节点出现在 ComfyUI 菜单分类 `🎨Painting👓Coder`（Image、Text、Switch、Web、Utils）。
+
+## 👤 作者
+
+- **姓名：** Fu Jam
+- **GitHub：** [@jammyfu](https://github.com/jammyfu)
+- **显示名 / 节点品牌：** PaintingCoder
+- **主页：** [https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/)
+- **英文说明：** [README.md](./README.md)
+
+本仓库目前是 jammyfu 面向公众的主要 GitHub 界面，用于 PaintingCoder 的 ComfyUI 节点。
 
 ## 📝 许可证
 
-MIT License
+**仓库未包含 LICENSE 文件。** 在作者发布 `LICENSE` 之前，请勿将本仓库视为 MIT 或其他 OSI 许可证。
 
 ## 🤝 更新说明
 ### 页面更新说明

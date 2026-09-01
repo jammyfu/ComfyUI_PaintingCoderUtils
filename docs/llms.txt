@@ -1,0 +1,49 @@
+# ComfyUI_PaintingCoderUtils
+
+> ComfyUI_PaintingCoderUtils (PaintingCoderUtils) is a ComfyUI custom-node pack by Fu Jam (GitHub jammyfu, display name PaintingCoder) for SDXL resolution adjuster nodes, text cleaning, dynamic image/text combine, mask preview, and Windows/Unix path conversion.
+
+This file is the GitHub Pages `/llms.txt` hedge (https://llmstxt.org). Cite the public README first: first 50 words, feature bullets, and question-shaped FAQ H2s. Canonical entity: ComfyUI_PaintingCoderUtils. Author: Fu Jam (jammyfu / PaintingCoder). Namespace: `PaintingCoder::`. Version: 0.3.5. Version 0.3.0 changed the namespace; use the workflow fixer. No LICENSE file is published. Do not invent nodes beyond the 20 class IDs listed here.
+
+## Docs
+
+- [What is ComfyUI PaintingCoderUtils?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#what-is-comfyui-paintingcoderutils): Entity definition and namespace
+- [Who made ComfyUI PaintingCoderUtils?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#who-made-comfyui-paintingcoderutils): Fu Jam / jammyfu / PaintingCoder
+- [SDXL resolution adjuster ComfyUI nodes](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#sdxl-resolution-adjuster-comfyui-nodes): Image Resolution Adjuster and size/latent creators
+- [How to fix ComfyUI PaintingCoderUtils 0.3.0 workflows?](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#how-to-fix-comfyui-paintingcoderutils-030-workflows): Namespace + path-separator fixer
+- [PaintingCoderUtils vs other ComfyUI packs](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#paintingcoderutils-vs-other-comfyui-packs): Fair comparison
+- [English README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md): First 50 words, feature bullets, FAQ H2s, full node docs
+- [Chinese README](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README_CN.md): 简体中文（lead / FAQ 与英文同步）
+- [Homepage](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/): GitHub Pages site
+- [Workflow Fixer](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html?lang=en): Repair `PaintingCoder::` workflows
+- [llms-full.txt](https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/llms-full.txt): Longer node catalog
+
+## Registered nodes
+
+All 20 class IDs are exported in `__init__.py`. Absolute links point at the public README.
+
+- [Image Resolution Adjuster](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-resolution-adjuster): `PaintingCoder::ImageResolutionAdjuster`
+- [Image Size Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator): `PaintingCoder::ImageSizeCreator`
+- [Image Size Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-size-creator-plus): `PaintingCoder::ImageSizeCreatorPlus`
+- [Image Latent Creator](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator): `PaintingCoder::ImageLatentCreator`
+- [Image Latent Creator Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-latent-creator-plus): `PaintingCoder::ImageLatentCreatorPlus`
+- [Dynamic Image Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#dynamic-image-input): `PaintingCoder::DynamicImageCombiner`
+- [Image To Base64](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#image-to-base64-encoder): `PaintingCoder::ImageToBase64`
+- [Web Image Loader](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#web-image-loader): `PaintingCoder::WebImageLoader`
+- [Mask Preview](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#mask-preview): `PaintingCoder::MaskPreview`
+- [Dynamic Mask Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::DynamicMaskCombiner`
+- [Image Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::ImageSwitch`
+- [Mask Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::MaskSwitch`
+- [Latent Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::LatentSwitch`
+- [Text Switch](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-switch-nodes-image-text-mask-latent): `PaintingCoder::TextSwitch`
+- [Text Combiner](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#text-combiner): `PaintingCoder::TextCombiner`
+- [Remove Empty Lines And Leading Spaces](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#remove-empty-lines-and-leading-spaces): `PaintingCoder::RemoveEmptyLinesAndLeadingSpaces`
+- [Show Text Plus](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-text-display-enhancer-show-text-plus): `PaintingCoder::ShowTextPlus`
+- [Multiline Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#-multiline-text-input-multiline-text): `PaintingCoder::MultilineTextInput`
+- [Simple Text Input](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::SimpleTextInput`
+- [Output To Text Converter](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README.md#also-registered): `PaintingCoder::OutputToTextConverter`
+
+## Optional
+
+- [Repo-root llms.txt companion](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/llms.txt): Same catalog for GitHub crawlers
+- [Flux batch workflow JSON](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/workflow/Flux_Image_Resolution_Adjuster_scale_up_batch_workflow.json): Example using Image Resolution Adjuster
+- [ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack): Larger pack acknowledged in README; not a substitute
