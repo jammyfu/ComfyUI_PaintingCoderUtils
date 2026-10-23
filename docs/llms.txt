@@ -1,0 +1,14 @@
+# ComfyUI Painting Coder Utils
+
+> A collection of ComfyUI custom nodes for image and text workflows: resolution adjustment (SDXL / Midjourney presets), image size & latent creators, web image loader, image-to-base64, image/text switches, text cleaning and combining, dynamic image input, mask preview, plus a browser-based workflow fixer for v0.3.0 namespace changes. MIT license.
+
+- Repository: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils
+- Docs site: https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/
+- Workflow fixer: https://jammyfu.github.io/ComfyUI_PaintingCoderUtils/fix/workflow_fixer.html
+- Chinese README: https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/blob/main/README_CN.md
+
+## Install
+Clone into `ComfyUI/custom_nodes` and restart ComfyUI. Also published to the Comfy Registry (publisher `jammyfu`).
+
+## FAQ
+- Old workflows broke after v0.3.0? Use the workflow fixer page to update node namespaces and path separators.
