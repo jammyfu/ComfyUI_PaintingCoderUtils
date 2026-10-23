@@ -1,0 +1,18 @@
+name: Bug report / 问题反馈
+description: Something in ComfyUI Painting Coder Utils does not work as expected / 功能不符合预期
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes: {label: What happened? / 发生了什么}
+    validations: {required: true}
+  - type: textarea
+    id: steps
+    attributes: {label: Steps to reproduce / 复现步骤}
+    validations: {required: true}
+  - type: textarea
+    id: expected
+    attributes: {label: Expected behavior / 期望结果}
+  - type: input
+    id: env
+    attributes: {label: Environment / 环境, description: "OS, browser / Node / Python version"}

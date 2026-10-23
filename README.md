@@ -6,6 +6,12 @@ A practical collection of nodes designed for ComfyUI that streamlines image and 
 
 [English](./README.md) | [简体中文](./README_CN.md)
 
+<!-- geo:badges -->
+[![ComfyUI](https://img.shields.io/badge/ComfyUI-custom%20nodes-blue)](https://github.com/comfyanonymous/ComfyUI) [![Python](https://img.shields.io/badge/python-3.8%2B-3776AB)](pyproject.toml) [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Release](https://img.shields.io/github/v/release/jammyfu/ComfyUI_PaintingCoderUtils)](https://github.com/jammyfu/ComfyUI_PaintingCoderUtils/releases)
+
+**Quick install / 快速安装:** `cd ComfyUI/custom_nodes && git clone https://github.com/jammyfu/ComfyUI_PaintingCoderUtils.git`, then restart ComfyUI. See [Installation](#-installation).
+
+
 
 # ⚠️ Important Update Notice
 

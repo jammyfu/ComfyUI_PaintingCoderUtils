@@ -1,0 +1,14 @@
+name: Feature request / 功能建议
+description: Suggest an idea for ComfyUI Painting Coder Utils / 提一个新想法
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes: {label: Problem / 想解决的问题}
+    validations: {required: true}
+  - type: textarea
+    id: proposal
+    attributes: {label: Proposed solution / 建议方案}
+  - type: textarea
+    id: alternatives
+    attributes: {label: Alternatives considered / 考虑过的其他做法}
