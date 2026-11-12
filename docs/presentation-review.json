@@ -1,0 +1,25 @@
+{
+  "reviewed_at": "2026-11-12",
+  "languages": [
+    "en",
+    "zh-CN",
+    "zh-TW",
+    "ja",
+    "ko"
+  ],
+  "scope": "localized entry guide; historical detailed references retain original languages",
+  "reviewer": "AI fact and terminology review, not native human review",
+  "rendered_github": "not_checked",
+  "runtime_integration": "not_checked",
+  "ordering": {
+    "priority_basis": "editorial_priority",
+    "heat_status": "unknown",
+    "reason": "task selection before installation and details",
+    "source": "repository source files",
+    "metric": null,
+    "value": null,
+    "window": null,
+    "group_order": "same tasks across languages",
+    "tie_break": "stable task order"
+  }
+}
